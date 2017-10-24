@@ -2,13 +2,11 @@ package main
 
 import (
 	"github.com/gorilla/mux"
+
 	"github.com/orderfood/api_of/pkg/util/http"
+	"github.com/orderfood/api_of/pkg/storage"
 
-
-	users "github.com/orderfood/api_of/pkg/users/routes"
-	"fmt"
-
-	"log"
+	users "github.com/orderfood/api_of/pkg/api/users/routes"
 )
 
 const (
@@ -18,26 +16,26 @@ const (
 
 var Routes = make([]http.Route, 0)
 
-func AddRoutes(r ...[]http.Route){
-	for i := range r{
+func AddRoutes(r ...[]http.Route) {
+	for i := range r {
 		Routes = append(Routes, r[i]...)
-		log.Print(Routes)
 	}
 }
-func init(){
-	//Здесь инициализация роутов
-	//пример  AddRoutes(users.Routes)
+func init() {
+
 	AddRoutes(users.Routes)
 }
 
-func main(){
+func main() {
+
+	storage.DB_connect()
+
 	r := mux.NewRouter()
 	r.Methods("OPTIONS").HandlerFunc(http.Headers)
 
-	for _,route := range Routes {
-		fmt.Print(r.Handle(route.Path, http.Handle(route.Handler, route.Middleware...)).Methods(route.Method))
+	for _, route := range Routes {
+		r.Handle(route.Path, http.Handle(route.Handler, route.Middleware...)).Methods(route.Method)
 	}
 
-	http.Listen(host,port, r)
+	http.Listen(host, port, r)
 }
-

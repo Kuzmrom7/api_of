@@ -3,5 +3,5 @@ package routes
 import "github.com/orderfood/api_of/pkg/util/http"
 
 var Routes = []http.Route{
-	{Path:"/user", Method:http.MethodGet, Handler:GetUser},
+	{Path:"/users", Method:http.MethodGet, Handler:GetUser},
 }
