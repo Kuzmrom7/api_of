@@ -23,6 +23,7 @@ func Handle ( h http.HandlerFunc, middleware ...Middleware ) http.HandlerFunc{
 }
 
 func Listen (host string, port int, router http.Handler) error {
+
 	log.Print("Server up and run on : " , host, ":", port)
 	return http.ListenAndServe(fmt.Sprintf("%s:%d", host, port), router)
 }
