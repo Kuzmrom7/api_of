@@ -6,12 +6,22 @@ import (
 
 	"github.com/orderfood/api_of/pkg/storage"
 
+	"fmt"
+	"log"
 )
+
 type Users struct {
-	Id        string `json:id`
-	Name      string `json:"name"`
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
+	User_id   	  string `json:"user_id"`
+	Username      string `json:"username"`
+	Email 		  string `json:"email"`
+	Created       string `json:"created"`
+	Updated		  string `json:"updated"`
+}
+
+type User struct {
+	/*User_id   	  string `json:"user_id"`*/
+	Username      string `json:"username"`
+	Email 		  string `json:"email"`
 }
 
 func GetUser (w http.ResponseWriter, r *http.Request){
@@ -27,7 +37,7 @@ func GetUser (w http.ResponseWriter, r *http.Request){
 
 	for rows.Next() {
 		us := new(Users)
-		err = rows.Scan(&us.Id, &us.Name, &us.FirstName, &us.LastName)
+		err = rows.Scan(&us.User_id, &us.Username, &us.Email, &us.Created, &us.Updated )
 		if err != nil {
 			panic(err)
 		}
@@ -43,4 +53,28 @@ func GetUser (w http.ResponseWriter, r *http.Request){
 	w.WriteHeader(http.StatusOK)
 	w.Write(productsJson)
 	w.Write([]byte("Hello"))
+}
+
+func UserCreate (w http.ResponseWriter, r *http.Request) {
+	decoder := json.NewDecoder(r.Body)
+	user := User{}
+
+	err := decoder.Decode(&user)
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	result, err := storage.DB.Exec("INSERT INTO users (username, email) VALUES ($1, $2)", user.Username, user.Email)
+	if err != nil{
+		log.Println(err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	lastInsertId,err := result.LastInsertId()
+	fmt.Println(lastInsertId)
+	w.WriteHeader(http.StatusOK)
+
 }
