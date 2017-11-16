@@ -6,4 +6,5 @@ var Routes = []http.Route{
 
 	{Path:"/user", Method:http.MethodGet, Handler:GetUser},
 	{Path:"/user", Method:http.MethodPost, Handler:UserCreate},
+
 }
