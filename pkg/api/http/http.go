@@ -4,7 +4,7 @@ import (
 	"github.com/gorilla/mux"
 
 
-	users "github.com/orderfood/api_of/pkg/api/users/routes"
+	users "github.com/orderfood/api_of/pkg/auth/user/routes"
 	"github.com/orderfood/api_of/pkg/util/http"
 )
 

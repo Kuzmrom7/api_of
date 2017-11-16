@@ -1,21 +1,33 @@
 package pgsql
 
 import (
-	"fmt"
-	"github.com/orderfood/api_of/pkg/storage"
-	"encoding/json"
-	"io"
+	"github.com/orderfood/api_of/pkg/storage/storage"
 	"log"
+	"github.com/orderfood/api_of/pkg/storage/store"
+	"context"
+	"github.com/orderfood/api_of/pkg/common/types"
+	"errors"
 )
 const (
+	sqlstrUserExistsByLogin = `
+
+	`
+
 	sqlGetUsers = `
 		SELECT * FROM users
 	`
 
 	sqlCreqteUser = `
-		INSERT INTO users (username, email) VALUES ($1, $2)
+		INSERT INTO users (username, email, gravatar, password, salt)
+		VALUES ($1, $2, $3, $4, $5)
+		RETURNING user_id;
 	`
 )
+
+type UserStorage struct {
+	storage.User
+	client store.IDB
+}
 
 type Users struct {
 	User_id   	  string `json:"user_id"`
@@ -35,50 +47,73 @@ type UserModel struct {
 
 }
 
-func GetUser() ([]byte, error) {
-	log.Println("STORAGE--- GetUser()")
-	rows, err := storage.DB.Query(sqlGetUsers)
+func (s *UserStorage) CheckExistsByLogin(ctx context.Context, login string) (bool, error) {
+	result, err := s.client.Exec(sqlstrUserExistsByLogin, login)
 	if err != nil {
-		fmt.Println(err)
+		return false, err
 	}
 
-	defer rows.Close()
-
-	users := make([]*Users, 0)
-
-	for rows.Next() {
-		us := new(Users)
-		err = rows.Scan(&us.User_id, &us.Username, &us.Email, &us.Created, &us.Updated )
-		if err != nil {
-			panic(err)
-		}
-		users = append(users, us)
+	rows, err := result.RowsAffected()
+	if err != nil {
+		return false, err
 	}
 
-	productsJson, err := json.Marshal(users)
-
-	return productsJson, nil
+	return rows != 0, nil
 }
 
-func CreateUser (productJson io.Reader) (int64,error) {
+//func GetUser() ([]byte, error) {
+//	log.Println("STORAGE--- GetUser()")
+//	rows, err := storage.DB.Query(sqlGetUsers)
+//	if err != nil {
+//		fmt.Println(err)
+//	}
+//
+//	defer rows.Close()
+//
+//	users := make([]*Users, 0)
+//
+//	for rows.Next() {
+//		us := new(Users)
+//		err = rows.Scan(&us.User_id, &us.Username, &us.Email, &us.Created, &us.Updated )
+//		if err != nil {
+//			panic(err)
+//		}
+//		users = append(users, us)
+//	}
+//
+//	productsJson, err := json.Marshal(users)
+//
+//	return productsJson, nil
+//}
+
+func (s *UserStorage) CreateUser (ctx context.Context, user *types.User) error {
 	log.Println("STORAGE--- CreateUser()")
 
-	decoder := json.NewDecoder(productJson)
-	user := User{}
+	if user == nil {
+		err := errors.New("user can not be nil")
+		return  err
+	}
 
-	err := decoder.Decode(&user)
+	var (
+		err error
+		id  store.NullString
+	)
+
+	tx, err := s.client.Begin()
 	if err != nil {
-		log.Println(err)
-
+		return err
 	}
 
-	result, err := storage.DB.Exec(sqlCreqteUser, user.Username, user.Email)
+	tx.QueryRow(sqlCreqteUser, user.Meta.Username, user.Meta.Email, user.Meta.Gravatar,
+		user.Security.Pass.Password, user.Security.Pass.Salt).Scan(&id)
 
-	if err != nil{
-		log.Println(err)
-	}
+	user.Meta.ID = id.String
 
-	lastInsertId,err := result.LastInsertId()
+	return err
+}
 
-	return lastInsertId, nil
+func newUserStorage(client store.IDB) *UserStorage {
+	s := new(UserStorage)
+	s.client = client
+	return s
 }
