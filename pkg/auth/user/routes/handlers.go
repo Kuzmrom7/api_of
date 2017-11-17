@@ -4,26 +4,46 @@ import (
 	"net/http"
 	"log"
 
-	//"github.com/orderfood/api_of/pkg/storage/pgsql"
+	sv1 "github.com/orderfood/api_of/pkg/auth/session/views/v1"
+	"github.com/orderfood/api_of/pkg/auth/user/views/v1"
 	"github.com/orderfood/api_of/pkg/auth/user/routes/request"
 	"github.com/orderfood/api_of/pkg/auth/user"
-	//"github.com/orderfood/api_of/pkg/common/errors"
+	"github.com/orderfood/api_of/pkg/common/types"
+	"github.com/orderfood/api_of/pkg/common/errors"
+
+	"fmt"
 )
 
 
 
 func GetUser (w http.ResponseWriter, r *http.Request){
-	//
-	//productsJson, err := pgsql.GetUser()
-	//
-	//if err != nil {
-	//	log.Println(err)
-	//	w.WriteHeader(http.StatusBadRequest)
-	//}
-	//
-	//w.Header().Set("Content-Type", "application/json")
-	//w.WriteHeader(http.StatusOK)
-	//w.Write(productsJson)
+
+	//TODO Реализовать id ввод (скорее это будет по контексту запроса)
+	
+  var strid string
+	log.Println("Vedite id")
+ 	fmt.Scan(&strid)
+
+	u := user.New(r.Context())
+	usr, err := u.GetByID(strid)
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+		return
+	}
+	if usr == nil {
+		errors.New("user").NotFound().Http(w)
+	}
+
+	response, err := v1.NewUser(usr).ToJson()
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+	}
+
+	w.WriteHeader(http.StatusOK)
+	if _, err = w.Write(response); err != nil {
+		return
+	}
+
 }
 
 func UserCreate (w http.ResponseWriter, r *http.Request) {
@@ -60,13 +80,22 @@ func UserCreate (w http.ResponseWriter, r *http.Request) {
 
 	usr, err := u.Create(rq)
 
-	//TODO Session
-	log.Println("Create user id: " , usr.Meta.ID)
-	w.WriteHeader(http.StatusOK)
-	if _, err = w.Write([]byte(usr.Meta.ID)); err != nil{
-		log.Println("User write response error")
+	session := types.NewSession(usr.Meta.ID, usr.Meta.Username, usr.Meta.Email)
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
 		return
 	}
 
+	response, err := sv1.NewSession(session).ToJson()
+	if err != nil{
+		errors.HTTP.InternalServerError(w)
+		return
+	}
 
+	log.Println("Create user id: " , usr.Meta.ID, " username: " , usr.Meta.Username)
+	w.WriteHeader(http.StatusOK)
+	if _, err = w.Write(response); err != nil{
+		log.Println("User write response error")
+		return
+	}
 }

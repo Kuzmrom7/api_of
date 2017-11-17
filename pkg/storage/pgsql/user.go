@@ -7,19 +7,23 @@ import (
 	"context"
 	"github.com/orderfood/api_of/pkg/common/types"
 	"errors"
+	"database/sql"
+
 )
 const (
 	sqlstrUserExistsByLogin = `
 
 	`
 
-	sqlGetUsers = `
-		SELECT * FROM users
+	sqlstrUserGetById = `
+		SELECT users.user_id, users.username, users.email, users.gravatar, users.password, users.salt
+		FROM users
+		WHERE users.user_id = $1;
 	`
 
-	sqlCreqteUser = `
+	sqlCreateUser = `
 		INSERT INTO users (username, email, gravatar, password, salt)
-		VALUES ($1, $2, $3, $4, $5)
+		VALUES ('$1', '$2', '$3', '$4', '$5')
 		RETURNING user_id;
 	`
 )
@@ -38,14 +42,31 @@ type Users struct {
 }
 
 type User struct {
-	/*User_id   	  string `json:"user_id"`*/
 	Username      string `json:"username"`
 	Email 		  string `json:"email"`
 }
 
-type UserModel struct {
-
+type userModel struct {
+	id 				store.NullString
+	username 	store.NullString
+	email 		store.NullString
+	gravatar 	store.NullString
+	password 	store.NullString
+	salt 			store.NullString
 }
+
+func (um *userModel) convert() *types.User{
+	var u = new(types.User)
+	u.Meta.Username = um.username.String
+	u.Meta.ID = um.id.String
+	u.Meta.Email = um.email.String
+	u.Meta.Gravatar = um.gravatar.String
+	u.Security.Pass.Password = um.password.String
+	u.Security.Pass.Salt = um.salt.String
+
+	return u
+}
+
 
 func (s *UserStorage) CheckExistsByLogin(ctx context.Context, login string) (bool, error) {
 	result, err := s.client.Exec(sqlstrUserExistsByLogin, login)
@@ -61,30 +82,25 @@ func (s *UserStorage) CheckExistsByLogin(ctx context.Context, login string) (boo
 	return rows != 0, nil
 }
 
-//func GetUser() ([]byte, error) {
-//	log.Println("STORAGE--- GetUser()")
-//	rows, err := storage.DB.Query(sqlGetUsers)
-//	if err != nil {
-//		fmt.Println(err)
-//	}
-//
-//	defer rows.Close()
-//
-//	users := make([]*Users, 0)
-//
-//	for rows.Next() {
-//		us := new(Users)
-//		err = rows.Scan(&us.User_id, &us.Username, &us.Email, &us.Created, &us.Updated )
-//		if err != nil {
-//			panic(err)
-//		}
-//		users = append(users, us)
-//	}
-//
-//	productsJson, err := json.Marshal(users)
-//
-//	return productsJson, nil
-//}
+func (s *UserStorage)GetUserByID(ctx context.Context, id string) (*types.User, error) {
+	var (
+		err error
+		um = new(userModel)
+	)
+
+	err = s.client.QueryRow(sqlstrUserGetById, id).Scan(&um.id, &um.username, &um.email, &um.gravatar, &um.password, &um.salt)
+	switch err{
+	case nil:
+	case sql.ErrNoRows:
+		return nil, nil
+	default:
+		return nil, err
+	}
+
+	usr := um.convert()
+	log.Print(usr)
+	return usr, nil
+}
 
 func (s *UserStorage) CreateUser (ctx context.Context, user *types.User) error {
 	log.Println("STORAGE--- CreateUser()")
@@ -99,12 +115,17 @@ func (s *UserStorage) CreateUser (ctx context.Context, user *types.User) error {
 		id  store.NullString
 	)
 
-	tx, err := s.client.Begin()
-	if err != nil {
-		return err
-	}
+	//tx, err := s.client.Begin()
+	//if err != nil {
+	//	return err
+	//}
+	log.Println(user.Meta.Username)
+	log.Println( user.Meta.Email)
+	log.Println(user.Meta.Gravatar)
+	log.Println(user.Security.Pass.Password)
+	log.Println(user.Security.Pass.Salt)
 
-	tx.QueryRow(sqlCreqteUser, user.Meta.Username, user.Meta.Email, user.Meta.Gravatar,
+	err = s.client.QueryRow("INSERT INTO users (username, email, gravatar, password, salt) VALUES ($1, $2, $3, $4, $5) RETURNING user_id", user.Meta.Username, user.Meta.Email, user.Meta.Gravatar,
 		user.Security.Pass.Password, user.Security.Pass.Salt).Scan(&id)
 
 	user.Meta.ID = id.String

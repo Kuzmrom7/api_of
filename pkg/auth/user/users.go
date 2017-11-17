@@ -6,8 +6,8 @@ import (
 	ctx "github.com/orderfood/api_of/pkg/api/context"
 	"github.com/orderfood/api_of/pkg/auth/user/routes/request"
 	"github.com/orderfood/api_of/pkg/common/types"
-
 	"github.com/orderfood/api_of/pkg/util/generator"
+
 )
 
 type user struct {
@@ -36,6 +36,22 @@ func (u *user) CheckExists(login string) (bool, error) {
 	return exists, nil
 }
 
+func (u *user) GetByID (id string) (*types.User, error){
+	var (
+		storage = ctx.Get().GetStorage()
+	)
+
+	usr, err := storage.User().GetUserByID(u.context, id)
+	if err != nil {
+		return nil, err
+	}
+	if usr == nil {
+		return nil, nil
+	}
+
+	return usr, nil
+}
+
 func (u *user) Create(rq *request.RequestUserCreate) (*types.User, error){
 
 	var (
@@ -54,8 +70,6 @@ func (u *user) Create(rq *request.RequestUserCreate) (*types.User, error){
 	if err := storage.User().CreateUser(u.context, usr); err != nil{
 		return nil, err
 	}
-
-//TODO Add registry with generate token jwt
 
 	return usr, nil
 }
