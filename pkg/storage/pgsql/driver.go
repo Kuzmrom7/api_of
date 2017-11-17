@@ -5,6 +5,7 @@ import (
 	"github.com/orderfood/api_of/pkg/storage/storage"
 	"database/sql"
 	_ "github.com/lib/pq"
+	"log"
 )
 
 type Storage struct {
@@ -19,6 +20,8 @@ func (s *Storage) User() storage.User {
 }
 
 func New(c store.Config) (*Storage, error) {
+
+	log.Println(c.Connection)
 
 	client, err := sql.Open("postgres", c.Connection)
 	if err != nil {
