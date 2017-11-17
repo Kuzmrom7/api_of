@@ -39,6 +39,10 @@ CREATE EXTENSION "uuid-ossp";
    user_id         UUID PRIMARY KEY             NOT NULL  DEFAULT uuid_generate_v4(),
    username        VARCHAR(256) UNIQUE,
    email           VARCHAR(256) UNIQUE,
+   gravatar        VARCHAR(64)                    DEFAULT '',
+   password        VARCHAR(256)                   DEFAULT '',
+   salt            VARCHAR(256)                   DEFAULT '',
+   active          BOOLEAN                        DEFAULT TRUE,
    created         TIMESTAMP                      DEFAULT now(),
    updated         TIMESTAMP                      DEFAULT now()
  );
