@@ -11,21 +11,22 @@ import (
 	"github.com/orderfood/api_of/pkg/common/types"
 	"github.com/orderfood/api_of/pkg/common/errors"
 
-	"fmt"
 )
-
-
 
 func GetUser (w http.ResponseWriter, r *http.Request){
 
-	//TODO Реализовать id ввод (скорее это будет по контексту запроса)
-	
-  var strid string
-	log.Println("Vedite id")
- 	fmt.Scan(&strid)
+	if r.Context().Value("uid") == nil {
+		errors.HTTP.Unauthorized(w)
+		return
+	}
+
+	var (
+		err      error
+		id = r.Context().Value("uid").(string)
+	)
 
 	u := user.New(r.Context())
-	usr, err := u.GetByID(strid)
+	usr, err := u.GetByID(id)
 	if err != nil {
 		errors.HTTP.InternalServerError(w)
 		return
