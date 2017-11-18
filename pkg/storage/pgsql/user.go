@@ -11,6 +11,9 @@ import (
 
 )
 const (
+
+	sqlstrUserGetByLogin = ``
+
 	sqlstrUserExistsByLogin = `
 		SELECT TRUE
 		FROM users
@@ -25,7 +28,7 @@ const (
 
 	sqlCreateUser = `
 		INSERT INTO users (username, email, gravatar, password, salt)
-		VALUES ('$1', '$2', '$3', '$4', '$5')
+		VALUES ($1, $2, $3, $4, $5)
 		RETURNING user_id;
 	`
 )
@@ -70,6 +73,7 @@ func (um *userModel) convert() *types.User{
 }
 
 
+
 func (s *UserStorage) CheckExistsByLogin(ctx context.Context, login string) (bool, error) {
 	result, err := s.client.Exec(sqlstrUserExistsByLogin, login)
 	if err != nil {
@@ -84,13 +88,15 @@ func (s *UserStorage) CheckExistsByLogin(ctx context.Context, login string) (boo
 	return rows != 0, nil
 }
 
-func (s *UserStorage)GetUserByID(ctx context.Context, id string) (*types.User, error) {
+func (s *UserStorage) GetByLogin (ctx context.Context, login string) (*types.User, error) {
 	var (
 		err error
 		um = new(userModel)
 	)
 
-	err = s.client.QueryRow(sqlstrUserGetById, id).Scan(&um.id, &um.username, &um.email, &um.gravatar, &um.password, &um.salt)
+	err = s.client.QueryRow(sqlstrUserGetByLogin, login).Scan(&um.id, &um.username, &um.email,
+		&um.gravatar, &um.password, &um.salt)
+
 	switch err{
 	case nil:
 	case sql.ErrNoRows:
@@ -100,7 +106,28 @@ func (s *UserStorage)GetUserByID(ctx context.Context, id string) (*types.User, e
 	}
 
 	usr := um.convert()
-	log.Print(usr)
+
+	return usr, nil
+}
+
+func (s *UserStorage)GetUserByID(ctx context.Context, id string) (*types.User, error) {
+	var (
+		err error
+		um = new(userModel)
+	)
+
+	err = s.client.QueryRow(sqlstrUserGetById, id).Scan(&um.id, &um.username, &um.email,
+		&um.gravatar, &um.password, &um.salt)
+	switch err{
+	case nil:
+	case sql.ErrNoRows:
+		return nil, nil
+	default:
+		return nil, err
+	}
+
+	usr := um.convert()
+
 	return usr, nil
 }
 
@@ -117,8 +144,9 @@ func (s *UserStorage) CreateUser (ctx context.Context, user *types.User) error {
 		id  store.NullString
 	)
 
-	err = s.client.QueryRow("INSERT INTO users (username, email, gravatar, password, salt) VALUES ($1, $2, $3, $4, $5) RETURNING user_id", user.Meta.Username, user.Meta.Email, user.Meta.Gravatar,
+	err = s.client.QueryRow( sqlCreateUser, user.Meta.Username, user.Meta.Email, user.Meta.Gravatar,
 		user.Security.Pass.Password, user.Security.Pass.Salt).Scan(&id)
+
 	user.Meta.ID = id.String
 
 	return err

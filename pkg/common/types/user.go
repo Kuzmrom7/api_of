@@ -1,5 +1,7 @@
 package types
 
+import "golang.org/x/crypto/bcrypt"
+
 type User struct {
 	Meta			 	UserMeta 				`json:"meta"`
 	//Profile UserProfile `json:"profile"`
@@ -29,3 +31,12 @@ type UserSSH struct {
 	Fingerprint string `json:"fingerprint"`
 	Key         string `json:"key"`
 }
+
+func (p *UserPassword) ValidatePassword(password string) error{
+	if err := bcrypt.CompareHashAndPassword([]byte(p.Password), []byte(password + string(p.Salt)));
+	err != nil{
+		return err
+	}
+	return  nil
+}
+

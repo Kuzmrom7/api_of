@@ -19,6 +19,10 @@ func (Http) InternalServerError(w http.ResponseWriter) {
 	Http{Code:http.StatusInternalServerError, Status: http.StatusText(http.StatusInternalServerError), Message: "Internal server error"}.send(w)
 }
 
+func (Http) Unauthorized(w http.ResponseWriter) {
+	Http{Code: http.StatusUnauthorized, Status: http.StatusText(http.StatusUnauthorized), Message: "Access denied"}.send(w)
+}
+
 
 func (h Http) send(w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
