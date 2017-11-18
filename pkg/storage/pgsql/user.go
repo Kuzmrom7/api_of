@@ -12,7 +12,9 @@ import (
 )
 const (
 	sqlstrUserExistsByLogin = `
-
+		SELECT TRUE
+		FROM users
+		WHERE users.username = $1 OR users.email = $1
 	`
 
 	sqlstrUserGetById = `
@@ -115,19 +117,8 @@ func (s *UserStorage) CreateUser (ctx context.Context, user *types.User) error {
 		id  store.NullString
 	)
 
-	//tx, err := s.client.Begin()
-	//if err != nil {
-	//	return err
-	//}
-	log.Println(user.Meta.Username)
-	log.Println( user.Meta.Email)
-	log.Println(user.Meta.Gravatar)
-	log.Println(user.Security.Pass.Password)
-	log.Println(user.Security.Pass.Salt)
-
 	err = s.client.QueryRow("INSERT INTO users (username, email, gravatar, password, salt) VALUES ($1, $2, $3, $4, $5) RETURNING user_id", user.Meta.Username, user.Meta.Email, user.Meta.Gravatar,
 		user.Security.Pass.Password, user.Security.Pass.Salt).Scan(&id)
-
 	user.Meta.ID = id.String
 
 	return err

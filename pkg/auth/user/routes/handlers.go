@@ -59,24 +59,23 @@ func UserCreate (w http.ResponseWriter, r *http.Request) {
 	}
 
 	u := user.New(r.Context())
-	//TODO on feature
-	//exists, err := u.CheckExists(*rq.Username)
-	//if err != nil && exists {
-	//	errors.New("user").NotUnique("username").Http(w)
-	//	return
-	//}
-	//if err != nil{
-	//	errors.HTTP.InternalServerError(w)
-	//}
-	//log.Print("I here3")
-	//exists, err = u.CheckExists(*rq.Email)
-	//if err != nil && exists {
-	//	errors.New("user").NotUnique("email").Http(w)
-	//	return
-	//}
-	//if err != nil{
-	//	errors.HTTP.InternalServerError(w)
-	//}
+
+	exists, err := u.CheckExists(*rq.Username)
+	if err == nil && exists {
+		errors.New("user").NotUnique("username").Http(w)
+		return
+	}
+	if err != nil{
+		errors.HTTP.InternalServerError(w)
+	}
+	exists, err = u.CheckExists(*rq.Email)
+	if err == nil && exists {
+		errors.New("user").NotUnique("email").Http(w)
+		return
+	}
+	if err != nil{
+		errors.HTTP.InternalServerError(w)
+	}
 
 	usr, err := u.Create(rq)
 
