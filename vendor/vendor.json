@@ -9,6 +9,12 @@
 			"revisionTime": "2017-11-16T12:15:10Z"
 		},
 		{
+			"checksumSHA1": "0sh4FXicINLD/q5WM0qnXLan21g=",
+			"path": "github.com/dgrijalva/jwt-go",
+			"revision": "dbeaa9332f19a944acb5736b4456cfcc02140e29",
+			"revisionTime": "2017-10-19T21:57:19Z"
+		},
+		{
 			"checksumSHA1": "HEEx7LDDtZ8vwZauJtzdTc/uDa8=",
 			"path": "github.com/gorilla/mux",
 			"revision": "9bd9ff2d1d2a0660d35050674f2c3112547997af",
