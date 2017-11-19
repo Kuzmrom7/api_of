@@ -72,6 +72,7 @@ CREATE EXTENSION "uuid-ossp";
    id_menu         UUID PRIMARY KEY             NOT NULL DEFAULT  uuid_generate_v4(),
    name_menu       VARCHAR(256) UNIQUE,
    id_place        UUID                         NOT NULL,
+   user_id         UUID                         NOT NULL,
    created         TIMESTAMP                    DEFAULT now(),
    updated         TIMESTAMP                    DEFAULT now()
  );
@@ -81,6 +82,7 @@ CREATE EXTENSION "uuid-ossp";
    id_section         UUID PRIMARY KEY             NOT NULL DEFAULT  uuid_generate_v4(),
    name_section       VARCHAR(256)                 DEFAULT '',
    id_menu            UUID                         NOT NULL,
+   user_id            UUID                         NOT NULL,
    created            TIMESTAMP                    DEFAULT now(),
    updated            TIMESTAMP                    DEFAULT now()
  );
@@ -90,6 +92,7 @@ CREATE EXTENSION "uuid-ossp";
    id_typeDish         UUID PRIMARY KEY             NOT NULL DEFAULT  uuid_generate_v4(),
    name_typeDish       VARCHAR(256)                 DEFAULT '',
    id_section          UUID                         NOT NULL,
+   user_id             UUID                         NOT NULL,
    created             TIMESTAMP                    DEFAULT now(),
    updated             TIMESTAMP                    DEFAULT now()
 
@@ -99,6 +102,7 @@ CREATE EXTENSION "uuid-ossp";
    id_menu          UUID PRIMARY KEY             NOT NULL DEFAULT  uuid_generate_v4(),
    name_dish        VARCHAR(256) UNIQUE,
    id_typeDish      UUID                         NOT NULL,
+   user_id          UUID                             NOT NULL,
    description      VARCHAR(256)                 DEFAULT '',
    time_min         INTEGER                      DEFAULT 0,
    created          TIMESTAMP                    DEFAULT now(),

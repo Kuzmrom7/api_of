@@ -3,13 +3,13 @@
 	"ignore": "test",
 	"package": [
 		{
-			"checksumSHA1": "vXD6P3iFu1z4YCW62Yeca6i9Djc=",
+			"checksumSHA1": "6cp5mmGn54krDK+Sh1bLPZREbj0=",
 			"path": "github.com/asaskevich/govalidator",
 			"revision": "f682aee18e37332521b3c3ef4cba9ddb9b516b09",
 			"revisionTime": "2017-11-16T12:15:10Z"
 		},
 		{
-			"checksumSHA1": "0sh4FXicINLD/q5WM0qnXLan21g=",
+			"checksumSHA1": "+TKtBzv23ywvmmqRiGEjUba4YmI=",
 			"path": "github.com/dgrijalva/jwt-go",
 			"revision": "dbeaa9332f19a944acb5736b4456cfcc02140e29",
 			"revisionTime": "2017-10-19T21:57:19Z"
@@ -21,49 +21,49 @@
 			"revisionTime": "2017-10-10T21:54:56Z"
 		},
 		{
-			"checksumSHA1": "7GYKxuw/kcbQ/saIE/pzRjvBhlU=",
+			"checksumSHA1": "IF/Y5VUI27ZnsNE0eYxghei9p5Y=",
 			"path": "github.com/jawher/mow.cli",
 			"revision": "3ff64ca21987cfa628bd8d1865162b7ccd6107d7",
 			"revisionTime": "2017-11-11T12:18:41Z"
 		},
 		{
-			"checksumSHA1": "YZgEoQdubWHBJc4XNpFGFgLXVT0=",
+			"checksumSHA1": "uwnJHm8Gd1eHtNSpUGdSk5BlxfU=",
 			"path": "github.com/jawher/mow.cli/internal/container",
 			"revision": "3ff64ca21987cfa628bd8d1865162b7ccd6107d7",
 			"revisionTime": "2017-11-11T12:18:41Z"
 		},
 		{
-			"checksumSHA1": "SVJOISQ97gkJCV08mkOm7ST/HGs=",
+			"checksumSHA1": "qOpDoI5EiHFjKS8ViJo51HiLPCg=",
 			"path": "github.com/jawher/mow.cli/internal/flow",
 			"revision": "3ff64ca21987cfa628bd8d1865162b7ccd6107d7",
 			"revisionTime": "2017-11-11T12:18:41Z"
 		},
 		{
-			"checksumSHA1": "Pkq8yaS35GK8kWPSwm/VULV5FRY=",
+			"checksumSHA1": "72Uqy51AQymJlWzn/9vYWhqhW04=",
 			"path": "github.com/jawher/mow.cli/internal/fsm",
 			"revision": "3ff64ca21987cfa628bd8d1865162b7ccd6107d7",
 			"revisionTime": "2017-11-11T12:18:41Z"
 		},
 		{
-			"checksumSHA1": "yLj7bmde711FjGoopu07NyrlBnk=",
+			"checksumSHA1": "XBG8fzCX/uXW92Euctkvaj1Eq1g=",
 			"path": "github.com/jawher/mow.cli/internal/lexer",
 			"revision": "3ff64ca21987cfa628bd8d1865162b7ccd6107d7",
 			"revisionTime": "2017-11-11T12:18:41Z"
 		},
 		{
-			"checksumSHA1": "CdtT1Tq498Vman59u07jd2edNRU=",
+			"checksumSHA1": "L08a+gbFmzTmxz1GgrayiseaZms=",
 			"path": "github.com/jawher/mow.cli/internal/matcher",
 			"revision": "3ff64ca21987cfa628bd8d1865162b7ccd6107d7",
 			"revisionTime": "2017-11-11T12:18:41Z"
 		},
 		{
-			"checksumSHA1": "Aq5m3XQEGmdH1uuaPApvMR2tUv8=",
+			"checksumSHA1": "DvUiOG6lUYXPhHGHhD7RqNxnX3E=",
 			"path": "github.com/jawher/mow.cli/internal/parser",
 			"revision": "3ff64ca21987cfa628bd8d1865162b7ccd6107d7",
 			"revisionTime": "2017-11-11T12:18:41Z"
 		},
 		{
-			"checksumSHA1": "SO+4ZiaN+nvEYHKjPIr4wy0Bo6U=",
+			"checksumSHA1": "Y8x+qE1O695IlBJ/ObBjXS+wzSs=",
 			"path": "github.com/jawher/mow.cli/internal/values",
 			"revision": "3ff64ca21987cfa628bd8d1865162b7ccd6107d7",
 			"revisionTime": "2017-11-11T12:18:41Z"
@@ -81,7 +81,7 @@
 			"revisionTime": "2017-10-11T13:52:33Z"
 		},
 		{
-			"checksumSHA1": "HUXE+Nrcau8FSaVEvPYHMvDjxOE=",
+			"checksumSHA1": "zmC8/3V4ls53DJlNTKDZwPSC/dA=",
 			"path": "github.com/satori/go.uuid",
 			"revision": "5bf94b69c6b68ee1b541973bb8e1144db23a194b",
 			"revisionTime": "2017-03-21T23:07:31Z"

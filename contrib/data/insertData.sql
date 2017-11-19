@@ -20,31 +20,31 @@ VALUES ('9ba48d7c-b573-4dcb-b8bb-fbb196753231', 'Бургерная Lil_ASCII', 
 
 -------MENUS-------
 
-INSERT INTO menu (id_menu, name_menu, id_place)
-VALUES ('a93ba633-7547-491f-a4ae-339b1420b1c7', 'Летнее меню','9ba48d7c-b573-4dcb-b8bb-fbb196753231' );
+INSERT INTO menu (id_menu,user_id, name_menu, id_place)
+VALUES ('a93ba633-7547-491f-a4ae-339b1420b1c7','4f2858bb-ecab-4f88-b773-551d34f07bad', 'Летнее меню','9ba48d7c-b573-4dcb-b8bb-fbb196753231' );
 
 -------SECTIONS MENUS-------
 
-INSERT INTO section_menu (id_section, id_menu)
-VALUES ('771570df-cc44-4af5-a2b0-ee19b9f87cd9', 'a93ba633-7547-491f-a4ae-339b1420b1c7');
+INSERT INTO section_menu (id_section, id_menu, user_id)
+VALUES ('771570df-cc44-4af5-a2b0-ee19b9f87cd9', 'a93ba633-7547-491f-a4ae-339b1420b1c7','4f2858bb-ecab-4f88-b773-551d34f07bad');
 
 -------TYPES DISHES-------
 
-INSERT INTO type_dish (id_typedish, name_typedish, id_section)
-VALUES ('041529e0-3111-4993-a75b-7a12545a0d9f', 'Бургеры','771570df-cc44-4af5-a2b0-ee19b9f87cd9');
+INSERT INTO type_dish (id_typedish, name_typedish, id_section,user_id)
+VALUES ('041529e0-3111-4993-a75b-7a12545a0d9f', 'Бургеры','771570df-cc44-4af5-a2b0-ee19b9f87cd9','4f2858bb-ecab-4f88-b773-551d34f07bad');
 
 -------DISH-------
 
-INSERT INTO dish (id_menu, name_dish, id_typedish, description)
-VALUES ('31ba1f68-6eb3-4362-8d4d-24616fa9593d','Классический бургер', '041529e0-3111-4993-a75b-7a12545a0d9f', 'Лучший в мире бургер');
+INSERT INTO dish (id_menu, name_dish, id_typedish, description,user_id)
+VALUES ('31ba1f68-6eb3-4362-8d4d-24616fa9593d','Классический бургер', '041529e0-3111-4993-a75b-7a12545a0d9f', 'Лучший в мире бургер','4f2858bb-ecab-4f88-b773-551d34f07bad');
 
 
-INSERT INTO dish (id_menu, name_dish, id_typedish, description)
-VALUES ('8072b173-baaa-4d0f-a1c7-8af3995ffefa','Русский бургер', '041529e0-3111-4993-a75b-7a12545a0d9f', 'Лучший в мире бургер');
+INSERT INTO dish (id_menu, name_dish, id_typedish, description,user_id)
+VALUES ('8072b173-baaa-4d0f-a1c7-8af3995ffefa','Русский бургер', '041529e0-3111-4993-a75b-7a12545a0d9f', 'Лучший в мире бургер','4f2858bb-ecab-4f88-b773-551d34f07bad');
 
 
-INSERT INTO dish (id_menu, name_dish, id_typedish, description)
-VALUES ('5cb7e111-3860-424b-a14e-83a93db1e889','Исландский бургер', '041529e0-3111-4993-a75b-7a12545a0d9f', 'Лучший в мире бургер');
+INSERT INTO dish (id_menu, name_dish, id_typedish, description,user_id)
+VALUES ('5cb7e111-3860-424b-a14e-83a93db1e889','Исландский бургер', '041529e0-3111-4993-a75b-7a12545a0d9f', 'Лучший в мире бургер','4f2858bb-ecab-4f88-b773-551d34f07bad');
 
 ------EXAMPLE SELECT------
 
