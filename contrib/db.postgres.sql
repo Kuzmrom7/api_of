@@ -96,7 +96,7 @@ CREATE EXTENSION "uuid-ossp";
  );
  CREATE TABLE dish
  (
-   id_menu          UUID PRIMARY KEY             NOT NULL DEFAULT  uuid_generate_v4(),
+   id_dish          UUID PRIMARY KEY             NOT NULL DEFAULT  uuid_generate_v4(),
    name_dish        VARCHAR(256) UNIQUE,
    id_typeDish      UUID                         NOT NULL,
    description      VARCHAR(256)                 DEFAULT '',
@@ -104,6 +104,15 @@ CREATE EXTENSION "uuid-ossp";
    created          TIMESTAMP                    DEFAULT now(),
    updated          TIMESTAMP                    DEFAULT now()
  );
+CREATE TABLE img_dish
+(
+  id_img             UUID PRIMARY KEY             NOT NULL DEFAULT  uuid_generate_v4(),
+  url                VARCHAR(256)                 NOT NULL,
+  id_dish            UUID                         NOT NULL,
+  created            TIMESTAMP                    DEFAULT now(),
+  updated            TIMESTAMP                    DEFAULT now()
+
+);
 
  CREATE TABLE type_personal
  (
@@ -118,8 +127,8 @@ CREATE EXTENSION "uuid-ossp";
    phone               VARCHAR(64)                  DEFAULT '',
    id_place            UUID                         NOT NULL,
    id_typePersonal     UUID                         NOT NULL,
-   created          TIMESTAMP                    DEFAULT now(),
-   updated          TIMESTAMP                    DEFAULT now()
+   created             TIMESTAMP                    DEFAULT now(),
+   updated             TIMESTAMP                    DEFAULT now()
 
  );
 

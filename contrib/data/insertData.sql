@@ -35,15 +35,15 @@ VALUES ('041529e0-3111-4993-a75b-7a12545a0d9f', 'Бургеры','771570df-cc44-
 
 -------DISH-------
 
-INSERT INTO dish (id_menu, name_dish, id_typedish, description)
+INSERT INTO dish (id_dish, name_dish, id_typedish, description)
 VALUES ('31ba1f68-6eb3-4362-8d4d-24616fa9593d','Классический бургер', '041529e0-3111-4993-a75b-7a12545a0d9f', 'Лучший в мире бургер');
 
 
-INSERT INTO dish (id_menu, name_dish, id_typedish, description)
+INSERT INTO dish (id_dish, name_dish, id_typedish, description)
 VALUES ('8072b173-baaa-4d0f-a1c7-8af3995ffefa','Русский бургер', '041529e0-3111-4993-a75b-7a12545a0d9f', 'Лучший в мире бургер');
 
 
-INSERT INTO dish (id_menu, name_dish, id_typedish, description)
+INSERT INTO dish (id_dish, name_dish, id_typedish, description)
 VALUES ('5cb7e111-3860-424b-a14e-83a93db1e889','Исландский бургер', '041529e0-3111-4993-a75b-7a12545a0d9f', 'Лучший в мире бургер');
 
 ------EXAMPLE SELECT------
