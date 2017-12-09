@@ -11,3 +11,9 @@ type User interface {
 	CreateUser(ctx context.Context, user *types.User) error
 	CheckExistsByLogin(ctx context.Context, login string) (bool, error)
 }
+
+type Place interface {
+
+	CreatePlace(ctx context.Context, place *types.Place) error
+
+}
