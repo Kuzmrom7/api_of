@@ -7,6 +7,8 @@ import (
 	users "github.com/orderfood/api_of/pkg/auth/user/routes"
 	"github.com/orderfood/api_of/pkg/util/http"
 	session "github.com/orderfood/api_of/pkg/auth/session/routes"
+	place "github.com/orderfood/api_of/pkg/api/place/routes"
+	menu "github.com/orderfood/api_of/pkg/api/menu/routes"
 )
 
 var Routes = make([]http.Route, 0)
@@ -20,6 +22,9 @@ func init() {
 
 	AddRoutes(users.Routes)
 	AddRoutes(session.Routes)
+	AddRoutes(place.Routes)
+	AddRoutes(menu.Routes)
+
 }
 
 func Listen(host string, port int){
