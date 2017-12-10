@@ -13,9 +13,9 @@ import (
 const (
 
 	sqlCreateMenu = `
-		INSERT INTO place (name, phone_number, url, city, adress, user_id, id_typePlace)
-		VALUES ($1, $2, $3, $4, $5, $6, $7)
-		RETURNING id_place;
+		INSERT INTO menu (name_menu, id_place)
+		VALUES ($1, $2)
+		RETURNING id_menu;
 	`
 
 	sqlPlaceIDGetByName = `SELECT place.id_place
