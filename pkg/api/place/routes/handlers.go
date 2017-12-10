@@ -8,7 +8,7 @@ import (
 	"github.com/orderfood/api_of/pkg/api/place/routes/request"
 	"github.com/orderfood/api_of/pkg/common/errors"
 	"github.com/orderfood/api_of/pkg/api/place"
-	"fmt"
+//	"fmt"
 )
 
 func PlaceCreate(w http.ResponseWriter, r *http.Request) {
@@ -33,11 +33,20 @@ func PlaceCreate(w http.ResponseWriter, r *http.Request) {
 
 	p := place.New(r.Context())
 
+	typeplace_id, err := p.GetIDByName(rq.NameTypePlace)
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+		return
+	}
+	if typeplace_id == "" {
+		errors.New("type_place").NotFound().Http(w)
+	}
+
 	//TODO idTypePlace нужно запросом в базку получить по имени который в jsone приходит, те нужно сначала метод который получает id из базки
 	//пока mock ресторана
-	var idTypePlace = "68c65b87-925b-4227-bada-c543b55048e2"
+	//var idTypePlace = "68c65b87-925b-4227-bada-c543b55048e2"
 
-	plc, err := p.Create(usrid1, idTypePlace, rq)
+	plc, err := p.Create(usrid1, typeplace_id, rq)
 	if err != nil {
 		errors.HTTP.InternalServerError(w)
 	}
