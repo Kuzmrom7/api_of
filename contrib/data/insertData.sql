@@ -10,7 +10,7 @@ VALUES ('4f2858bb-ecab-4f88-b773-551d34f07bad', 'orderfood', 'orderfood@of.ru', 
 -------TYPES PLACES-------
 
 INSERT INTO type_place (id_typeplace, name_type)
-VALUES ('68c65b87-925b-4227-bada-c543b55048e2', 'Ресторан');
+VALUES ('68c65b87-925b-4227-bada-c543b55048e2', 'ресторан');
 
 -------PLACES-------
 

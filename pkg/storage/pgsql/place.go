@@ -7,23 +7,28 @@ import (
 	"github.com/orderfood/api_of/pkg/storage/store"
 	"log"
 	"errors"
+	"database/sql"
 )
 
 const (
-	sqlstrPlaceGetById = `SELECT place.name, place.phone_number, place.url, place.city, place.adress, place.user_id, place.id_typePlace
-		FROM place
-		WHERE users.user_id = $1;`
 
 	sqlCreatePlace = `
 		INSERT INTO place (name, phone_number, url, city, adress, user_id, id_typePlace)
 		VALUES ($1, $2, $3, $4, $5, $6, $7)
 		RETURNING id_place;
 	`
+	sqlTypePlaceIDGetByName = `SELECT type_place.id_typePlace
+		FROM type_place
+		WHERE type_place.name_type = $1;`
 )
 
 type PlaceStorage struct {
 	storage.Place
 	client store.IDB
+}
+
+type typeplaceModel struct {
+	id 				store.NullString
 }
 
 func (s *PlaceStorage) CreatePlace(ctx context.Context, place *types.Place) error {
@@ -45,6 +50,27 @@ func (s *PlaceStorage) CreatePlace(ctx context.Context, place *types.Place) erro
 	place.Meta.ID = id.String
 
 	return err
+}
+
+func (s *PlaceStorage) GetTypePlaceByName (ctx context.Context, name string) (string, error) {
+	var (
+		err error
+		pl = new(typeplaceModel)
+	)
+
+	err = s.client.QueryRow(sqlTypePlaceIDGetByName, name).Scan(&pl.id)
+
+	switch err{
+	case nil:
+	case sql.ErrNoRows:
+		return "", nil
+	default:
+		return "", err
+	}
+
+	typeplaceID := pl.id.String
+
+	return typeplaceID, nil
 }
 
 func newPlaceStorage(client store.IDB) *PlaceStorage {

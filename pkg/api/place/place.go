@@ -6,6 +6,7 @@ import (
 	ctx "github.com/orderfood/api_of/pkg/api/context"
 	"github.com/orderfood/api_of/pkg/api/place/routes/request"
 	"github.com/orderfood/api_of/pkg/common/types"
+	"strings"
 )
 
 type place struct {
@@ -18,21 +19,22 @@ func New(c context.Context) *place {
 	}
 }
 
-//func (u *place) GetByID (id string) (*types.User, error){
-//	var (
-//		storage = ctx.Get().GetStorage()
-//	)
-//
-//	usr, err := storage.User().GetUserByID(u.context, id)
-//	if err != nil {
-//		return nil, err
-//	}
-//	if usr == nil {
-//		return nil, nil
-//	}
-//
-//	return usr, nil
-//}
+func (p *place) GetIDByName (name_typeplace string) (string, error){
+
+	var (
+		storage = ctx.Get().GetStorage()
+	)
+
+	typeplace_id, err := storage.Place().GetTypePlaceByName(p.context, strings.ToLower(name_typeplace))
+	if err != nil {
+		return "", err
+	}
+	if typeplace_id == "" {
+		return "", nil
+	}
+
+	return typeplace_id, nil
+}
 
 func (p *place) Create(user, typeplace string, rq *request.RequestPlaceCreate) (*types.Place, error) {
 

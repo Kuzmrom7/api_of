@@ -6,7 +6,6 @@ import (
 	"github.com/orderfood/api_of/pkg/common/errors"
 	"io/ioutil"
 	"encoding/json"
-
 )
 
 type RequestPlaceCreate struct {
@@ -32,7 +31,6 @@ func (s *RequestPlaceCreate) DecodeAndValidate(reader io.Reader) *errors.Err {
 	if err != nil {
 		return errors.New("place").IncorrectJSON(err)
 	}
-
 
 	return nil
 }
