@@ -21,3 +21,9 @@ type Menu interface {
 	CreateMenu(ctx context.Context, menu *types.Menu) error
 	GetPlaceByName(ctx context.Context, name string) (string, error)
 }
+
+type Dich interface {
+	CreateDich(ctx context.Context, dich *types.Dich) error
+	Remove(ctx context.Context, id string) error
+	GetIDdichByName(ctx context.Context, name string) (string, error)
+}

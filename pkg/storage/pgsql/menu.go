@@ -11,7 +11,6 @@ import (
 )
 
 const (
-
 	sqlCreateMenu = `
 		INSERT INTO menu (name_menu, id_place)
 		VALUES ($1, $2)
@@ -24,12 +23,12 @@ const (
 )
 
 type MenuStorage struct {
-	storage.Place
+	storage.Menu
 	client store.IDB
 }
 
 type placeModel struct {
-	id 				store.NullString
+	id store.NullString
 }
 
 func (s *MenuStorage) CreateMenu(ctx context.Context, menu *types.Menu) error {
@@ -53,7 +52,7 @@ func (s *MenuStorage) CreateMenu(ctx context.Context, menu *types.Menu) error {
 	return err
 }
 
-func (s *MenuStorage) GetPlaceByName (ctx context.Context, name string) (string, error) {
+func (s *MenuStorage) GetPlaceByName(ctx context.Context, name string) (string, error) {
 	var (
 		err error
 		plc = new(placeModel)
@@ -61,7 +60,7 @@ func (s *MenuStorage) GetPlaceByName (ctx context.Context, name string) (string,
 
 	err = s.client.QueryRow(sqlPlaceIDGetByName, name).Scan(&plc.id)
 
-	switch err{
+	switch err {
 	case nil:
 	case sql.ErrNoRows:
 		return "", nil
