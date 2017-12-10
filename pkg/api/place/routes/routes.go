@@ -7,7 +7,7 @@ import (
 
 var Routes = []http.Route{
 
-	{Path:"/place", Method:http.MethodGet, Middleware: []http.Middleware{middleware.Authenticate}, Handler:GetPlace},
-	{Path:"/place", Method:http.MethodPost, Handler:PlaceCreate},
+	//{Path:"/place", Method:http.MethodGet, Middleware: []http.Middleware{middleware.Authenticate}, Handler:GetPlace},
+	{Path:"/place", Method:http.MethodPost, Middleware: []http.Middleware{middleware.Authenticate}, Handler:PlaceCreate},
 
 }

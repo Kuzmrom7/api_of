@@ -6,14 +6,14 @@ import (
 )
 
 func newPlace(obj *types.Place) *Place{
-	u := new(Place)
-	u.City = obj.Meta.City
-	u.Name = obj.Meta.Name
-	u.Url = obj.Meta.Url
-	u.Phone = obj.Meta.Phone
-	u.Adress = obj.Meta.Adress
-	u.NameTypePlace = obj.Meta.TypePlaceID
-	return u
+	p := new(Place)
+	p.City = obj.Meta.City
+	p.Name = obj.Meta.Name
+	p.Url = obj.Meta.Url
+	p.Phone = obj.Meta.Phone
+	p.Adress = obj.Meta.Adress
+	//u.NameTypePlace = obj.Meta.TypePlaceID
+	return p
 }
 
 func (obj *Place) ToJson() ([]byte, error) {
