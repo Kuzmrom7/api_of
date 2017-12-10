@@ -26,11 +26,11 @@ func (s *RequestPlaceCreate) DecodeAndValidate(reader io.Reader) *errors.Err {
 
 	body, err := ioutil.ReadAll(reader)
 	if err != nil {
-		return errors.New("user").Unknown(err)
+		return errors.New("place").Unknown(err)
 	}
 	err = json.Unmarshal(body, s)
 	if err != nil {
-		return errors.New("user").IncorrectJSON(err)
+		return errors.New("place").IncorrectJSON(err)
 	}
 
 
