@@ -4,17 +4,14 @@ import (
 	"net/http"
 	"log"
 
-	//sv1 "github.com/orderfood/api_of/pkg/api/place/views/v1"
-	//"github.com/orderfood/api_of/pkg/auth/user/views/v1"
 	"github.com/orderfood/api_of/pkg/api/place/views/v1"
 	"github.com/orderfood/api_of/pkg/api/place/routes/request"
-	"github.com/orderfood/api_of/pkg/common/types"
 	"github.com/orderfood/api_of/pkg/common/errors"
-
 	"github.com/orderfood/api_of/pkg/api/place"
+	"fmt"
 )
 
-func PlaceCreate (w http.ResponseWriter, r *http.Request) {
+func PlaceCreate(w http.ResponseWriter, r *http.Request) {
 
 	var (
 		err error
@@ -30,8 +27,9 @@ func PlaceCreate (w http.ResponseWriter, r *http.Request) {
 		err.Http(w)
 		return
 	}
-
-	usr := r.Context().Value("uid").(*types.User)
+	usrid1 := r.Context().Value("uid").(string)
+	//fmt.Print(usrid1)
+	//usrid := "42f39524-7cc3-4858-affb-a1c8822852bc"
 
 	p := place.New(r.Context())
 
@@ -39,7 +37,10 @@ func PlaceCreate (w http.ResponseWriter, r *http.Request) {
 	//пока mock ресторана
 	var idTypePlace = "68c65b87-925b-4227-bada-c543b55048e2"
 
-	plc, err := p.Create(usr.Meta.ID, idTypePlace ,rq)
+	plc, err := p.Create(usrid1, idTypePlace, rq)
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+	}
 
 	response, err := v1.NewPlace(plc).ToJson()
 	if err != nil {
@@ -48,7 +49,7 @@ func PlaceCreate (w http.ResponseWriter, r *http.Request) {
 
 	///log.Println("Create user id: " , usr.Meta.ID, " username: " , usr.Meta.Username)
 	w.WriteHeader(http.StatusOK)
-	if _, err = w.Write(response); err != nil{
+	if _, err = w.Write(response); err != nil {
 		log.Println("Place write response error")
 		return
 	}

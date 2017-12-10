@@ -15,8 +15,8 @@ const (
 		WHERE users.user_id = $1;`
 
 	sqlCreatePlace = `
-		INSERT INTO users (name, phone_number, url, city, adress, user_id, id_typePlace)
-		VALUES ($1, $2, $3, $4, $5, $6)
+		INSERT INTO place (name, phone_number, url, city, adress, user_id, id_typePlace)
+		VALUES ($1, $2, $3, $4, $5, $6, $7)
 		RETURNING id_place;
 	`
 )
@@ -26,13 +26,13 @@ type PlaceStorage struct {
 	client store.IDB
 }
 
-func (s *PlaceStorage) Create (ctx context.Context, place *types.Place) error {
+func (s *PlaceStorage) CreatePlace(ctx context.Context, place *types.Place) error {
 
 	log.Println("STORAGE--- CreatePlace()")
 
 	if place == nil {
 		err := errors.New("place can not be nil")
-		return  err
+		return err
 	}
 
 	var (
@@ -40,7 +40,7 @@ func (s *PlaceStorage) Create (ctx context.Context, place *types.Place) error {
 		id  store.NullString
 	)
 
-	err = s.client.QueryRow( sqlCreatePlace, place.Meta.Name, place.Meta.Phone, place.Meta.Url, place.Meta.City, place.Meta.Adress, place.Meta.UserID, place.Meta.TypePlaceID).Scan(&id)
+	err = s.client.QueryRow(sqlCreatePlace, place.Meta.Name, place.Meta.Phone, place.Meta.Url, place.Meta.City, place.Meta.Adress, place.Meta.UserID, place.Meta.TypePlaceID).Scan(&id)
 
 	place.Meta.ID = id.String
 
