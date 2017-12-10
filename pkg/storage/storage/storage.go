@@ -13,7 +13,11 @@ type User interface {
 }
 
 type Place interface {
-
 	CreatePlace(ctx context.Context, place *types.Place) error
 	GetTypePlaceByName(ctx context.Context, name string) (string, error)
+}
+
+type Menu interface {
+	CreateMenu(ctx context.Context, menu *types.Menu) error
+	GetPlaceByName(ctx context.Context, name string) (string, error)
 }

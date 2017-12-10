@@ -11,6 +11,7 @@ import (
 type Storage struct {
 	*UserStorage
 	*PlaceStorage
+	*MenuStorage
 }
 
 func (s *Storage) User() storage.User {
@@ -25,6 +26,13 @@ func (s *Storage) Place() storage.Place {
 		return nil
 	}
 	return s.PlaceStorage
+}
+
+func (s *Storage) Menu() storage.Menu {
+	if s == nil {
+		return nil
+	}
+	return s.MenuStorage
 }
 
 func New(c store.Config) (*Storage, error) {
@@ -43,5 +51,6 @@ func New(c store.Config) (*Storage, error) {
 	s := new(Storage)
 	s.UserStorage = newUserStorage(client)
 	s.PlaceStorage = newPlaceStorage(client)
+	s.MenuStorage = newMenuStorage(client)
 	return s, nil
 }
