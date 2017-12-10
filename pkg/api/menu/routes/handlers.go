@@ -34,7 +34,7 @@ func MenuCreate(w http.ResponseWriter, r *http.Request) {
 		errors.HTTP.InternalServerError(w)
 		return
 	}
-
+	log.Print(place_id)
 	if place_id == "" {
 		errors.New("place").NotFound().Http(w)
 	}

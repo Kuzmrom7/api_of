@@ -12,6 +12,7 @@ type Storage struct {
 	*UserStorage
 	*PlaceStorage
 	*MenuStorage
+	*DichStorage
 }
 
 func (s *Storage) User() storage.User {
@@ -35,6 +36,13 @@ func (s *Storage) Menu() storage.Menu {
 	return s.MenuStorage
 }
 
+func (s *Storage) Dich() storage.Dich {
+	if s == nil {
+		return nil
+	}
+	return s.DichStorage
+}
+
 func New(c store.Config) (*Storage, error) {
 
 	log.Println(c.Connection)
@@ -52,5 +60,6 @@ func New(c store.Config) (*Storage, error) {
 	s.UserStorage = newUserStorage(client)
 	s.PlaceStorage = newPlaceStorage(client)
 	s.MenuStorage = newMenuStorage(client)
+	s.DichStorage = newDichStorage(client)
 	return s, nil
 }

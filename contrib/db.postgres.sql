@@ -99,7 +99,7 @@ CREATE EXTENSION "uuid-ossp";
  (
    id_dish          UUID PRIMARY KEY                        NOT NULL DEFAULT  uuid_generate_v4(),
    name_dish        VARCHAR(256) UNIQUE,
-   id_typeDish      UUID REFERENCES type_dish (id_typeDish) NOT NULL,
+   id_typeDish      UUID ,
    description      VARCHAR(256)                            DEFAULT '',
    time_min         INTEGER                                 DEFAULT 0,
    created          TIMESTAMP                               DEFAULT now(),
