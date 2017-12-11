@@ -8,3 +8,5 @@ type Dich struct {
 	Created time.Time `json:"created"`
 	Updated time.Time `json:"updated"`
 }
+
+type DichList []*Dich

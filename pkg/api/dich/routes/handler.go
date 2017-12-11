@@ -87,3 +87,28 @@ func DichRemove(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+func DichList(w http.ResponseWriter, r *http.Request) {
+
+	if r.Context().Value("uid") == nil {
+		errors.HTTP.Unauthorized(w)
+		return
+	}
+
+	items, err := dich.New(r.Context()).List()
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+		return
+	}
+
+	response, err := v1.NewList(items).ToJson()
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+	}
+
+	w.WriteHeader(http.StatusOK)
+	if _, err = w.Write(response); err != nil {
+		log.Println("Dich list response error")
+		return
+	}
+}

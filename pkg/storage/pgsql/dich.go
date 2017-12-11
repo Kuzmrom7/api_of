@@ -8,9 +8,14 @@ import (
 	"log"
 	"errors"
 	"database/sql"
+	//"encoding/json"
 )
 
 const (
+	sqlstrList = `
+		SELECT dish.id_dish, dish.name_dish, dish.description
+		FROM dish;`
+
 	sqlCreateDich = `
 		INSERT INTO dish (name_dish, description, time_min)
 		VALUES ($1, $2, $3)
@@ -30,7 +35,19 @@ type DichStorage struct {
 }
 
 type dichModel struct {
-	id store.NullString
+	id          store.NullString
+	name        store.NullString
+	description store.NullString
+}
+
+func (nm *dichModel) convert() *types.Dich {
+	c := new(types.Dich)
+
+	c.Meta.ID = nm.id.String
+	c.Meta.Name = nm.name.String
+	c.Meta.Desc = nm.description.String
+
+	return c
 }
 
 func (s *DichStorage) CreateDich(ctx context.Context, dich *types.Dich) error {
@@ -82,6 +99,34 @@ func (s *DichStorage) Remove(ctx context.Context, id string) error {
 		return err
 	}
 	return nil
+}
+
+func (s *DichStorage) List(ctx context.Context) (map[string]*types.Dich, error) {
+
+	dishes := make(map[string]*types.Dich)
+
+	rows, err := s.client.Query(sqlstrList)
+	switch err {
+	case nil:
+	case sql.ErrNoRows:
+		return nil, nil
+	default:
+
+		return nil, err
+	}
+
+	for rows.Next() {
+		di := new(dichModel)
+
+		if err := rows.Scan(&di.id, di.name, di.description); err != nil {
+			return nil, err
+		}
+
+		c := di.convert()
+		dishes[c.Meta.ID] = c
+	}
+
+	return dishes, nil
 }
 
 func newDichStorage(client store.IDB) *DichStorage {

@@ -65,3 +65,16 @@ func (d *dich) Remove(id_dich string) error {
 	}
 	return nil
 }
+
+func (r *dich) List() (map[string]*types.Dich, error) {
+
+	var (
+		storage = ctx.Get().GetStorage()
+	)
+
+	list, err := storage.Dich().List(r.context)
+	if err != nil {
+		return nil, err
+	}
+	return list, nil
+}
