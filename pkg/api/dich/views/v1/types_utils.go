@@ -18,3 +18,20 @@ func newDich(obj *types.Dich) *Dich {
 func (obj *Dich) ToJson() ([]byte, error) {
 	return json.Marshal(obj)
 }
+
+
+
+func New(obj *types.Dich) *Dich {
+	i := new(Dich)
+	i.Name = obj.Meta.Name
+	i.Desc = obj.Meta.Desc
+	return i
+}
+
+
+func (obj *DichList) ToJson() ([]byte, error) {
+	if obj == nil {
+		obj = &DichList{}
+	}
+	return json.Marshal(obj)
+}
