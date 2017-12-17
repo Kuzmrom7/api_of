@@ -4,6 +4,7 @@ import "time"
 
 type Place struct {
 	Meta PlaceMeta `json:"meta"`
+	//Type TypePlaces `json:"type"`
 }
 
 type PlaceMeta struct {
@@ -17,4 +18,9 @@ type PlaceMeta struct {
 	UserID      string    `json:"user,omitempty"`
 	Created     time.Time `json:"created"`
 	Updated     time.Time `json:"updated"`
+}
+
+type TypePlaces struct {
+	ID       string `json:"id"`
+	NameType string `json:"nametype"`
 }

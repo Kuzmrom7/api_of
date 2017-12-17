@@ -12,6 +12,19 @@ VALUES ('4f2858bb-ecab-4f88-b773-551d34f07bad', 'orderfood', 'orderfood@of.ru', 
 INSERT INTO type_place (id_typeplace, name_type)
 VALUES ('68c65b87-925b-4227-bada-c543b55048e2', 'ресторан');
 
+INSERT INTO type_place (id_typeplace, name_type)
+VALUES ('c32397bc-4ff2-40e6-a290-e8191bd2d5c0', 'кальянная');
+
+INSERT INTO type_place (id_typeplace, name_type)
+VALUES ('b5870b67-e348-4cb9-bccb-40956363dfdd', 'бар');
+
+INSERT INTO type_place (id_typeplace, name_type)
+VALUES ('28f8e2f1-4183-45c2-bb94-b58116af0e42', 'кафе');
+
+INSERT INTO type_place (id_typeplace, name_type)
+VALUES ('3b896b95-928a-4107-934b-d7dace83b83a', 'кофейнная');
+
+
 -------PLACES-------
 
 INSERT INTO place (id_place, name, phone_number, url, city, adress, user_id, id_typeplace)

@@ -8,7 +8,6 @@ import (
 	"github.com/orderfood/api_of/pkg/api/place/routes/request"
 	"github.com/orderfood/api_of/pkg/common/errors"
 	"github.com/orderfood/api_of/pkg/api/place"
-//	"fmt"
 )
 
 func PlaceCreate(w http.ResponseWriter, r *http.Request) {
@@ -60,6 +59,33 @@ func PlaceCreate(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	if _, err = w.Write(response); err != nil {
 		log.Println("Place write response error")
+		return
+	}
+}
+
+func PlaceList(w http.ResponseWriter, r *http.Request) {
+
+	//if r.Context().Value("uid") == nil {
+	//	errors.HTTP.Unauthorized(w)
+	//	return
+	//}
+
+	items, err := place.New(r.Context()).List()
+	if err != nil {
+		log.Print("---------------")
+		errors.HTTP.InternalServerError(w)
+		return
+	}
+
+	response, err := v1.NewList(items).ToJson()
+	if err != nil {
+		log.Print("////////////////")
+		errors.HTTP.InternalServerError(w)
+	}
+
+	w.WriteHeader(http.StatusOK)
+	if _, err = w.Write(response); err != nil {
+		log.Println("Dich list response error")
 		return
 	}
 }
