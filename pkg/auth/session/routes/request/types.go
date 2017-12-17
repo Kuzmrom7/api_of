@@ -5,6 +5,7 @@ import (
 	"io"
 	"io/ioutil"
 	"encoding/json"
+	"strings"
 )
 type RequestSessionCreate struct {
 	Login 		*string `json:"login,omitempty"`
@@ -32,6 +33,8 @@ func (s *RequestSessionCreate) DecodeAndValidate(reader io.Reader) *errors.Err{
 	if s.Password == nil || *s.Password == "" {
 		return errors.New("user").BadParameter("password", err)
 	}
+
+	*s.Login = strings.ToLower(*s.Login)
 
 	return  nil
 }
