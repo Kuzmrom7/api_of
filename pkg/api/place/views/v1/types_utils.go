@@ -19,3 +19,18 @@ func newPlace(obj *types.Place) *Place{
 func (obj *Place) ToJson() ([]byte, error) {
 	return json.Marshal(obj)
 }
+
+func New(obj *types.TypePlaces) *TypePlace {
+	i := new(TypePlace)
+	i.Name = obj.NameType
+	i.ID = obj.ID
+	return i
+}
+
+
+func (obj *TypePlaceList) ToJson() ([]byte, error) {
+	if obj == nil {
+		obj = &TypePlaceList{}
+	}
+	return json.Marshal(obj)
+}
