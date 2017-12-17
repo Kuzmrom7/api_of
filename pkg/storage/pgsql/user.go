@@ -12,7 +12,10 @@ import (
 )
 const (
 
-	sqlstrUserGetByLogin = ``
+	sqlstrUserGetByLogin = `
+		SELECT users.user_id, users.username, users.email, users.gravatar, users.password, users.salt
+		FROM users
+		WHERE users.username = $1;`
 
 	sqlstrUserExistsByLogin = `
 		SELECT TRUE
