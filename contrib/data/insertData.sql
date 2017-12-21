@@ -59,6 +59,24 @@ VALUES ('8072b173-baaa-4d0f-a1c7-8af3995ffefa','Русский бургер', '0
 INSERT INTO dish (id_dish, name_dish, id_typedish, description)
 VALUES ('5cb7e111-3860-424b-a14e-83a93db1e889','Исландский бургер', '041529e0-3111-4993-a75b-7a12545a0d9f', 'Лучший в мире бургер');
 
+
+INSERT INTO type_personal (id_typePersonal, name_type)
+VALUES ('ad64c48a-33f4-4cb7-abe6-4da9e56a403d', 'охранник');
+
+INSERT INTO type_personal (id_typePersonal, name_type)
+VALUES ('bbad620b-7939-4d82-853f-5d1fe13a8629', 'администратор');
+
+INSERT INTO type_personal (id_typePersonal, name_type)
+VALUES ('a345fc9a-46d3-4fed-b562-dbf9584f8058', 'официант');
+
+INSERT INTO type_personal (id_typePersonal, name_type)
+VALUES ('53ab0358-d085-4e90-a66a-4d0f6e3dfa18', 'кальянщик');
+
+INSERT INTO type_personal (id_typePersonal, name_type)
+VALUES ('6f8ee4df-ce23-4e1e-9c21-87d163075785', 'бармен');
+
+INSERT INTO type_personal (id_typePersonal, name_type)
+VALUES ('7d826de7-97de-4002-8555-6a8056fa3faa', 'техперсонал');
 ------EXAMPLE SELECT------
 
 /*SELECT u.user_id, u.username, p.city, m.name_menu, d.name_dish

@@ -1,7 +1,7 @@
 package pgsql
 
 import (
-	"github.com/orderfood/api_of/pkg/storage/storage"
+	//"github.com/orderfood/api_of/pkg/storage/storage"
 	"github.com/orderfood/api_of/pkg/storage/store"
 	"github.com/orderfood/api_of/pkg/common/types"
 	"context"
@@ -10,35 +10,6 @@ import (
 	"database/sql"
 	//"encoding/json"
 )
-
-const (
-	sqlstrList = `
-		SELECT dish.id_dish, dish.name_dish, dish.description
-		FROM dish;`
-
-	sqlCreateDich = `
-		INSERT INTO dish (name_dish, description, time_min)
-		VALUES ($1, $2, $3)
-		RETURNING id_dish;
-	`
-
-	sqlDichIDGetByName = `SELECT dish.id_dish
-		FROM dish
-		WHERE dish.name_dish = $1;`
-
-	sqlDichRemove = `DELETE FROM dish WHERE id_dish = $1;`
-)
-
-type DichStorage struct {
-	storage.Dich
-	client store.IDB
-}
-
-type dichModel struct {
-	id          store.NullString
-	name        store.NullString
-	description store.NullString
-}
 
 func (nm *dichModel) convert() *types.Dich {
 	c := new(types.Dich)
@@ -105,7 +76,7 @@ func (s *DichStorage) List(ctx context.Context) (map[string]*types.Dich, error) 
 
 	dishes := make(map[string]*types.Dich)
 
-	rows, err := s.client.Query(sqlstrList)
+	rows, err := s.client.Query(sqlstrListDish)
 	switch err {
 	case nil:
 	case sql.ErrNoRows:
@@ -129,8 +100,4 @@ func (s *DichStorage) List(ctx context.Context) (map[string]*types.Dich, error) 
 	return dishes, nil
 }
 
-func newDichStorage(client store.IDB) *DichStorage {
-	s := new(DichStorage)
-	s.client = client
-	return s
-}
+
