@@ -1,9 +1,8 @@
 package storage
 
-
 import (
-"github.com/orderfood/api_of/pkg/storage/pgsql"
-"github.com/orderfood/api_of/pkg/storage/store"
+	"github.com/orderfood/api_of/pkg/storage/pgsql"
+	"github.com/orderfood/api_of/pkg/storage/store"
 )
 
 func Get(c store.Config) (Storage, error) {

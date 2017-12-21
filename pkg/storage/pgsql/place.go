@@ -31,8 +31,8 @@ type PlaceStorage struct {
 }
 
 type typeplaceModel struct {
-	id 				store.NullString
-	name        store.NullString
+	id   store.NullString
+	name store.NullString
 }
 
 func (s *PlaceStorage) CreatePlace(ctx context.Context, place *types.Place) error {
@@ -56,15 +56,15 @@ func (s *PlaceStorage) CreatePlace(ctx context.Context, place *types.Place) erro
 	return err
 }
 
-func (s *PlaceStorage) GetTypePlaceByName (ctx context.Context, name string) (string, error) {
+func (s *PlaceStorage) GetTypePlaceByName(ctx context.Context, name string) (string, error) {
 	var (
 		err error
-		pl = new(typeplaceModel)
+		pl  = new(typeplaceModel)
 	)
 
 	err = s.client.QueryRow(sqlTypePlaceIDGetByName, name).Scan(&pl.id)
 
-	switch err{
+	switch err {
 	case nil:
 	case sql.ErrNoRows:
 		return "", nil

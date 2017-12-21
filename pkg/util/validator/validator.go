@@ -5,7 +5,7 @@ import (
 	"regexp"
 )
 
-func IsEmail(s string) bool{
+func IsEmail(s string) bool {
 	return govalidator.IsEmail(s)
 }
 
@@ -18,6 +18,6 @@ func IsUsername(s string) bool {
 	return false
 }
 
-func IsPassword(s string) bool{
+func IsPassword(s string) bool {
 	return len(s) > 6
 }

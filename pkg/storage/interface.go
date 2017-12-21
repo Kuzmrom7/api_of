@@ -8,4 +8,3 @@ type Storage interface {
 	Menu() storage.Menu
 	Dich() storage.Dich
 }
-

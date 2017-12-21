@@ -10,15 +10,15 @@ import (
 	"log"
 )
 
-func SessionCreate(w http.ResponseWriter, r *http.Request){
+func SessionCreate(w http.ResponseWriter, r *http.Request) {
 	var (
-		err error
+		err     error
 		storage = c.Get().GetStorage();
-		usr  *types.User
+		usr     *types.User
 	)
 
 	rq := new(request.RequestSessionCreate)
-	if err := rq.DecodeAndValidate(r.Body); err != nil{
+	if err := rq.DecodeAndValidate(r.Body); err != nil {
 		err.Http(w)
 	}
 

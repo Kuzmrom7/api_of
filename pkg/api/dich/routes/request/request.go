@@ -33,6 +33,13 @@ func (s *RequestDichCreate) DecodeAndValidate(reader io.Reader) *errors.Err {
 		return errors.New("dich").IncorrectJSON(err)
 	}
 
+	if s.Name == "" {
+		return errors.New("dish").BadParameter("name")
+	}
+	if s.Desc == "" {
+		return errors.New("dish").BadParameter("name")
+	}
+
 	return nil
 }
 
@@ -49,6 +56,9 @@ func (s *RequestDichRemove) DecodeAndValidate(reader io.Reader) *errors.Err {
 	err = json.Unmarshal(body, s)
 	if err != nil {
 		return errors.New("dich").IncorrectJSON(err)
+	}
+	if s.Name == "" {
+		return errors.New("dish").BadParameter("name")
 	}
 
 	return nil

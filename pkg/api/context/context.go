@@ -9,14 +9,13 @@ import (
 
 var _ctx Context
 
-type Context struct{
+type Context struct {
 	_c.Context
-	config        *config.Config
-	storage 			storage.Storage
+	config  *config.Config
+	storage storage.Storage
 }
 
 //-------------------------------------------------------------------------------------------------
-
 
 func Get() *Context {
 	return &_ctx
@@ -30,14 +29,14 @@ func (c *Context) GetConfig() *config.Config {
 	return c.config
 }
 
-func (c *Context) SetStorage(storage storage.Storage)  {
+func (c *Context) SetStorage(storage storage.Storage) {
 	c.storage = storage
 }
 
-func (c *Context) GetStorage() storage.Storage  {
+func (c *Context) GetStorage() storage.Storage {
 	return c.storage
 }
 
-func (c *Context) Background() context.Context{
+func (c *Context) Background() context.Context {
 	return context.Background()
 }

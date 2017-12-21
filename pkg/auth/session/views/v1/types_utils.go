@@ -5,7 +5,7 @@ import (
 	"github.com/orderfood/api_of/pkg/common/types"
 )
 
-func New(obj *types.Session) *Session{
+func New(obj *types.Session) *Session {
 	var token, err = obj.Encode()
 	if err != nil {
 		return nil
