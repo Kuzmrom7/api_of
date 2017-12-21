@@ -27,8 +27,6 @@ func PlaceCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	usrid1 := r.Context().Value("uid").(string)
-	//fmt.Print(usrid1)
-	//usrid := "42f39524-7cc3-4858-affb-a1c8822852bc"
 
 	p := place.New(r.Context())
 
@@ -40,10 +38,6 @@ func PlaceCreate(w http.ResponseWriter, r *http.Request) {
 	if typeplace_id == "" {
 		errors.New("type_place").NotFound().Http(w)
 	}
-
-	//TODO idTypePlace нужно запросом в базку получить по имени который в jsone приходит, те нужно сначала метод который получает id из базки
-	//пока mock ресторана
-	//var idTypePlace = "68c65b87-925b-4227-bada-c543b55048e2"
 
 	plc, err := p.Create(usrid1, typeplace_id, rq)
 	if err != nil {
@@ -65,21 +59,14 @@ func PlaceCreate(w http.ResponseWriter, r *http.Request) {
 
 func PlaceList(w http.ResponseWriter, r *http.Request) {
 
-	//if r.Context().Value("uid") == nil {
-	//	errors.HTTP.Unauthorized(w)
-	//	return
-	//}
-
 	items, err := place.New(r.Context()).List()
 	if err != nil {
-		log.Print("---------------")
 		errors.HTTP.InternalServerError(w)
 		return
 	}
 
 	response, err := v1.NewList(items).ToJson()
 	if err != nil {
-		log.Print("////////////////")
 		errors.HTTP.InternalServerError(w)
 	}
 

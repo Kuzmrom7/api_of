@@ -3,7 +3,6 @@ package http
 import (
 	"github.com/gorilla/mux"
 
-
 	users "github.com/orderfood/api_of/pkg/auth/user/routes"
 	"github.com/orderfood/api_of/pkg/util/http"
 	session "github.com/orderfood/api_of/pkg/auth/session/routes"
@@ -29,7 +28,7 @@ func init() {
 
 }
 
-func Listen(host string, port int){
+func Listen(host string, port int) {
 	r := mux.NewRouter()
 	r.Methods("OPTIONS").HandlerFunc(http.Headers)
 

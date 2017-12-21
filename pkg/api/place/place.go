@@ -19,13 +19,15 @@ func New(c context.Context) *place {
 	}
 }
 
-func (p *place) GetIDByName (name_typeplace string) (string, error){
+func (p *place) GetIDByName(name_typeplace string) (string, error) {
 
 	var (
 		storage = ctx.Get().GetStorage()
 	)
 
-	typeplace_id, err := storage.Place().GetTypePlaceByName(p.context, strings.ToLower(name_typeplace))
+	name_typeplace = strings.ToLower(name_typeplace)
+
+	typeplace_id, err := storage.Place().GetTypePlaceByName(p.context, name_typeplace)
 	if err != nil {
 		return "", err
 	}
@@ -70,4 +72,3 @@ func (r *place) List() (map[string]*types.TypePlaces, error) {
 	}
 	return list, nil
 }
-

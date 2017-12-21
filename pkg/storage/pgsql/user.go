@@ -8,10 +8,9 @@ import (
 	"github.com/orderfood/api_of/pkg/common/types"
 	"errors"
 	"database/sql"
-
 )
-const (
 
+const (
 	sqlstrUserGetByLogin = `
 		SELECT users.user_id, users.username, users.email, users.gravatar, users.password, users.salt
 		FROM users
@@ -42,28 +41,28 @@ type UserStorage struct {
 }
 
 type Users struct {
-	User_id   	  string `json:"user_id"`
-	Username      string `json:"username"`
-	Email 		  string `json:"email"`
-	Created       string `json:"created"`
-	Updated		  string `json:"updated"`
+	User_id  string `json:"user_id"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Created  string `json:"created"`
+	Updated  string `json:"updated"`
 }
 
 type User struct {
-	Username      string `json:"username"`
-	Email 		  string `json:"email"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
 }
 
 type userModel struct {
-	id 				store.NullString
-	username 	store.NullString
-	email 		store.NullString
-	gravatar 	store.NullString
-	password 	store.NullString
-	salt 			store.NullString
+	id       store.NullString
+	username store.NullString
+	email    store.NullString
+	gravatar store.NullString
+	password store.NullString
+	salt     store.NullString
 }
 
-func (um *userModel) convert() *types.User{
+func (um *userModel) convert() *types.User {
 	var u = new(types.User)
 	u.Meta.Username = um.username.String
 	u.Meta.ID = um.id.String
@@ -74,8 +73,6 @@ func (um *userModel) convert() *types.User{
 
 	return u
 }
-
-
 
 func (s *UserStorage) CheckExistsByLogin(ctx context.Context, login string) (bool, error) {
 	result, err := s.client.Exec(sqlstrUserExistsByLogin, login)
@@ -91,16 +88,16 @@ func (s *UserStorage) CheckExistsByLogin(ctx context.Context, login string) (boo
 	return rows != 0, nil
 }
 
-func (s *UserStorage) GetByLogin (ctx context.Context, login string) (*types.User, error) {
+func (s *UserStorage) GetByLogin(ctx context.Context, login string) (*types.User, error) {
 	var (
 		err error
-		um = new(userModel)
+		um  = new(userModel)
 	)
 
 	err = s.client.QueryRow(sqlstrUserGetByLogin, login).Scan(&um.id, &um.username, &um.email,
 		&um.gravatar, &um.password, &um.salt)
 
-	switch err{
+	switch err {
 	case nil:
 	case sql.ErrNoRows:
 		return nil, nil
@@ -113,15 +110,15 @@ func (s *UserStorage) GetByLogin (ctx context.Context, login string) (*types.Use
 	return usr, nil
 }
 
-func (s *UserStorage)GetUserByID(ctx context.Context, id string) (*types.User, error) {
+func (s *UserStorage) GetUserByID(ctx context.Context, id string) (*types.User, error) {
 	var (
 		err error
-		um = new(userModel)
+		um  = new(userModel)
 	)
 
 	err = s.client.QueryRow(sqlstrUserGetById, id).Scan(&um.id, &um.username, &um.email,
 		&um.gravatar, &um.password, &um.salt)
-	switch err{
+	switch err {
 	case nil:
 	case sql.ErrNoRows:
 		return nil, nil
@@ -134,12 +131,12 @@ func (s *UserStorage)GetUserByID(ctx context.Context, id string) (*types.User, e
 	return usr, nil
 }
 
-func (s *UserStorage) CreateUser (ctx context.Context, user *types.User) error {
+func (s *UserStorage) CreateUser(ctx context.Context, user *types.User) error {
 	log.Println("STORAGE--- CreateUser()")
 
 	if user == nil {
 		err := errors.New("user can not be nil")
-		return  err
+		return err
 	}
 
 	var (
@@ -147,7 +144,7 @@ func (s *UserStorage) CreateUser (ctx context.Context, user *types.User) error {
 		id  store.NullString
 	)
 
-	err = s.client.QueryRow( sqlCreateUser, user.Meta.Username, user.Meta.Email, user.Meta.Gravatar,
+	err = s.client.QueryRow(sqlCreateUser, user.Meta.Username, user.Meta.Email, user.Meta.Gravatar,
 		user.Security.Pass.Password, user.Security.Pass.Salt).Scan(&id)
 
 	user.Meta.ID = id.String

@@ -6,27 +6,27 @@ import (
 	"errors"
 )
 
-var(
-	SecretAccessToken	= ""
+var (
+	SecretAccessToken         = ""
 	ErrUnexpectedSigninMethod = errors.New("UNEXPECTED_SIGNIN_METHD")
 	ErrSessionTokenHasNoEXP   = errors.New("NO_EXP_IN_TOKEN")
 	ErrSessionTokenHasNoJTI   = errors.New("NO_JTI_IN_TOKEN")
 )
 
 //Generate new session structure
-func NewSession(uid, username, email string) *Session{
+func NewSession(uid, username, email string) *Session {
 	return &Session{
-		Uid: uid,
+		Uid:      uid,
 		Username: username,
-		Email: email,
+		Email:    email,
 	}
 }
 
 //Session data
-type Session struct{
-	Uid 			string
-	Username 	string
-	Email 		string
+type Session struct {
+	Uid      string
+	Username string
+	Email    string
 }
 
 func (s *Session) Decode(token string) error {
@@ -34,7 +34,7 @@ func (s *Session) Decode(token string) error {
 	payload, err := jwt.Parse(token, func(payload *jwt.Token) (interface{}, error) {
 		result := []byte(SecretAccessToken)
 
-		err := func(token *jwt.Token) error{
+		err := func(token *jwt.Token) error {
 
 			claims := token.Claims.(jwt.MapClaims)
 
@@ -43,7 +43,7 @@ func (s *Session) Decode(token string) error {
 			}
 
 			if claims["exp"] == nil {
-				return  ErrSessionTokenHasNoEXP
+				return ErrSessionTokenHasNoEXP
 			}
 
 			if claims["jti"] == nil {
@@ -51,7 +51,7 @@ func (s *Session) Decode(token string) error {
 			}
 
 			return nil
-		} (payload)
+		}(payload)
 
 		return result, err
 	})

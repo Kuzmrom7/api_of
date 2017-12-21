@@ -32,5 +32,13 @@ func (s *RequestPlaceCreate) DecodeAndValidate(reader io.Reader) *errors.Err {
 		return errors.New("place").IncorrectJSON(err)
 	}
 
+	if s.Name == "" {
+		return errors.New("place").BadParameter("name")
+	}
+
+	if s.NameTypePlace == "" {
+		return errors.New("place").BadParameter("nametypeplace")
+	}
+
 	return nil
 }

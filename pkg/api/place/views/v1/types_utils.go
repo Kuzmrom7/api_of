@@ -22,8 +22,8 @@ func (obj *Place) ToJson() ([]byte, error) {
 
 func New(obj *types.TypePlaces) *TypePlace {
 	i := new(TypePlace)
-	i.Name = obj.NameType
-	i.ID = obj.ID
+	i.Meta.Name = obj.NameType
+	i.Meta.ID = obj.ID
 	return i
 }
 

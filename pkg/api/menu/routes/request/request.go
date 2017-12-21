@@ -9,10 +9,9 @@ import (
 )
 
 type RequestMenuCreate struct {
-	Name          string `json:"name,omitempty"`
-	NamePlace			string `json:"nameplace"`
-//	Name          string `json:"name,omitempty"`
-
+	Name      string `json:"name,omitempty"`
+	NamePlace string `json:"nameplace"`
+	//	Name          string `json:"name,omitempty"`
 }
 
 func (s *RequestMenuCreate) DecodeAndValidate(reader io.Reader) *errors.Err {
@@ -28,6 +27,14 @@ func (s *RequestMenuCreate) DecodeAndValidate(reader io.Reader) *errors.Err {
 	err = json.Unmarshal(body, s)
 	if err != nil {
 		return errors.New("menu").IncorrectJSON(err)
+	}
+
+	if s.Name == "" {
+		return errors.New("menu").BadParameter("name")
+	}
+
+	if s.NamePlace == "" {
+		return errors.New("menu").BadParameter("nameplace")
 	}
 
 	return nil

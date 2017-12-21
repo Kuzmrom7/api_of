@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 )
 
-func newUser(obj *types.User) *User{
+func newUser(obj *types.User) *User {
 	u := new(User)
 	u.ID = obj.Meta.ID
 	u.Username = obj.Meta.Username

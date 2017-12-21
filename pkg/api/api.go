@@ -11,13 +11,12 @@ import (
 	"log"
 )
 
-
-func Daemon(_cfg *config.Config){
+func Daemon(_cfg *config.Config) {
 	var (
-			ctx  = context.Get()
-			cfg  = config.Set(_cfg)
-		  done = make(chan bool, 1)
-			sigs = make(chan os.Signal)
+		ctx  = context.Get()
+		cfg  = config.Set(_cfg)
+		done = make(chan bool, 1)
+		sigs = make(chan os.Signal)
 	)
 
 	ctx.SetConfig(cfg)

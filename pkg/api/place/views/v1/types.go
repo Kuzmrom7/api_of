@@ -9,9 +9,13 @@ type Place struct {
 	NameTypePlace string `json:"nametypeplace,omitempty"`
 }
 
+type TypePlaceList []*TypePlace
+
 type TypePlace struct {
+	Meta TypePlaceMeta `json:"meta"`
+}
+
+type TypePlaceMeta struct {
 	ID   string `json:"id,omitempty"`
 	Name string `json:"name,omitempty"`
 }
-
-type TypePlaceList []*TypePlace

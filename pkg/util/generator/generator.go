@@ -16,7 +16,7 @@ func GetUUIDV4() string {
 	return uuid.NewV4().String()
 }
 
-func Generatepassword(password string, salt string) (string, error){
+func Generatepassword(password string, salt string) (string, error) {
 	pass := []byte(password + salt)
 
 	hash, err := bcrypt.GenerateFromPassword(pass, bcrypt.DefaultCost)
@@ -26,7 +26,7 @@ func Generatepassword(password string, salt string) (string, error){
 	return string(hash), nil
 }
 
-func GenerateGravatar(email string) string{
+func GenerateGravatar(email string) string {
 	m := md5.New()
 	if _, err := io.WriteString(m, strings.ToLower(email)); err != nil {
 		return ""
@@ -49,8 +49,8 @@ func GenerateRandomString(n int) string {
 	return str[:n]
 }
 
-func GenerateSalt(password string) (string, error){
-	buf := make([]byte, 10, 10 + sha1.Size)
+func GenerateSalt(password string) (string, error) {
+	buf := make([]byte, 10, 10+sha1.Size)
 	_, err := io.ReadFull(rand.Reader, buf)
 	if err != nil {
 		fmt.Printf("random read fail: %v", err)

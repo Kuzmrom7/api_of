@@ -10,7 +10,7 @@ import (
 
 func Authenticate(h http.HandlerFunc) http.HandlerFunc {
 
-	return func(w http.ResponseWriter, r *http.Request){
+	return func(w http.ResponseWriter, r *http.Request) {
 
 		var token string
 
@@ -23,7 +23,7 @@ func Authenticate(h http.HandlerFunc) http.HandlerFunc {
 				return
 			}
 			token = auth[1]
-		}else {
+		} else {
 			errors.HTTP.Unauthorized(w)
 			return
 		}

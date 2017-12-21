@@ -2,7 +2,7 @@ package http
 
 import "net/http"
 
-func Headers(w http.ResponseWriter, r *http.Request){
+func Headers(w http.ResponseWriter, r *http.Request) {
 	origin := r.Header.Get("Origin")
 
 	w.Header().Add("Access-Control-Allow-Origin", origin)
