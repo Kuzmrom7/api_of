@@ -29,3 +29,12 @@ type Dich interface {
 	GetIDdichByName(ctx context.Context, name string) (string, error)
 	List(ctx context.Context) (map[string]*types.Dich, error)
 }
+
+type Personal interface {
+	CreatePerson(ctx context.Context, personal *types.Personal) error
+	//Remove(ctx context.Context, id string) error
+	GetTypePersonIDByName(ctx context.Context, name string) (string, error)
+	GetPlaceIDByUsrid(ctx context.Context, id string) (string, error)
+	//List(ctx context.Context) (map[string]*types.Dich, error)
+
+}

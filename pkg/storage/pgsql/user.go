@@ -1,7 +1,6 @@
 package pgsql
 
 import (
-	"github.com/orderfood/api_of/pkg/storage/storage"
 	"log"
 	"github.com/orderfood/api_of/pkg/storage/store"
 	"context"
@@ -9,58 +8,6 @@ import (
 	"errors"
 	"database/sql"
 )
-
-const (
-	sqlstrUserGetByLogin = `
-		SELECT users.user_id, users.username, users.email, users.gravatar, users.password, users.salt
-		FROM users
-		WHERE users.username = $1;`
-
-	sqlstrUserExistsByLogin = `
-		SELECT TRUE
-		FROM users
-		WHERE users.username = $1 OR users.email = $1
-	`
-
-	sqlstrUserGetById = `
-		SELECT users.user_id, users.username, users.email, users.gravatar, users.password, users.salt
-		FROM users
-		WHERE users.user_id = $1;
-	`
-
-	sqlCreateUser = `
-		INSERT INTO users (username, email, gravatar, password, salt)
-		VALUES ($1, $2, $3, $4, $5)
-		RETURNING user_id;
-	`
-)
-
-type UserStorage struct {
-	storage.User
-	client store.IDB
-}
-
-type Users struct {
-	User_id  string `json:"user_id"`
-	Username string `json:"username"`
-	Email    string `json:"email"`
-	Created  string `json:"created"`
-	Updated  string `json:"updated"`
-}
-
-type User struct {
-	Username string `json:"username"`
-	Email    string `json:"email"`
-}
-
-type userModel struct {
-	id       store.NullString
-	username store.NullString
-	email    store.NullString
-	gravatar store.NullString
-	password store.NullString
-	salt     store.NullString
-}
 
 func (um *userModel) convert() *types.User {
 	var u = new(types.User)
@@ -152,8 +99,3 @@ func (s *UserStorage) CreateUser(ctx context.Context, user *types.User) error {
 	return err
 }
 
-func newUserStorage(client store.IDB) *UserStorage {
-	s := new(UserStorage)
-	s.client = client
-	return s
-}

@@ -3,37 +3,11 @@ package pgsql
 import (
 	"context"
 	"github.com/orderfood/api_of/pkg/common/types"
-	"github.com/orderfood/api_of/pkg/storage/storage"
 	"github.com/orderfood/api_of/pkg/storage/store"
 	"log"
 	"errors"
 	"database/sql"
 )
-
-const (
-	sqlstrListType = `
-		SELECT type_place.id_typePlace, type_place.name_type
-		FROM type_place;`
-
-	sqlCreatePlace = `
-		INSERT INTO place (name, phone_number, url, city, adress, user_id, id_typePlace)
-		VALUES ($1, $2, $3, $4, $5, $6, $7)
-		RETURNING id_place;
-	`
-	sqlTypePlaceIDGetByName = `SELECT type_place.id_typePlace
-		FROM type_place
-		WHERE type_place.name_type = $1;`
-)
-
-type PlaceStorage struct {
-	storage.Place
-	client store.IDB
-}
-
-type typeplaceModel struct {
-	id   store.NullString
-	name store.NullString
-}
 
 func (s *PlaceStorage) CreatePlace(ctx context.Context, place *types.Place) error {
 
@@ -113,8 +87,3 @@ func (nm *typeplaceModel) convert() *types.TypePlaces {
 	return c
 }
 
-func newPlaceStorage(client store.IDB) *PlaceStorage {
-	s := new(PlaceStorage)
-	s.client = client
-	return s
-}

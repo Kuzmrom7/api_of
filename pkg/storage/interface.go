@@ -7,4 +7,5 @@ type Storage interface {
 	Place() storage.Place
 	Menu() storage.Menu
 	Dich() storage.Dich
+	Personal() storage.Personal
 }

@@ -1,7 +1,6 @@
 package pgsql
 
 import (
-	"github.com/orderfood/api_of/pkg/storage/storage"
 	"github.com/orderfood/api_of/pkg/storage/store"
 	"database/sql"
 	"github.com/orderfood/api_of/pkg/common/types"
@@ -9,27 +8,6 @@ import (
 	"log"
 	"errors"
 )
-
-const (
-	sqlCreateMenu = `
-		INSERT INTO menu (name_menu, id_place)
-		VALUES ($1, $2)
-		RETURNING id_menu;
-	`
-
-	sqlPlaceIDGetByName = `SELECT place.id_place
-		FROM place
-		WHERE place.name = $1;`
-)
-
-type MenuStorage struct {
-	storage.Menu
-	client store.IDB
-}
-
-type placeModel struct {
-	id store.NullString
-}
 
 func (s *MenuStorage) CreateMenu(ctx context.Context, menu *types.Menu) error {
 
@@ -55,7 +33,7 @@ func (s *MenuStorage) CreateMenu(ctx context.Context, menu *types.Menu) error {
 func (s *MenuStorage) GetPlaceByName(ctx context.Context, name string) (string, error) {
 	var (
 		err error
-		plc = new(placeModel)
+		plc = new(idModel)
 	)
 
 	err = s.client.QueryRow(sqlPlaceIDGetByName, name).Scan(&plc.id)
@@ -73,8 +51,3 @@ func (s *MenuStorage) GetPlaceByName(ctx context.Context, name string) (string, 
 	return placeID, nil
 }
 
-func newMenuStorage(client store.IDB) *MenuStorage {
-	s := new(MenuStorage)
-	s.client = client
-	return s
-}
