@@ -51,3 +51,44 @@ func (s *MenuStorage) GetPlaceByName(ctx context.Context, name string) (string, 
 	return placeID, nil
 }
 
+
+func (s *MenuStorage) List(ctx context.Context, placeid string) (map[string]*types.Menu, error) {
+
+	menus := make(map[string]*types.Menu)
+
+	rows, err := s.client.Query(sqlstrListMenu, placeid)
+	switch err {
+	case nil:
+	case sql.ErrNoRows:
+		return nil, nil
+	default:
+
+		return nil, err
+	}
+
+
+	for rows.Next() {
+
+		di := new(menuModel)
+
+		if err := rows.Scan(&di.id, &di.name, &di.url); err != nil {
+
+			return nil, err
+		}
+
+		c := di.convert()
+		menus[c.Meta.ID] = c
+	}
+
+	return menus, nil
+}
+
+func (nm *menuModel) convert() *types.Menu {
+	c := new(types.Menu)
+
+	c.Meta.ID = nm.id.String
+	c.Meta.Name = nm.name.String
+	c.Meta.Url = nm.url.String
+
+	return c
+}

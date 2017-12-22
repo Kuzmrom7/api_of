@@ -18,8 +18,7 @@ func (nm *dichModel) convert() *types.Dish {
 	c.Meta.Name = nm.name.String
 	c.Meta.Desc = nm.description.String
 	c.Meta.Url = nm.url.String
-	log.Println(c.Meta.Name)
-	log.Println(c.Meta.ID)
+
 	return c
 }
 

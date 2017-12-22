@@ -8,6 +8,7 @@ import (
 	"github.com/orderfood/api_of/pkg/common/errors"
 	"github.com/orderfood/api_of/pkg/api/menu"
 	"log"
+	"github.com/orderfood/api_of/pkg/api/place"
 )
 
 func MenuCreate(w http.ResponseWriter, r *http.Request) {
@@ -64,7 +65,22 @@ func GetListMenu(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	items, err := menu.New(r.Context()).List()
+	var (
+		err error
+		id  = r.Context().Value("uid").(string)
+	)
+
+	p := place.New(r.Context())
+	plc, err := p.GetPlaceByIDUsr(id)
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+		return
+	}
+	if plc == nil {
+		errors.New("place").NotFound().Http(w)
+	}
+
+	items, err := menu.New(r.Context()).List(plc.Meta.ID)
 	if err != nil {
 		errors.HTTP.InternalServerError(w)
 		return

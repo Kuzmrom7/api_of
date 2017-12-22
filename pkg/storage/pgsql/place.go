@@ -19,7 +19,7 @@ func (s *PlaceStorage) GetPlaceByIDUser(ctx context.Context, id string) (*types.
 	)
 
 	err = s.client.QueryRow(sqlPlaceGetByIDUsr, id).Scan(&pl.name, &pl.phone, &pl.adress,
-		&pl.city, &pl.url)
+		&pl.city, &pl.url, &pl.id)
 	switch err {
 	case nil:
 	case sql.ErrNoRows:
@@ -140,6 +140,7 @@ func (pl *placeModel) convert() *types.Place {
 	c.Meta.Adress = pl.adress.String
 	c.Meta.City = pl.city.String
 	c.Meta.Url = pl.url.String
+	c.Meta.ID = pl.id.String
 
 	return c
 }

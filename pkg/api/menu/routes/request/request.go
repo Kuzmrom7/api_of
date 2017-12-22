@@ -37,6 +37,9 @@ func (s *RequestMenuCreate) DecodeAndValidate(reader io.Reader) *errors.Err {
 	if s.NamePlace == "" {
 		return errors.New("menu").BadParameter("nameplace")
 	}
+	if s.Url == "" {
+		return errors.New("menu").BadParameter("url")
+	}
 
 	return nil
 }
