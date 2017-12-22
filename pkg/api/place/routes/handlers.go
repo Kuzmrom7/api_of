@@ -10,6 +10,7 @@ import (
 	"github.com/orderfood/api_of/pkg/api/place"
 )
 
+//------------------------------------СОЗДАНИЕ ЗАВЕДЕНИЯ----------------------------------------------//
 func PlaceCreate(w http.ResponseWriter, r *http.Request) {
 
 	var (
@@ -30,7 +31,7 @@ func PlaceCreate(w http.ResponseWriter, r *http.Request) {
 
 	p := place.New(r.Context())
 
-	typeplace_id, err := p.GetIDByName(rq.NameTypePlace)
+	typeplace_id, err := p.GetIDTypePlaceByName(rq.NameTypePlace)
 	if err != nil {
 		errors.HTTP.InternalServerError(w)
 		return
@@ -57,6 +58,7 @@ func PlaceCreate(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//------------------------------------СПИСОК ТИПОВ ЗАВЕДЕНИЙ--------------------------------------------//
 func PlaceList(w http.ResponseWriter, r *http.Request) {
 
 	items, err := place.New(r.Context()).List()
@@ -75,4 +77,39 @@ func PlaceList(w http.ResponseWriter, r *http.Request) {
 		log.Println("Dich list response error")
 		return
 	}
+}
+
+//------------------------------------ИНФОРМАЦИЯ О ЗАВЕДЕНИИ--------------------------------------------//
+func GetPlace(w http.ResponseWriter, r *http.Request) {
+
+	if r.Context().Value("uid") == nil {
+		errors.HTTP.Unauthorized(w)
+		return
+	}
+
+	var (
+		err error
+		id  = r.Context().Value("uid").(string)
+	)
+
+	p := place.New(r.Context())
+	plc, err := p.GetPlaceByIDUsr(id)
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+		return
+	}
+	if plc == nil {
+		errors.New("place").NotFound().Http(w)
+	}
+
+	response, err := v1.NewPlace(plc).ToJson()
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+	}
+
+	w.WriteHeader(http.StatusOK)
+	if _, err = w.Write(response); err != nil {
+		return
+	}
+
 }
