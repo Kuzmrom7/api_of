@@ -11,6 +11,7 @@ type DishMeta struct {
 	Name       string    `json:"name,omitempty"`
 	Desc       string    `json:"description,omitempty"`
 	Timemin    int64     `json:"timemin,omitempty"`
+	UserID     string    `json:"userid"`
 	Url        string    `json:"url"`
 	TypeDishID string    `json:"typedish"`
 	Created    time.Time `json:"created"`

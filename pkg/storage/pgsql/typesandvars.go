@@ -8,17 +8,14 @@ import (
 const (
 	//-----------------DISH-------------------//
 
-	sqlstrListDish = `
-		SELECT dish.id_dish, dish.name_dish, dish.description
-		FROM dish
-			INNER JOIN menudish on menudish.id_dish = dish.id_dish
-			INNER JOIN menu on menu.id_menu = menudish.id_menu
-			INNER JOIN place on place.id_place = menu.id_place
-		WHERE place.user_id = $1;`
+   sqlstrListDish = `
+					SELECT dish.id_dish, dish.name_dish, dish.description, dish.url
+					FROM dish
+					WHERE dish.user_id = $1;`
 
 	sqlCreateDich = `
-		INSERT INTO dish (name_dish, description, time_min, id_typeDish, url)
-		VALUES ($1, $2, $3, $4, $5)
+		INSERT INTO dish (name_dish, description, time_min, id_typeDish, url, user_id)
+		VALUES ($1, $2, $3, $4, $5, $6)
 		RETURNING id_dish;
 	`
 
@@ -153,6 +150,7 @@ type dichModel struct {
 	id          store.NullString
 	name        store.NullString
 	description store.NullString
+	url 				store.NullString
 }
 
 type idModel struct {

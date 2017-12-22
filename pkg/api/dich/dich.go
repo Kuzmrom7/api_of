@@ -19,7 +19,7 @@ func New(c context.Context) *dish {
 	}
 }
 
-func (p *dish) Create(rq *request.RequestDichCreate, typedishID string) (*types.Dish, error) {
+func (p *dish) Create(rq *request.RequestDichCreate, typedishID, userid string) (*types.Dish, error) {
 
 	var (
 		storage = ctx.Get().GetStorage()
@@ -31,6 +31,7 @@ func (p *dish) Create(rq *request.RequestDichCreate, typedishID string) (*types.
 	di.Meta.Timemin = rq.Timemin
 	di.Meta.TypeDishID = typedishID
 	di.Meta.Url = rq.Url
+	di.Meta.UserID = userid
 
 	if err := storage.Dish().CreateDich(p.context, &di); err != nil {
 		return nil, err
