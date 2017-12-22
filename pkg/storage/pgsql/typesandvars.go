@@ -8,7 +8,7 @@ import (
 const (
 	//-----------------DISH-------------------//
 
-   sqlstrListDish = `
+	sqlstrListDish = `
 					SELECT dish.id_dish, dish.name_dish, dish.description, dish.url
 					FROM dish
 					WHERE dish.user_id = $1;`
@@ -45,6 +45,10 @@ const (
 		FROM place
 		WHERE place.name = $1;`
 
+	sqlstrListMenu = `
+					SELECT menu.id_menu, menu.name_menu, menu.url
+					FROM menu
+					WHERE menu.id_place = $1;`
 	//-----------------PLACE-------------------//
 
 	sqlstrListTypePlace = `
@@ -61,7 +65,7 @@ const (
 		WHERE type_place.name_type = $1;`
 
 	sqlPlaceGetByIDUsr = `
-		SELECT place.name, place.phone_number, place.adress, place.city, place.url
+		SELECT place.name, place.phone_number, place.adress, place.city, place.url, place.id_place
 		FROM place
 		WHERE place.user_id = $1;`
 
@@ -150,7 +154,14 @@ type dichModel struct {
 	id          store.NullString
 	name        store.NullString
 	description store.NullString
-	url 				store.NullString
+	url         store.NullString
+}
+
+//-----------------------MODELs-------------------------//
+type menuModel struct {
+	id   store.NullString
+	name store.NullString
+	url  store.NullString
 }
 
 type idModel struct {
@@ -195,6 +206,7 @@ type userModel struct {
 }
 
 type placeModel struct {
+	id     store.NullString
 	name   store.NullString
 	phone  store.NullString
 	url    store.NullString

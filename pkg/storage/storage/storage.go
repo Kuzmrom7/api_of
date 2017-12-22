@@ -23,7 +23,7 @@ type Place interface {
 type Menu interface {
 	CreateMenu(ctx context.Context, menu *types.Menu) error
 	GetPlaceByName(ctx context.Context, name string) (string, error)
-	List(ctx context.Context) (map[string]*types.Menu, error)
+	List(ctx context.Context, placeid string) (map[string]*types.Menu, error)
 }
 
 type Dish interface {
