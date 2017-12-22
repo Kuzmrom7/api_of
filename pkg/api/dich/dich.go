@@ -69,13 +69,13 @@ func (d *dish) Remove(id_dich string) error {
 	return nil
 }
 
-func (r *dish) List() (map[string]*types.Dish, error) {
+func (r *dish) List(userid string) (map[string]*types.Dish, error) {
 
 	var (
 		storage = ctx.Get().GetStorage()
 	)
 
-	list, err := storage.Dish().List(r.context)
+	list, err := storage.Dish().List(r.context, userid)
 	if err != nil {
 		return nil, err
 	}

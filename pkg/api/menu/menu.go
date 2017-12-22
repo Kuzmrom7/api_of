@@ -53,3 +53,16 @@ func (p *menu) Create(place string, rq *request.RequestMenuCreate) (*types.Menu,
 
 	return &men, nil
 }
+
+func (r *menu) List() (map[string]*types.Menu, error) {
+
+	var (
+		storage = ctx.Get().GetStorage()
+	)
+
+	list, err := storage.Menu().List(r.context)
+	if err != nil {
+		return nil, err
+	}
+	return list, nil
+}
