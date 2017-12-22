@@ -59,12 +59,13 @@ const (
 	sqlstrPlaceUpdate = `
 		UPDATE place
 		SET
-			place.phone_number = $1,
-			place.adress = $2,
-			place.city = $3,
-			place.url = $4,
-			place.updated = now()
-		WHERE place.name = $5;`
+			phone_number = $1,
+			adress = $2,
+			city = $3,
+			url = $4,
+			updated = now()
+		WHERE name = $5
+		RETURNING updated;`
 
 	//-----------------USERS-------------------//
 
