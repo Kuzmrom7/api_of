@@ -8,6 +8,7 @@ import (
 	"errors"
 	"database/sql"
 	"time"
+	"fmt"
 )
 
 func (s *PlaceStorage) GetPlaceByIDUser(ctx context.Context, id string) (*types.Place, error) {
@@ -113,9 +114,10 @@ func (s *PlaceStorage) Update(ctx context.Context, place *types.Place) error{
 
 	place.Meta.Updated = time.Now()
 
-	err := s.client.QueryRow(sqlstrPlaceUpdate, place.Meta.Phone, place.Meta.Adress,
-		place.Meta.City, place.Meta.Url, place.Meta.Name).Scan(&place.Meta.Updatedit )
+	 err := s.client.QueryRow(sqlstrPlaceUpdate, place.Meta.Phone, place.Meta.Adress,
+		place.Meta.City, place.Meta.Url, place.Meta.Name).Scan(&place.Meta.Updated)
 		if err != nil {
+			fmt.Print("fdsfsdfdsfdsfsdf")
 		return err
 	}
 	return nil

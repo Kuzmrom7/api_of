@@ -8,6 +8,7 @@ import (
 	"github.com/orderfood/api_of/pkg/api/place/routes/request"
 	"github.com/orderfood/api_of/pkg/common/errors"
 	"github.com/orderfood/api_of/pkg/api/place"
+	"fmt"
 )
 
 //------------------------------------СОЗДАНИЕ ЗАВЕДЕНИЯ----------------------------------------------//
@@ -147,12 +148,12 @@ func PlaceUpdate(w http.ResponseWriter, r *http.Request){
 	if err != nil {
 		errors.HTTP.InternalServerError(w)
 	}
-
+	fmt.Println("-----")
 	response, err := v1.NewPlace(plc).ToJson()
 	if err != nil {
 		errors.HTTP.InternalServerError(w)
 	}
-
+	fmt.Println("---+++++++++++++--")
 	w.WriteHeader(http.StatusOK)
 	if _, err = w.Write(response); err != nil {
 		log.Println("Place write response error")
