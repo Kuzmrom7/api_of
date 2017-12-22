@@ -38,27 +38,36 @@ VALUES ('a93ba633-7547-491f-a4ae-339b1420b1c7', 'Летнее меню','9ba48d7
 
 -------SECTIONS MENUS-------
 
-INSERT INTO section_menu (id_section, id_menu)
-VALUES ('771570df-cc44-4af5-a2b0-ee19b9f87cd9', 'a93ba633-7547-491f-a4ae-339b1420b1c7');
+
 
 -------TYPES DISHES-------
 
-INSERT INTO type_dish (id_typedish, name_typedish, id_section)
-VALUES ('041529e0-3111-4993-a75b-7a12545a0d9f', 'Бургеры','771570df-cc44-4af5-a2b0-ee19b9f87cd9');
+INSERT INTO type_dish (id_typeDish, name_typeDish)
+VALUES ('403f1a53-7444-483d-9f48-c590dd476d28', 'завтраки');
+INSERT INTO type_dish (id_typeDish, name_typeDish)
+VALUES ('126bdeac-5dfe-42f9-8400-5e2b3090dfef', 'гарниры');
+INSERT INTO type_dish (id_typeDish, name_typeDish)
+VALUES ('635687a9-f5c8-4595-8f82-312fedb11f8c', 'напитки');
+INSERT INTO type_dish (id_typeDish, name_typeDish)
+VALUES ('fef1833e-48eb-4e46-ae74-e015451c9ee9', 'супы');
+INSERT INTO type_dish (id_typeDish, name_typeDish)
+VALUES ('2c567271-9bd3-405f-980d-f596e509cb0d', 'мясное');
 
 -------DISH-------
 
 INSERT INTO dish (id_dish, name_dish, id_typedish, description)
-VALUES ('31ba1f68-6eb3-4362-8d4d-24616fa9593d','Классический бургер', '041529e0-3111-4993-a75b-7a12545a0d9f', 'Лучший в мире бургер');
+VALUES ('31ba1f68-6eb3-4362-8d4d-24616fa9593d','Классический бургер', '2c567271-9bd3-405f-980d-f596e509cb0d', 'Лучший в мире бургер');
 
 
 INSERT INTO dish (id_dish, name_dish, id_typedish, description)
-VALUES ('8072b173-baaa-4d0f-a1c7-8af3995ffefa','Русский бургер', '041529e0-3111-4993-a75b-7a12545a0d9f', 'Лучший в мире бургер');
+VALUES ('8072b173-baaa-4d0f-a1c7-8af3995ffefa','Русский бургер', '2c567271-9bd3-405f-980d-f596e509cb0d', 'Лучший в мире бургер');
 
 
 INSERT INTO dish (id_dish, name_dish, id_typedish, description)
-VALUES ('5cb7e111-3860-424b-a14e-83a93db1e889','Исландский бургер', '041529e0-3111-4993-a75b-7a12545a0d9f', 'Лучший в мире бургер');
+VALUES ('5cb7e111-3860-424b-a14e-83a93db1e889','Исландский бургер', '2c567271-9bd3-405f-980d-f596e509cb0d', 'Лучший в мире бургер');
 
+INSERT INTO menudish (id_menu, id_dish)
+VALUES ('a93ba633-7547-491f-a4ae-339b1420b1c7', '5cb7e111-3860-424b-a14e-83a93db1e889');
 
 INSERT INTO type_personal (id_typePersonal, name_type)
 VALUES ('ad64c48a-33f4-4cb7-abe6-4da9e56a403d', 'охранник');
@@ -77,6 +86,8 @@ VALUES ('6f8ee4df-ce23-4e1e-9c21-87d163075785', 'бармен');
 
 INSERT INTO type_personal (id_typePersonal, name_type)
 VALUES ('7d826de7-97de-4002-8555-6a8056fa3faa', 'техперсонал');
+
+
 ------EXAMPLE SELECT------
 
 /*SELECT u.user_id, u.username, p.city, m.name_menu, d.name_dish

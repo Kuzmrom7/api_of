@@ -74,16 +74,16 @@ func (p *personal) Create(typeperson, place string, rq *request.RequestPersonCre
 
 	return &pers, nil
 }
-//
-//func (r *personal) List() (map[string]*types.TypePlaces, error) {
-//
-//	var (
-//		storage = ctx.Get().GetStorage()
-//	)
-//
-//	list, err := storage.Place().List(r.context)
-//	if err != nil {
-//		return nil, err
-//	}
-//	return list, nil
-//}
+
+func (r *personal) List() (map[string]*types.TypePersonals, error) {
+
+	var (
+		storage = ctx.Get().GetStorage()
+	)
+
+	list, err := storage.Personal().List(r.context)
+	if err != nil {
+		return nil, err
+	}
+	return list, nil
+}

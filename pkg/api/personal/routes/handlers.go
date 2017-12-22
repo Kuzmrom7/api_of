@@ -68,22 +68,22 @@ func PersonCreate(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-//func TypePersonList(w http.ResponseWriter, r *http.Request) {
-//
-//	items, err := personal.New(r.Context()).List()
-//	if err != nil {
-//		errors.HTTP.InternalServerError(w)
-//		return
-//	}
-//
-//	response, err := v1.NewList(items).ToJson()
-//	if err != nil {
-//		errors.HTTP.InternalServerError(w)
-//	}
-//
-//	w.WriteHeader(http.StatusOK)
-//	if _, err = w.Write(response); err != nil {
-//		log.Println("Dich list response error")
-//		return
-//	}
-//}
+func TypePersonList(w http.ResponseWriter, r *http.Request) {
+
+	items, err := personal.New(r.Context()).List()
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+		return
+	}
+
+	response, err := v1.NewList(items).ToJson()
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+	}
+
+	w.WriteHeader(http.StatusOK)
+	if _, err = w.Write(response); err != nil {
+		log.Println("Personal list response error")
+		return
+	}
+}

@@ -13,8 +13,8 @@ const (
 		FROM dish;`
 
 	sqlCreateDich = `
-		INSERT INTO dish (name_dish, description, time_min)
-		VALUES ($1, $2, $3)
+		INSERT INTO dish (name_dish, description, time_min, id_typeDish, url)
+		VALUES ($1, $2, $3, $4, $5)
 		RETURNING id_dish;
 	`
 
@@ -24,11 +24,19 @@ const (
 
 	sqlDichRemove = `DELETE FROM dish WHERE id_dish = $1;`
 
+	sqlstrListTypeDish = `
+		SELECT type_dish.id_typeDish, type_dish.name_typeDish
+		FROM type_dish;`
+
+	ssqlTypeDishlIDGetByName = `SELECT type_dish.id_typeDish
+		FROM type_dish
+		WHERE type_dish.name_typeDish = $1;`
+
 	//-----------------MENU-------------------//
 
 	sqlCreateMenu = `
-		INSERT INTO menu (name_menu, id_place)
-		VALUES ($1, $2)
+		INSERT INTO menu (name_menu, id_place, url)
+		VALUES ($1, $2, $3)
 		RETURNING id_menu;
 	`
 	//for menu and personal
@@ -38,7 +46,7 @@ const (
 
 	//-----------------PLACE-------------------//
 
-	sqlstrListType = `
+	sqlstrListTypePlace = `
 		SELECT type_place.id_typePlace, type_place.name_type
 		FROM type_place;`
 
@@ -104,11 +112,15 @@ const (
 	sqlPlaceIDGetByUsr = `SELECT place.id_place
 		FROM place
 		WHERE place.user_id = $1;`
+
+	sqlstrListTypePersonal = `
+		SELECT type_personal.id_typePersonal, type_personal.name_type
+		FROM type_personal;`
 )
 
 //-----------------------STORAGEs------------------------//
-type DichStorage struct {
-	storage.Dich
+type DishStorage struct {
+	storage.Dish
 	client store.IDB
 }
 
@@ -143,7 +155,17 @@ type idModel struct {
 	id store.NullString
 }
 
-type typeplaceModel struct {
+type typeModel struct {
+	id   store.NullString
+	name store.NullString
+}
+
+type typeModelDishes struct {
+	id   store.NullString
+	name store.NullString
+}
+
+type typeModelPersonals struct {
 	id   store.NullString
 	name store.NullString
 }
@@ -185,8 +207,8 @@ func newMenuStorage(client store.IDB) *MenuStorage {
 	return s
 }
 
-func newDichStorage(client store.IDB) *DichStorage {
-	s := new(DichStorage)
+func newDishStorage(client store.IDB) *DishStorage {
+	s := new(DishStorage)
 	s.client = client
 	return s
 }

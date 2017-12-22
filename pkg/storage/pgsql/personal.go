@@ -71,3 +71,39 @@ func (s *PersonalStorage) CreatePerson(ctx context.Context, personal *types.Pers
 
 	return err
 }
+
+func (s *PersonalStorage) List(ctx context.Context) (map[string]*types.TypePersonals, error) {
+
+	personals := make(map[string]*types.TypePersonals)
+
+	rows, err := s.client.Query(sqlstrListTypePersonal)
+	switch err {
+	case nil:
+	case sql.ErrNoRows:
+		return nil, nil
+	default:
+
+		return nil, err
+	}
+
+	for rows.Next() {
+		tp := new(typeModelPersonals)
+
+		if err := rows.Scan(&tp.id, &tp.name); err != nil {
+			return nil, err
+		}
+
+		c := tp.convert()
+		personals[c.ID] = c
+	}
+
+	return personals, nil
+}
+
+func (nm *typeModelPersonals) convert() *types.TypePersonals {
+	c := new(types.TypePersonals)
+
+	c.ID = nm.id.String
+	c.NameType = nm.name.String
+	return c
+}

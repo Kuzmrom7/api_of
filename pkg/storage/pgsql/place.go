@@ -59,7 +59,7 @@ func (s *PlaceStorage) CreatePlace(ctx context.Context, place *types.Place) erro
 func (s *PlaceStorage) GetTypePlaceByName(ctx context.Context, name string) (string, error) {
 	var (
 		err error
-		pl  = new(typeplaceModel)
+		pl  = new(typeModel)
 	)
 
 	err = s.client.QueryRow(sqlTypePlaceIDGetByName, name).Scan(&pl.id)
@@ -81,7 +81,7 @@ func (s *PlaceStorage) List(ctx context.Context) (map[string]*types.TypePlaces, 
 
 	places := make(map[string]*types.TypePlaces)
 
-	rows, err := s.client.Query(sqlstrListType)
+	rows, err := s.client.Query(sqlstrListTypePlace)
 	switch err {
 	case nil:
 	case sql.ErrNoRows:
@@ -92,7 +92,7 @@ func (s *PlaceStorage) List(ctx context.Context) (map[string]*types.TypePlaces, 
 	}
 
 	for rows.Next() {
-		tp := new(typeplaceModel)
+		tp := new(typeModel)
 
 		if err := rows.Scan(&tp.id, &tp.name); err != nil {
 			return nil, err
@@ -124,7 +124,7 @@ func (s *PlaceStorage) Update(ctx context.Context, place *types.Place) error{
 }
 
 
-func (nm *typeplaceModel) convert() *types.TypePlaces {
+func (nm *typeModel) convert() *types.TypePlaces {
 	c := new(types.TypePlaces)
 
 	c.ID = nm.id.String

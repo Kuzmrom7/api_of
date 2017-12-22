@@ -72,25 +72,16 @@ CREATE EXTENSION "uuid-ossp";
  (
    id_menu         UUID PRIMARY KEY                    NOT NULL DEFAULT  uuid_generate_v4(),
    name_menu       VARCHAR(256) UNIQUE,
+   url             VARCHAR(256)                        DEFAULT '',
    id_place        UUID REFERENCES place (id_place)    NOT NULL,
    created         TIMESTAMP                           DEFAULT now(),
    updated         TIMESTAMP                           DEFAULT now()
- );
-
- CREATE TABLE section_menu
- (
-   id_section         UUID PRIMARY KEY                  NOT NULL DEFAULT  uuid_generate_v4(),
-   name_section       VARCHAR(256)                      DEFAULT '',
-   id_menu            UUID  REFERENCES menu (id_menu)   NOT NULL,
-   created            TIMESTAMP                         DEFAULT now(),
-   updated            TIMESTAMP                         DEFAULT now()
  );
 
  CREATE TABLE type_dish
  (
    id_typeDish         UUID PRIMARY KEY                           NOT NULL DEFAULT  uuid_generate_v4(),
    name_typeDish       VARCHAR(256)                               DEFAULT '',
-   id_section          UUID REFERENCES section_menu (id_section)  NOT NULL,
    created             TIMESTAMP                                  DEFAULT now(),
    updated             TIMESTAMP                                  DEFAULT now()
 
@@ -99,12 +90,20 @@ CREATE EXTENSION "uuid-ossp";
  (
    id_dish          UUID PRIMARY KEY                        NOT NULL DEFAULT  uuid_generate_v4(),
    name_dish        VARCHAR(256) UNIQUE,
-   id_typeDish      UUID ,
+   id_typeDish      UUID REFERENCES type_dish (id_typeDish),
    description      VARCHAR(256)                            DEFAULT '',
+   url              VARCHAR(256)                            DEFAULT '',
    time_min         INTEGER                                 DEFAULT 0,
    created          TIMESTAMP                               DEFAULT now(),
    updated          TIMESTAMP                               DEFAULT now()
  );
+
+CREATE TABLE menudish
+(
+  id_menu UUID REFERENCES menu (id_menu),
+  id_dish UUID REFERENCES dish (id_dish)
+);
+
 CREATE TABLE img_dish
 (
   id_img             UUID PRIMARY KEY               NOT NULL DEFAULT  uuid_generate_v4(),

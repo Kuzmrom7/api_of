@@ -6,43 +6,46 @@ import (
 	ctx "github.com/orderfood/api_of/pkg/api/context"
 	"github.com/orderfood/api_of/pkg/api/dich/routes/request"
 	"github.com/orderfood/api_of/pkg/common/types"
+	"strings"
 )
 
-type dich struct {
+type dish struct {
 	context context.Context
 }
 
-func New(c context.Context) *dich {
-	return &dich{
+func New(c context.Context) *dish {
+	return &dish{
 		context: c,
 	}
 }
 
-func (p *dich) Create(rq *request.RequestDichCreate) (*types.Dich, error) {
+func (p *dish) Create(rq *request.RequestDichCreate, typedishID string) (*types.Dish, error) {
 
 	var (
 		storage = ctx.Get().GetStorage()
-		di      = types.Dich{}
+		di      = types.Dish{}
 	)
 
 	di.Meta.Name = rq.Name
 	di.Meta.Desc = rq.Desc
 	di.Meta.Timemin = rq.Timemin
+	di.Meta.TypeDishID = typedishID
+	di.Meta.Url = rq.Url
 
-	if err := storage.Dich().CreateDich(p.context, &di); err != nil {
+	if err := storage.Dish().CreateDich(p.context, &di); err != nil {
 		return nil, err
 	}
 
 	return &di, nil
 }
 
-func (p *dich) GetIDByName(name_dich string) (string, error) {
+func (p *dish) GetIDByName(name_dich string) (string, error) {
 
 	var (
 		storage = ctx.Get().GetStorage()
 	)
 
-	place_id, err := storage.Dich().GetIDdichByName(p.context, name_dich)
+	place_id, err := storage.Dish().GetIDdichByName(p.context, name_dich)
 	if err != nil {
 		return "", err
 	}
@@ -53,28 +56,60 @@ func (p *dich) GetIDByName(name_dich string) (string, error) {
 	return place_id, nil
 }
 
-func (d *dich) Remove(id_dich string) error {
+func (d *dish) Remove(id_dich string) error {
 
 	var (
 		storage = ctx.Get().GetStorage()
 	)
 
-	err := storage.Dich().Remove(d.context, id_dich)
+	err := storage.Dish().Remove(d.context, id_dich)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (r *dich) List() (map[string]*types.Dich, error) {
+func (r *dish) List() (map[string]*types.Dish, error) {
 
 	var (
 		storage = ctx.Get().GetStorage()
 	)
 
-	list, err := storage.Dich().List(r.context)
+	list, err := storage.Dish().List(r.context)
 	if err != nil {
 		return nil, err
 	}
 	return list, nil
+}
+
+func (r *dish) TypeList() (map[string]*types.TypeDishes, error) {
+
+	var (
+		storage = ctx.Get().GetStorage()
+	)
+
+	list, err := storage.Dish().TypeList(r.context)
+	if err != nil {
+		return nil, err
+	}
+	return list, nil
+}
+
+func (p *dish) GetIDTypeDishByName(type_name string) (string, error) {
+
+	var (
+		storage = ctx.Get().GetStorage()
+	)
+
+	type_name = strings.ToLower(type_name)
+
+	typedish_id, err := storage.Dish().GetTypeDishIDByName(p.context, type_name)
+	if err != nil {
+		return "", err
+	}
+	if typedish_id == "" {
+		return "", nil
+	}
+
+	return typedish_id, nil
 }

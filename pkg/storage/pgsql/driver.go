@@ -12,7 +12,7 @@ type Storage struct {
 	*UserStorage
 	*PlaceStorage
 	*MenuStorage
-	*DichStorage
+	*DishStorage
 	*PersonalStorage
 }
 
@@ -37,11 +37,11 @@ func (s *Storage) Menu() storage.Menu {
 	return s.MenuStorage
 }
 
-func (s *Storage) Dich() storage.Dich {
+func (s *Storage) Dish() storage.Dish {
 	if s == nil {
 		return nil
 	}
-	return s.DichStorage
+	return s.DishStorage
 }
 
 func (s *Storage) Personal() storage.Personal {
@@ -68,7 +68,7 @@ func New(c store.Config) (*Storage, error) {
 	s.UserStorage = newUserStorage(client)
 	s.PlaceStorage = newPlaceStorage(client)
 	s.MenuStorage = newMenuStorage(client)
-	s.DichStorage = newDichStorage(client)
+	s.DishStorage = newDishStorage(client)
 	s.PersonalStorage = newPersonalStorage(client)
 	return s, nil
 }
