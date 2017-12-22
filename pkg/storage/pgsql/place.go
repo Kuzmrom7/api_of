@@ -113,8 +113,9 @@ func (s *PlaceStorage) Update(ctx context.Context, place *types.Place) error{
 
 	place.Meta.Updated = time.Now()
 
-	if _, err := s.client.Exec(sqlstrPlaceUpdate, place.Meta.Phone, place.Meta.Adress,
-		place.Meta.City, place.Meta.Url, place.Meta.Name); err != nil {
+	err := s.client.QueryRow(sqlstrPlaceUpdate, place.Meta.Phone, place.Meta.Adress,
+		place.Meta.City, place.Meta.Url, place.Meta.Name).Scan(&place.Meta.Updatedit )
+		if err != nil {
 		return err
 	}
 	return nil
