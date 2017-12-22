@@ -8,6 +8,7 @@ import (
 	"github.com/orderfood/api_of/pkg/api/place/routes/request"
 	"github.com/orderfood/api_of/pkg/common/errors"
 	"github.com/orderfood/api_of/pkg/api/place"
+	"github.com/orderfood/api_of/pkg/util/http/utils"
 )
 
 //------------------------------------СОЗДАНИЕ ЗАВЕДЕНИЯ----------------------------------------------//
@@ -109,6 +110,54 @@ func GetPlace(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	if _, err = w.Write(response); err != nil {
+		return
+	}
+}
+
+func PlaceUpdate(w http.ResponseWriter, r *http.Request){
+	name := utils.Vars(r)["place"]
+
+	var (
+		err error
+	)
+
+	if r.Context().Value("uid") == nil {
+		errors.HTTP.Unauthorized(w)
+		return
+	}
+
+	rq := new(request.RequestPlaceUpdate)
+	if err := rq.DecodeAndValidate(r.Body); err != nil {
+		err.Http(w)
+		return
+	}
+
+	usrid1 := r.Context().Value("uid").(string)
+
+	p := place.New(r.Context())
+
+	plc, err := p.GetPlaceByIDUsr(usrid1)
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+		return
+	}
+	if plc == nil {
+		errors.New("place").NotFound().Http(w)
+	}
+
+	err = p.Update(plc, rq, name)
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+	}
+
+	response, err := v1.NewPlace(plc).ToJson()
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+	}
+
+	w.WriteHeader(http.StatusOK)
+	if _, err = w.Write(response); err != nil {
+		log.Println("Place write response error")
 		return
 	}
 

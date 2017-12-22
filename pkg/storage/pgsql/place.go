@@ -7,6 +7,7 @@ import (
 	"log"
 	"errors"
 	"database/sql"
+	"time"
 )
 
 func (s *PlaceStorage) GetPlaceByIDUser(ctx context.Context, id string) (*types.Place, error) {
@@ -77,7 +78,7 @@ func (s *PlaceStorage) GetTypePlaceByName(ctx context.Context, name string) (str
 
 func (s *PlaceStorage) List(ctx context.Context) (map[string]*types.TypePlaces, error) {
 
-	dishes := make(map[string]*types.TypePlaces)
+	places := make(map[string]*types.TypePlaces)
 
 	rows, err := s.client.Query(sqlstrListType)
 	switch err {
@@ -90,18 +91,35 @@ func (s *PlaceStorage) List(ctx context.Context) (map[string]*types.TypePlaces, 
 	}
 
 	for rows.Next() {
-		di := new(typeplaceModel)
+		tp := new(typeplaceModel)
 
-		if err := rows.Scan(&di.id, &di.name); err != nil {
+		if err := rows.Scan(&tp.id, &tp.name); err != nil {
 			return nil, err
 		}
 
-		c := di.convert()
-		dishes[c.ID] = c
+		c := tp.convert()
+		places[c.ID] = c
 	}
 
-	return dishes, nil
+	return places, nil
 }
+
+func (s *PlaceStorage) Update(ctx context.Context, place *types.Place, name string) error{
+
+	if place == nil {
+		err := errors.New("place can not be nil")
+		return err
+	}
+
+	place.Meta.Updated = time.Now()
+
+	if _, err := s.client.Exec(sqlstrPlaceUpdate, place.Meta.Phone, place.Meta.Adress,
+		place.Meta.City, place.Meta.Url, name); err != nil {
+		return err
+	}
+	return nil
+}
+
 
 func (nm *typeplaceModel) convert() *types.TypePlaces {
 	c := new(types.TypePlaces)

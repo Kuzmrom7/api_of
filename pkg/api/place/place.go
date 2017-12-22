@@ -88,3 +88,30 @@ func (u *place) GetPlaceByIDUsr(id string) (*types.Place, error) {
 
 	return plc, nil
 }
+
+func (p *place) Update(place *types.Place, rq *request.RequestPlaceUpdate, name string) error{
+	var (
+		err     error
+		storage = ctx.Get().GetStorage()
+	)
+
+	if rq.Url != nil {
+		place.Meta.Url = *rq.Url
+	}
+	if rq.City != nil {
+		place.Meta.City = *rq.City
+	}
+
+	if rq.Adress != nil {
+		place.Meta.Adress = *rq.Adress
+	}
+
+	if rq.Phone != nil {
+		place.Meta.Phone = *rq.Phone
+	}
+
+	if err = storage.Place().Update(p.context, place, name); err != nil {
+		return err
+	}
+	return nil
+}
