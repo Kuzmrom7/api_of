@@ -17,7 +17,9 @@ func (nm *dichModel) convert() *types.Dish {
 	c.Meta.ID = nm.id.String
 	c.Meta.Name = nm.name.String
 	c.Meta.Desc = nm.description.String
-
+	c.Meta.Url = nm.url.String
+	log.Println(c.Meta.Name)
+	log.Println(c.Meta.ID)
 	return c
 }
 
@@ -35,7 +37,7 @@ func (s *DishStorage) CreateDich(ctx context.Context, dich *types.Dish) error {
 		id  store.NullString
 	)
 
-	err = s.client.QueryRow(sqlCreateDich, dich.Meta.Name, dich.Meta.Desc, dich.Meta.Timemin, dich.Meta.TypeDishID, dich.Meta.Url).Scan(&id)
+	err = s.client.QueryRow(sqlCreateDich, dich.Meta.Name, dich.Meta.Desc, dich.Meta.Timemin, dich.Meta.TypeDishID, dich.Meta.Url, dich.Meta.UserID).Scan(&id)
 
 	dich.Meta.ID = id.String
 
@@ -85,11 +87,14 @@ func (s *DishStorage) List(ctx context.Context, userid string) (map[string]*type
 
 		return nil, err
 	}
+	log.Println(userid)
 
 	for rows.Next() {
+
 		di := new(dichModel)
 
-		if err := rows.Scan(&di.id, di.name, di.description); err != nil {
+		if err := rows.Scan(&di.id, &di.name, &di.description, &di.url); err != nil {
+
 			return nil, err
 		}
 
@@ -113,7 +118,6 @@ func (s *DishStorage) TypeList(ctx context.Context) (map[string]*types.TypeDishe
 
 		return nil, err
 	}
-
 	for rows.Next() {
 		tp := new(typeModelDishes)
 

@@ -40,7 +40,9 @@ func DishCreate(w http.ResponseWriter, r *http.Request) {
 		errors.New("typedish").NotFound().Http(w)
 	}
 
-	di, err := d.Create(rq, typedish_id)
+	usrid1 := r.Context().Value("uid").(string)
+
+	di, err := d.Create(rq, typedish_id, usrid1)
 	if err != nil {
 		errors.HTTP.InternalServerError(w)
 	}

@@ -25,6 +25,7 @@ func New(obj *types.Dish) *Dich {
 	i := new(Dich)
 	i.Name = obj.Meta.Name
 	i.Desc = obj.Meta.Desc
+	i.Url = obj.Meta.Url
 	return i
 }
 
