@@ -72,11 +72,11 @@ func (s *DishStorage) Remove(ctx context.Context, id string) error {
 	return nil
 }
 
-func (s *DishStorage) List(ctx context.Context) (map[string]*types.Dish, error) {
+func (s *DishStorage) List(ctx context.Context, userid string) (map[string]*types.Dish, error) {
 
 	dishes := make(map[string]*types.Dish)
 
-	rows, err := s.client.Query(sqlstrListDish)
+	rows, err := s.client.Query(sqlstrListDish, userid)
 	switch err {
 	case nil:
 	case sql.ErrNoRows:

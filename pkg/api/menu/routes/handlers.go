@@ -56,3 +56,29 @@ func MenuCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+func GetListMenu(w http.ResponseWriter, r *http.Request) {
+
+	if r.Context().Value("uid") == nil {
+		errors.HTTP.Unauthorized(w)
+		return
+	}
+
+	items, err := menu.New(r.Context()).List()
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+		return
+	}
+
+	response, err := v1.NewList(items).ToJson()
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+	}
+
+	w.WriteHeader(http.StatusOK)
+	if _, err = w.Write(response); err != nil {
+		log.Println("Menu list response error")
+		return
+	}
+
+}

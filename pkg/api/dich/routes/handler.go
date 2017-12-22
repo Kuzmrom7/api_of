@@ -30,7 +30,7 @@ func DishCreate(w http.ResponseWriter, r *http.Request) {
 
 	d := dich.New(r.Context())
 
-	typedish_id, err := d.GetIDByName(rq.TypeDish)
+	typedish_id, err := d.GetIDTypeDishByName(rq.TypeDish)
 	if err != nil {
 		errors.HTTP.InternalServerError(w)
 		return
@@ -104,7 +104,9 @@ func DishList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	items, err := dich.New(r.Context()).List()
+	usrid1 := r.Context().Value("uid").(string)
+
+	items, err := dich.New(r.Context()).List(usrid1)
 	if err != nil {
 		errors.HTTP.InternalServerError(w)
 		return

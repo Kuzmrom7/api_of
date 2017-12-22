@@ -10,7 +10,11 @@ const (
 
 	sqlstrListDish = `
 		SELECT dish.id_dish, dish.name_dish, dish.description
-		FROM dish;`
+		FROM dish
+			INNER JOIN menudish on menudish.id_dish = dish.id_dish
+			INNER JOIN menu on menu.id_menu = menudish.id_menu
+			INNER JOIN place on place.id_place = menu.id_place
+		WHERE place.user_id = $1;`
 
 	sqlCreateDich = `
 		INSERT INTO dish (name_dish, description, time_min, id_typeDish, url)
