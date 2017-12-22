@@ -6,6 +6,6 @@ type Storage interface {
 	User() storage.User
 	Place() storage.Place
 	Menu() storage.Menu
-	Dich() storage.Dich
+	Dish() storage.Dish
 	Personal() storage.Personal
 }

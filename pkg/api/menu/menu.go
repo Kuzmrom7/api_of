@@ -45,6 +45,7 @@ func (p *menu) Create(place string, rq *request.RequestMenuCreate) (*types.Menu,
 
 	men.Meta.Name = rq.Name
 	men.Meta.PlaceID = place
+	men.Meta.Url = rq.Url
 
 	if err := storage.Menu().CreateMenu(p.context, &men); err != nil {
 		return nil, err

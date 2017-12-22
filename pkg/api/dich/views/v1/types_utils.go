@@ -5,10 +5,12 @@ import (
 	"encoding/json"
 )
 
-func newDich(obj *types.Dich) *Dich {
+func newDich(obj *types.Dish) *Dich {
 	d := new(Dich)
 	d.Name = obj.Meta.Name
 	d.Desc = obj.Meta.Desc
+	d.Url = obj.Meta.Url
+	d.Timemin = obj.Meta.Timemin
 	d.Created = obj.Meta.Created
 	d.Updated = obj.Meta.Updated
 
@@ -19,16 +21,30 @@ func (obj *Dich) ToJson() ([]byte, error) {
 	return json.Marshal(obj)
 }
 
-func New(obj *types.Dich) *Dich {
+func New(obj *types.Dish) *Dich {
 	i := new(Dich)
 	i.Name = obj.Meta.Name
 	i.Desc = obj.Meta.Desc
 	return i
 }
 
+func Newt(obj *types.TypeDishes) *TypeDish {
+	i := new(TypeDish)
+	i.Meta.Name = obj.NameType
+	i.Meta.ID = obj.ID
+	return i
+}
+
 func (obj *DichList) ToJson() ([]byte, error) {
 	if obj == nil {
 		obj = &DichList{}
+	}
+	return json.Marshal(obj)
+}
+
+func (obj *TypeDishList) ToJson() ([]byte, error) {
+	if obj == nil {
+		obj = &TypeDishList{}
 	}
 	return json.Marshal(obj)
 }

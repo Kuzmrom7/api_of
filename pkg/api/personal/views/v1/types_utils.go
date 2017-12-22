@@ -22,3 +22,10 @@ func New(obj *types.TypePersonals) *TypePersonal {
 	i.Meta.ID = obj.ID
 	return i
 }
+
+func (obj *TypePersonalList) ToJson() ([]byte, error) {
+	if obj == nil {
+		obj = &TypePersonalList{}
+	}
+	return json.Marshal(obj)
+}

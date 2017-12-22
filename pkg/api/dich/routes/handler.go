@@ -8,11 +8,10 @@ import (
 	"github.com/orderfood/api_of/pkg/api/dich/routes/request"
 	"github.com/orderfood/api_of/pkg/common/errors"
 	"github.com/orderfood/api_of/pkg/api/dich"
-	//"github.com/orderfood/api_of/pkg/util/http/utils"
 
 )
 
-func DichCreate(w http.ResponseWriter, r *http.Request) {
+func DishCreate(w http.ResponseWriter, r *http.Request) {
 
 	var (
 		err error
@@ -31,7 +30,17 @@ func DichCreate(w http.ResponseWriter, r *http.Request) {
 
 	d := dich.New(r.Context())
 
-	di, err := d.Create(rq)
+	typedish_id, err := d.GetIDByName(rq.TypeDish)
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+		return
+	}
+	log.Print(typedish_id)
+	if typedish_id == "" {
+		errors.New("typedish").NotFound().Http(w)
+	}
+
+	di, err := d.Create(rq, typedish_id)
 	if err != nil {
 		errors.HTTP.InternalServerError(w)
 	}
@@ -48,7 +57,7 @@ func DichCreate(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func DichRemove(w http.ResponseWriter, r *http.Request) {
+func DishRemove(w http.ResponseWriter, r *http.Request) {
 
 	//nameDich := utils.Vars(r)["dich"]
 
@@ -88,7 +97,7 @@ func DichRemove(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func DichList(w http.ResponseWriter, r *http.Request) {
+func DishList(w http.ResponseWriter, r *http.Request) {
 
 	if r.Context().Value("uid") == nil {
 		errors.HTTP.Unauthorized(w)
@@ -102,6 +111,26 @@ func DichList(w http.ResponseWriter, r *http.Request) {
 	}
 
 	response, err := v1.NewList(items).ToJson()
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+	}
+
+	w.WriteHeader(http.StatusOK)
+	if _, err = w.Write(response); err != nil {
+		log.Println("Dich list response error")
+		return
+	}
+}
+
+func TypeDishList(w http.ResponseWriter, r *http.Request) {
+
+	items, err := dich.New(r.Context()).TypeList()
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+		return
+	}
+
+	response, err := v1.NewListType(items).ToJson()
 	if err != nil {
 		errors.HTTP.InternalServerError(w)
 	}

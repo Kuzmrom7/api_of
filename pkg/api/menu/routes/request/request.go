@@ -11,6 +11,7 @@ import (
 type RequestMenuCreate struct {
 	Name      string `json:"name,omitempty"`
 	NamePlace string `json:"nameplace"`
+	Url 			string `json:"url"`
 	//	Name          string `json:"name,omitempty"`
 }
 

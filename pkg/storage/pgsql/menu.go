@@ -23,7 +23,7 @@ func (s *MenuStorage) CreateMenu(ctx context.Context, menu *types.Menu) error {
 		id  store.NullString
 	)
 
-	err = s.client.QueryRow(sqlCreateMenu, menu.Meta.Name, menu.Meta.PlaceID).Scan(&id)
+	err = s.client.QueryRow(sqlCreateMenu, menu.Meta.Name, menu.Meta.PlaceID, menu.Meta.Url).Scan(&id)
 
 	menu.Meta.ID = id.String
 

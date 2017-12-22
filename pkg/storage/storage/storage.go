@@ -25,11 +25,13 @@ type Menu interface {
 	GetPlaceByName(ctx context.Context, name string) (string, error)
 }
 
-type Dich interface {
-	CreateDich(ctx context.Context, dich *types.Dich) error
+type Dish interface {
+	CreateDich(ctx context.Context, dich *types.Dish) error
 	Remove(ctx context.Context, id string) error
 	GetIDdichByName(ctx context.Context, name string) (string, error)
-	List(ctx context.Context) (map[string]*types.Dich, error)
+	List(ctx context.Context) (map[string]*types.Dish, error)
+	TypeList(ctx context.Context) (map[string]*types.TypeDishes, error)
+	GetTypeDishIDByName(ctx context.Context, name string) (string, error)
 }
 
 type Personal interface {
@@ -37,6 +39,6 @@ type Personal interface {
 	//Remove(ctx context.Context, id string) error
 	GetTypePersonIDByName(ctx context.Context, name string) (string, error)
 	GetPlaceIDByUsrid(ctx context.Context, id string) (string, error)
-	//List(ctx context.Context) (map[string]*types.Dich, error)
+	List(ctx context.Context) (map[string]*types.TypePersonals, error)
 
 }

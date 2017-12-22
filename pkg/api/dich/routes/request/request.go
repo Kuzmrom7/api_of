@@ -9,9 +9,11 @@ import (
 )
 
 type RequestDichCreate struct {
-	Name    string `json:"name,omitempty"`
-	Desc    string `json:"description,omitempty"`
-	Timemin int64  `json:"timemin,omitempty"`
+	Name     string `json:"name,omitempty"`
+	Desc     string `json:"description,omitempty"`
+	Timemin  int64  `json:"timemin,omitempty"`
+	TypeDish string `json:"typedish"`
+	Url      string `json:"url"`
 }
 
 type RequestDichRemove struct {
@@ -36,8 +38,17 @@ func (s *RequestDichCreate) DecodeAndValidate(reader io.Reader) *errors.Err {
 	if s.Name == "" {
 		return errors.New("dish").BadParameter("name")
 	}
+
 	if s.Desc == "" {
 		return errors.New("dish").BadParameter("name")
+	}
+
+	if s.TypeDish == "" {
+		return errors.New("dish").BadParameter("typedish")
+	}
+
+	if s.Url == "" {
+		return errors.New("dish").BadParameter("url")
 	}
 
 	return nil

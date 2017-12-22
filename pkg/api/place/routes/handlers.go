@@ -60,7 +60,7 @@ func PlaceCreate(w http.ResponseWriter, r *http.Request) {
 }
 
 //------------------------------------СПИСОК ТИПОВ ЗАВЕДЕНИЙ--------------------------------------------//
-func PlaceList(w http.ResponseWriter, r *http.Request) {
+func TypePlaceList(w http.ResponseWriter, r *http.Request) {
 
 	items, err := place.New(r.Context()).List()
 	if err != nil {
