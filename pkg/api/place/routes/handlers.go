@@ -8,7 +8,6 @@ import (
 	"github.com/orderfood/api_of/pkg/api/place/routes/request"
 	"github.com/orderfood/api_of/pkg/common/errors"
 	"github.com/orderfood/api_of/pkg/api/place"
-	"github.com/orderfood/api_of/pkg/util/http/utils"
 )
 
 //------------------------------------СОЗДАНИЕ ЗАВЕДЕНИЯ----------------------------------------------//
@@ -113,9 +112,8 @@ func GetPlace(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
-
+//------------------------------------ОБНОВЛЕНИЕ ЗАВЕДЕНИЯ--------------------------------------------//
 func PlaceUpdate(w http.ResponseWriter, r *http.Request){
-	name := utils.Vars(r)["place"]
 
 	var (
 		err error
@@ -145,7 +143,7 @@ func PlaceUpdate(w http.ResponseWriter, r *http.Request){
 		errors.New("place").NotFound().Http(w)
 	}
 
-	err = p.Update(plc, rq, name)
+	err = p.Update(plc, rq)
 	if err != nil {
 		errors.HTTP.InternalServerError(w)
 	}

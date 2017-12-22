@@ -104,7 +104,7 @@ func (s *PlaceStorage) List(ctx context.Context) (map[string]*types.TypePlaces, 
 	return places, nil
 }
 
-func (s *PlaceStorage) Update(ctx context.Context, place *types.Place, name string) error{
+func (s *PlaceStorage) Update(ctx context.Context, place *types.Place) error{
 
 	if place == nil {
 		err := errors.New("place can not be nil")
@@ -114,7 +114,7 @@ func (s *PlaceStorage) Update(ctx context.Context, place *types.Place, name stri
 	place.Meta.Updated = time.Now()
 
 	if _, err := s.client.Exec(sqlstrPlaceUpdate, place.Meta.Phone, place.Meta.Adress,
-		place.Meta.City, place.Meta.Url, name); err != nil {
+		place.Meta.City, place.Meta.Url, place.Meta.Name); err != nil {
 		return err
 	}
 	return nil
