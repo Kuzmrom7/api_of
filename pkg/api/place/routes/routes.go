@@ -8,6 +8,6 @@ import (
 var Routes = []http.Route{
 	{Path: "/place", Method: http.MethodGet, Middleware: []http.Middleware{middleware.Authenticate}, Handler: GetPlace},
 	{Path: "/place", Method: http.MethodPost, Middleware: []http.Middleware{middleware.Authenticate}, Handler: PlaceCreate},
-	{Path: "/place/{place}", Method: http.MethodPost, Middleware: []http.Middleware{middleware.Authenticate}, Handler: PlaceUpdate},
+	{Path: "/place/{place}", Method: http.MethodPut, Middleware: []http.Middleware{middleware.Authenticate}, Handler: PlaceUpdate},
 	{Path: "/typeplace", Method: http.MethodGet, Handler: PlaceList},
 }
