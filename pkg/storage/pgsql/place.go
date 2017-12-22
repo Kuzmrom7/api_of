@@ -9,6 +9,30 @@ import (
 	"database/sql"
 )
 
+func (s *PlaceStorage) GetPlaceByIDUser(ctx context.Context, id string) (*types.Place, error) {
+
+	var (
+		err error
+		pl  = new(placeModel)
+	)
+
+	err = s.client.QueryRow(sqlPlaceGetByIDUsr, id).Scan(&pl.name, &pl.phone, &pl.adress,
+		&pl.city, &pl.url)
+	switch err {
+	case nil:
+	case sql.ErrNoRows:
+		return nil, nil
+	default:
+		return nil, err
+	}
+
+	plc := pl.convert()
+
+	return plc, nil
+
+}
+
+
 func (s *PlaceStorage) CreatePlace(ctx context.Context, place *types.Place) error {
 
 	log.Println("STORAGE--- CreatePlace()")
@@ -87,3 +111,14 @@ func (nm *typeplaceModel) convert() *types.TypePlaces {
 	return c
 }
 
+func (pl *placeModel) convert() *types.Place {
+	c := new(types.Place)
+
+	c.Meta.Name = pl.name.String
+	c.Meta.Phone = pl.phone.String
+	c.Meta.Adress = pl.adress.String
+	c.Meta.City = pl.city.String
+	c.Meta.Url = pl.url.String
+
+	return c
+}

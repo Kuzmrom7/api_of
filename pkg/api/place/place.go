@@ -19,7 +19,7 @@ func New(c context.Context) *place {
 	}
 }
 
-func (p *place) GetIDByName(name_typeplace string) (string, error) {
+func (p *place) GetIDTypePlaceByName(name_typeplace string) (string, error) {
 
 	var (
 		storage = ctx.Get().GetStorage()
@@ -71,4 +71,20 @@ func (r *place) List() (map[string]*types.TypePlaces, error) {
 		return nil, err
 	}
 	return list, nil
+}
+
+func (u *place) GetPlaceByIDUsr(id string) (*types.Place, error) {
+	var (
+		storage = ctx.Get().GetStorage()
+	)
+
+	plc, err := storage.Place().GetPlaceByIDUser(u.context, id)
+	if err != nil {
+		return nil, err
+	}
+	if plc == nil {
+		return nil, nil
+	}
+
+	return plc, nil
 }

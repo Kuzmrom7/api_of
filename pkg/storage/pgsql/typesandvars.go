@@ -31,7 +31,7 @@ const (
 		VALUES ($1, $2)
 		RETURNING id_menu;
 	`
-//for menu and personal
+	//for menu and personal
 	sqlPlaceIDGetByName = `SELECT place.id_place
 		FROM place
 		WHERE place.name = $1;`
@@ -50,6 +50,11 @@ const (
 	sqlTypePlaceIDGetByName = `SELECT type_place.id_typePlace
 		FROM type_place
 		WHERE type_place.name_type = $1;`
+
+	sqlPlaceGetByIDUsr = `
+		SELECT place.name, place.phone_number, place.adress, place.city, place.url
+		FROM place
+		WHERE place.user_id = $1;`
 
 	//-----------------USERS-------------------//
 
@@ -88,8 +93,8 @@ const (
 	sqlPlaceIDGetByUsr = `SELECT place.id_place
 		FROM place
 		WHERE place.user_id = $1;`
-
 )
+
 //-----------------------STORAGEs------------------------//
 type DichStorage struct {
 	storage.Dich
@@ -152,6 +157,14 @@ type userModel struct {
 	gravatar store.NullString
 	password store.NullString
 	salt     store.NullString
+}
+
+type placeModel struct {
+	name   store.NullString
+	phone  store.NullString
+	url    store.NullString
+	city   store.NullString
+	adress store.NullString
 }
 
 //-------------------------------------------------------------------------------------------------------//

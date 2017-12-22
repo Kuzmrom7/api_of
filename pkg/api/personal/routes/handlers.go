@@ -7,7 +7,7 @@ import (
 	"github.com/orderfood/api_of/pkg/api/personal/routes/request"
 	"github.com/orderfood/api_of/pkg/common/errors"
 	"github.com/orderfood/api_of/pkg/api/personal"
-	//"github.com/orderfood/api_of/pkg/api/place"
+
 )
 
 func PersonCreate(w http.ResponseWriter, r *http.Request) {
@@ -69,21 +69,21 @@ func PersonCreate(w http.ResponseWriter, r *http.Request) {
 }
 
 //func TypePersonList(w http.ResponseWriter, r *http.Request) {
-	//
-	//items, err := place.New(r.Context()).List()
-	//if err != nil {
-	//	errors.HTTP.InternalServerError(w)
-	//	return
-	//}
-	//
-	//response, err := v1.NewList(items).ToJson()
-	//if err != nil {
-	//	errors.HTTP.InternalServerError(w)
-	//}
-	//
-	//w.WriteHeader(http.StatusOK)
-	//if _, err = w.Write(response); err != nil {
-	//	log.Println("Dich list response error")
-	//	return
-	//}
+//
+//	items, err := personal.New(r.Context()).List()
+//	if err != nil {
+//		errors.HTTP.InternalServerError(w)
+//		return
+//	}
+//
+//	response, err := v1.NewList(items).ToJson()
+//	if err != nil {
+//		errors.HTTP.InternalServerError(w)
+//	}
+//
+//	w.WriteHeader(http.StatusOK)
+//	if _, err = w.Write(response); err != nil {
+//		log.Println("Dich list response error")
+//		return
+//	}
 //}
