@@ -56,6 +56,16 @@ const (
 		FROM place
 		WHERE place.user_id = $1;`
 
+	sqlstrPlaceUpdate = `
+		UPDATE place
+		SET
+			place.phone_number = $1,
+			place.adress = $2,
+			place.city = $3,
+			place.url = $4,
+			place.updated = now()
+		WHERE place.name = $5;`
+
 	//-----------------USERS-------------------//
 
 	sqlstrUserGetByLogin = `
