@@ -83,6 +83,51 @@ func (s *MenuStorage) List(ctx context.Context, placeid string) (map[string]*typ
 	return menus, nil
 }
 
+
+func (s *MenuStorage) GetIDmenuByName(ctx context.Context, name string) (string, error) {
+	var (
+		err error
+		di  = new(dichModel)
+	)
+
+	err = s.client.QueryRow(sqlMenuIDGetByName, name).Scan(&di.id)
+
+	switch err {
+	case nil:
+	case sql.ErrNoRows:
+		return "", nil
+	default:
+		return "", err
+	}
+
+	menuID := di.id.String
+
+	return menuID, nil
+}
+
+func (s *MenuStorage) CreateMenuDish(ctx context.Context, menuid, dishid string) error {
+
+	log.Println("STORAGE--- CreateMenuDish()")
+
+	if menuid == "" {
+		err := errors.New("menuid can not be nil")
+		return err
+	}
+	if dishid == "" {
+		err := errors.New("dishid can not be nil")
+		return err
+	}
+
+	var (
+		err error
+		id  store.NullString
+	)
+
+	err = s.client.QueryRow(sqlCreateMenuDish, menuid, dishid).Scan(&id)
+
+	return err
+}
+
 func (nm *menuModel) convert() *types.Menu {
 	c := new(types.Menu)
 

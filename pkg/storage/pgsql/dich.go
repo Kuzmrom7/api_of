@@ -44,13 +44,13 @@ func (s *DishStorage) CreateDich(ctx context.Context, dich *types.Dish) error {
 	return err
 }
 
-func (s *DishStorage) GetIDdichByName(ctx context.Context, name string) (string, error) {
+func (s *DishStorage) GetIDdichByName(ctx context.Context, name, usrid string) (string, error) {
 	var (
 		err error
 		di  = new(dichModel)
 	)
 
-	err = s.client.QueryRow(sqlDichIDGetByName, name).Scan(&di.id)
+	err = s.client.QueryRow(sqlDichIDGetByName, name, usrid).Scan(&di.id)
 
 	switch err {
 	case nil:

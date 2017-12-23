@@ -68,6 +68,8 @@ func DishRemove(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	usrid  := r.Context().Value("uid").(string)
+
 	rq := new(request.RequestDichRemove)
 	if err := rq.DecodeAndValidate(r.Body); err != nil {
 		err.Http(w)
@@ -76,7 +78,7 @@ func DishRemove(w http.ResponseWriter, r *http.Request) {
 
 	d := dich.New(r.Context())
 
-	dich_id, err := d.GetIDByName(rq.Name)
+	dich_id, err := d.GetIDdishByName(rq.Name, usrid)
 	if err != nil {
 		errors.HTTP.InternalServerError(w)
 		return

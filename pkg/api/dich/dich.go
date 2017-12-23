@@ -40,21 +40,21 @@ func (p *dish) Create(rq *request.RequestDichCreate, typedishID, userid string) 
 	return &di, nil
 }
 
-func (p *dish) GetIDByName(name_dich string) (string, error) {
+func (p *dish) GetIDdishByName(name_dich, usrid string) (string, error) {
 
 	var (
 		storage = ctx.Get().GetStorage()
 	)
 
-	place_id, err := storage.Dish().GetIDdichByName(p.context, name_dich)
+	dish_id, err := storage.Dish().GetIDdichByName(p.context, name_dich, usrid)
 	if err != nil {
 		return "", err
 	}
-	if place_id == "" {
+	if dish_id == "" {
 		return "", nil
 	}
 
-	return place_id, nil
+	return dish_id, nil
 }
 
 func (d *dish) Remove(id_dich string) error {
