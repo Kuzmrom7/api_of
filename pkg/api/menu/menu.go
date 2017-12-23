@@ -80,6 +80,19 @@ func (p *menu) CreateMenuDish(menuid, dishid string) error {
 	return nil
 }
 
+func (p *menu) RemoveMenuDish(menuid, dishid string) error {
+
+	var (
+		storage = ctx.Get().GetStorage()
+	)
+
+	if err := storage.Menu().DeleteDishInMenu(p.context, menuid, dishid); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (u *menu) GetMenuByIDPlaceAndNameMenu(idplace, name string) (*types.Menu, error) {
 	var (
 		storage = ctx.Get().GetStorage()

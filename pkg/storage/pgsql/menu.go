@@ -104,6 +104,29 @@ func (s *MenuStorage) InsertDishInMenu(ctx context.Context, menuid, dishid strin
 	return err
 }
 
+
+func (s *MenuStorage) DeleteDishInMenu(ctx context.Context, menuid, dishid string) error {
+
+	log.Println("STORAGE--- DeleteDishInMenu()")
+
+	if menuid == "" {
+		err := errors.New("menuid can not be nil")
+		return err
+	}
+	if dishid == "" {
+		err := errors.New("dishid can not be nil")
+		return err
+	}
+
+	_, err := s.client.Exec(sqlMenuDishRemove, menuid, dishid)
+	if err != nil {
+		return err
+	}
+	return nil
+
+}
+
+
 func (s *MenuStorage) Fetch(ctx context.Context, idplace, name string) (*types.Menu, error) {
 
 	var (

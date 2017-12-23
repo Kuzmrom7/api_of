@@ -51,6 +51,9 @@ const (
 		VALUES ($1, $2)
 		RETURNING id_menu;
 	`
+
+	sqlMenuDishRemove = `DELETE FROM menudish WHERE id_menu = $1 AND id_dish = $2;`
+
 	sqlFetchMenu = `
 		SELECT menu.id_menu, menu.url, menu.created, menu.updated
 		FROM menu

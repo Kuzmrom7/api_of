@@ -14,7 +14,7 @@ type RequestMenuCreate struct {
 	Url       string `json:"url"`
 }
 
-type RequestMenuDishCreate struct {
+type RequestMenuDishCreateRemove struct {
 	NameMenu string `json:"namemenu,omitempty"`
 	NameDish string `json:"namedish"`
 }
@@ -54,7 +54,7 @@ func (s *RequestMenuCreate) DecodeAndValidate(reader io.Reader) *errors.Err {
 	return nil
 }
 
-func (s *RequestMenuDishCreate) DecodeAndValidate(reader io.Reader) *errors.Err {
+func (s *RequestMenuDishCreateRemove) DecodeAndValidate(reader io.Reader) *errors.Err {
 
 	var (
 		err error
