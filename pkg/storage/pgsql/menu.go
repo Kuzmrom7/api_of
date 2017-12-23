@@ -149,6 +149,36 @@ func (s *MenuStorage) Fetch(ctx context.Context, idplace, name string) (*types.M
 
 }
 
+func (s *MenuStorage) ListMenuDish(ctx context.Context, menuid, typedishid string) (map[string]*types.Dish, error) {
+
+	menudishes := make(map[string]*types.Dish)
+
+	rows, err := s.client.Query(sqlstrListMenuDishes, menuid, typedishid)
+	switch err {
+	case nil:
+	case sql.ErrNoRows:
+		return nil, nil
+	default:
+
+		return nil, err
+	}
+
+	for rows.Next() {
+
+		di := new(dichModel)
+
+		if err := rows.Scan(&di.id, &di.name, &di.description, &di.url, &di.updated); err != nil {
+
+			return nil, err
+		}
+
+		c := di.convert()
+		menudishes[c.Meta.ID] = c
+	}
+
+	return menudishes, nil
+}
+
 func (nm *menuModel) convert() *types.Menu {
 	c := new(types.Menu)
 
