@@ -56,11 +56,6 @@ const (
 		FROM menu
 		WHERE menu.id_place = $1 AND menu.name_menu = $2;`
 
-	//for menu and personal
-	sqlPlaceIDGetByName = `SELECT place.id_place
-		FROM place
-		WHERE place.name = $1;`
-
 	sqlstrListMenu = `
 					SELECT menu.id_menu, menu.name_menu, menu.url, menu.created, menu.updated
 					FROM menu
@@ -77,6 +72,10 @@ const (
 	sqlstrListTypePlace = `
 		SELECT type_place.id_typePlace, type_place.name_type
 		FROM type_place;`
+
+	sqlPlaceIDGetByUsr = `SELECT place.id_place
+		FROM place
+		WHERE place.user_id = $1;`
 
 	sqlCreatePlace = `
 		INSERT INTO place (name, phone_number, url, city, adress, user_id, id_typePlace)
@@ -137,9 +136,6 @@ const (
 		VALUES ($1, $2, $3, $4)
 		RETURNING id_personal;
 	`
-	sqlPlaceIDGetByUsr = `SELECT place.id_place
-		FROM place
-		WHERE place.user_id = $1;`
 
 	sqlstrListTypePersonal = `
 		SELECT type_personal.id_typePersonal, type_personal.name_type

@@ -33,7 +33,7 @@ func (p *dish) Create(rq *request.RequestDichCreate, typedishID, userid string) 
 	di.Meta.Url = rq.Url
 	di.Meta.UserID = userid
 
-	if err := storage.Dish().CreateDich(p.context, &di); err != nil {
+	if err := storage.Dish().CreateDish(p.context, &di); err != nil {
 		return nil, err
 	}
 
@@ -46,7 +46,7 @@ func (p *dish) GetIDdishByName(name_dich, usrid string) (string, error) {
 		storage = ctx.Get().GetStorage()
 	)
 
-	dish_id, err := storage.Dish().GetIDdichByName(p.context, name_dich, usrid)
+	dish_id, err := storage.Dish().GetIdDishByName(p.context, name_dich, usrid)
 	if err != nil {
 		return "", err
 	}
@@ -63,7 +63,7 @@ func (d *dish) Remove(id_dich string) error {
 		storage = ctx.Get().GetStorage()
 	)
 
-	err := storage.Dish().Remove(d.context, id_dich)
+	err := storage.Dish().RemoveDish(d.context, id_dich)
 	if err != nil {
 		return err
 	}

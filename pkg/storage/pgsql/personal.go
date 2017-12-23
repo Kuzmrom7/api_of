@@ -9,26 +9,7 @@ import (
 	"github.com/orderfood/api_of/pkg/storage/store"
 )
 
-func (s *PersonalStorage) GetPlaceIDByUsrid(ctx context.Context, id string) (string, error) {
-	var (
-		err error
-		plc = new(idModel)
-	)
 
-	err = s.client.QueryRow(sqlPlaceIDGetByUsr, id).Scan(&plc.id)
-
-	switch err {
-	case nil:
-	case sql.ErrNoRows:
-		return "", nil
-	default:
-		return "", err
-	}
-
-	placeID := plc.id.String
-
-	return placeID, nil
-}
 
 func (s *PersonalStorage) GetTypePersonIDByName(ctx context.Context, name string) (string, error) {
 	var (

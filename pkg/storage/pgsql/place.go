@@ -34,6 +34,27 @@ func (s *PlaceStorage) GetPlaceByIDUser(ctx context.Context, id string) (*types.
 
 }
 
+func (s *PlaceStorage) GetPlaceIDByUsrid(ctx context.Context, id string) (string, error) {
+	var (
+		err error
+		plc = new(idModel)
+	)
+
+	err = s.client.QueryRow(sqlPlaceIDGetByUsr, id).Scan(&plc.id)
+
+	switch err {
+	case nil:
+	case sql.ErrNoRows:
+		return "", nil
+	default:
+		return "", err
+	}
+
+	placeID := plc.id.String
+
+	return placeID, nil
+}
+
 
 func (s *PlaceStorage) CreatePlace(ctx context.Context, place *types.Place) error {
 
@@ -77,7 +98,7 @@ func (s *PlaceStorage) GetTypePlaceByName(ctx context.Context, name string) (str
 	return typeplaceID, nil
 }
 
-func (s *PlaceStorage) List(ctx context.Context) (map[string]*types.TypePlaces, error) {
+func (s *PlaceStorage) ListType(ctx context.Context) (map[string]*types.TypePlaces, error) {
 
 	places := make(map[string]*types.TypePlaces)
 

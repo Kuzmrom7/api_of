@@ -18,23 +18,6 @@ func New(c context.Context) *menu {
 	}
 }
 
-func (p *menu) GetIDplaceByName(name_place string) (string, error) {
-
-	var (
-		storage = ctx.Get().GetStorage()
-	)
-
-	place_id, err := storage.Menu().GetPlaceByName(p.context, name_place)
-	if err != nil {
-		return "", err
-	}
-	if place_id == "" {
-		return "", nil
-	}
-
-	return place_id, nil
-}
-
 func (p *menu) GetIDMenuByName(name_menu string) (string, error) {
 
 	var (
@@ -90,7 +73,7 @@ func (p *menu) CreateMenuDish(menuid, dishid string) error {
 		storage = ctx.Get().GetStorage()
 	)
 
-	if err := storage.Menu().CreateMenuDish(p.context, menuid, dishid); err != nil {
+	if err := storage.Menu().InsertDishInMenu(p.context, menuid, dishid); err != nil {
 		return err
 	}
 
@@ -119,7 +102,7 @@ func (r *menu) ListMenuDish(menuid, typedishid string) (map[string]*types.Dish, 
 		storage = ctx.Get().GetStorage()
 	)
 
-	list, err := storage.Menu().ListMenuDish(r.context, menuid, typedishid)
+	list, err := storage.Menu().ListDishesInMenu(r.context, menuid, typedishid)
 	if err != nil {
 		return nil, err
 	}

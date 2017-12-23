@@ -38,23 +38,6 @@ func (p *personal) GetIDTypePersonByName(name_typeperson string) (string, error)
 	return typeplace_id, nil
 }
 
-func (p *personal) GetIDPlaceByUsr(usrid string) (string, error) {
-
-	var (
-		storage = ctx.Get().GetStorage()
-	)
-
-	place_id, err := storage.Personal().GetPlaceIDByUsrid(p.context, usrid)
-	if err != nil {
-		return "", err
-	}
-	if place_id == "" {
-		return "", nil
-	}
-
-	return place_id, nil
-}
-
 //
 func (p *personal) Create(typeperson, place string, rq *request.RequestPersonCreate) (*types.Personal, error) {
 

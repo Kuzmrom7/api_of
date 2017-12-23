@@ -10,7 +10,6 @@ import (
 	"log"
 	"github.com/orderfood/api_of/pkg/api/place"
 	"github.com/orderfood/api_of/pkg/api/dich"
-	"github.com/orderfood/api_of/pkg/api/personal"
 	dv1 "github.com/orderfood/api_of/pkg/api/dich/views/v1"
 )
 
@@ -31,9 +30,9 @@ func MenuCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	m := menu.New(r.Context())
+	usrid := r.Context().Value("uid").(string)
 
-	place_id, err := m.GetIDplaceByName(rq.NamePlace)
+	place_id, err := place.New(r.Context()).GetIDPlaceByUsrId(usrid)
 	if err != nil {
 		errors.HTTP.InternalServerError(w)
 		return
@@ -43,7 +42,7 @@ func MenuCreate(w http.ResponseWriter, r *http.Request) {
 		errors.New("place").NotFound().Http(w)
 	}
 
-	men, err := m.Create(place_id, rq)
+	men, err := menu.New(r.Context()).Create(place_id, rq)
 	if err != nil {
 		errors.HTTP.InternalServerError(w)
 	}
@@ -169,7 +168,6 @@ func GetMenu(w http.ResponseWriter, r *http.Request) {
 
 	var (
 		err error
-		id  = r.Context().Value("uid").(string)
 	)
 
 	rq := new(request.RequestMenuFetch)
@@ -178,8 +176,9 @@ func GetMenu(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	p := personal.New(r.Context())
-	place_id, err := p.GetIDPlaceByUsr(id)
+	usrid := r.Context().Value("uid").(string)
+
+	place_id, err := place.New(r.Context()).GetIDPlaceByUsrId(usrid)
 	if err != nil {
 		errors.HTTP.InternalServerError(w)
 		return
@@ -189,8 +188,7 @@ func GetMenu(w http.ResponseWriter, r *http.Request) {
 		errors.New("place").NotFound().Http(w)
 	}
 
-	m := menu.New(r.Context())
-	men, err := m.GetMenuByIDPlaceAndNameMenu(place_id, rq.Name)
+	men, err := menu.New(r.Context()).GetMenuByIDPlaceAndNameMenu(place_id, rq.Name)
 	if err != nil {
 		errors.HTTP.InternalServerError(w)
 		return
@@ -204,7 +202,6 @@ func GetMenu(w http.ResponseWriter, r *http.Request) {
 		errors.HTTP.InternalServerError(w)
 	}
 
-	///log.Println("Create user id: " , usr.Meta.ID, " username: " , usr.Meta.Username)
 	w.WriteHeader(http.StatusOK)
 	if _, err = w.Write(response); err != nil {
 		log.Println("Menu write response error")

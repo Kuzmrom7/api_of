@@ -23,9 +23,9 @@ func (nm *dichModel) convert() *types.Dish {
 	return c
 }
 
-func (s *DishStorage) CreateDich(ctx context.Context, dich *types.Dish) error {
+func (s *DishStorage) CreateDish(ctx context.Context, dich *types.Dish) error {
 
-	log.Println("STORAGE--- CreateDich()")
+	log.Println("STORAGE--- CreateDish()")
 
 	if dich == nil {
 		err := errors.New("dich can not be nil")
@@ -44,7 +44,7 @@ func (s *DishStorage) CreateDich(ctx context.Context, dich *types.Dish) error {
 	return err
 }
 
-func (s *DishStorage) GetIDdichByName(ctx context.Context, name, usrid string) (string, error) {
+func (s *DishStorage) GetIdDishByName(ctx context.Context, name, usrid string) (string, error) {
 	var (
 		err error
 		di  = new(dichModel)
@@ -65,7 +65,7 @@ func (s *DishStorage) GetIDdichByName(ctx context.Context, name, usrid string) (
 	return dishID, nil
 }
 
-func (s *DishStorage) Remove(ctx context.Context, id string) error {
+func (s *DishStorage) RemoveDish(ctx context.Context, id string) error {
 
 	_, err := s.client.Exec(sqlDichRemove, id)
 	if err != nil {

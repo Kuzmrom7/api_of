@@ -66,7 +66,7 @@ func (r *place) List() (map[string]*types.TypePlaces, error) {
 		storage = ctx.Get().GetStorage()
 	)
 
-	list, err := storage.Place().List(r.context)
+	list, err := storage.Place().ListType(r.context)
 	if err != nil {
 		return nil, err
 	}
@@ -114,4 +114,22 @@ func (p *place) Update(place *types.Place, rq *request.RequestPlaceUpdate) error
 		return err
 	}
 	return nil
+}
+
+
+func (p *place) GetIDPlaceByUsrId(usrid string) (string, error) {
+
+	var (
+		storage = ctx.Get().GetStorage()
+	)
+
+	place_id, err := storage.Place().GetPlaceIDByUsrid(p.context, usrid)
+	if err != nil {
+		return "", err
+	}
+	if place_id == "" {
+		return "", nil
+	}
+
+	return place_id, nil
 }

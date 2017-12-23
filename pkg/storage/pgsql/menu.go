@@ -30,27 +30,6 @@ func (s *MenuStorage) CreateMenu(ctx context.Context, menu *types.Menu) error {
 	return err
 }
 
-func (s *MenuStorage) GetPlaceByName(ctx context.Context, name string) (string, error) {
-	var (
-		err error
-		plc = new(idModel)
-	)
-
-	err = s.client.QueryRow(sqlPlaceIDGetByName, name).Scan(&plc.id)
-
-	switch err {
-	case nil:
-	case sql.ErrNoRows:
-		return "", nil
-	default:
-		return "", err
-	}
-
-	placeID := plc.id.String
-
-	return placeID, nil
-}
-
 func (s *MenuStorage) List(ctx context.Context, placeid string) (map[string]*types.Menu, error) {
 
 	menus := make(map[string]*types.Menu)
@@ -102,9 +81,9 @@ func (s *MenuStorage) GetIDmenuByName(ctx context.Context, name string) (string,
 	return menuID, nil
 }
 
-func (s *MenuStorage) CreateMenuDish(ctx context.Context, menuid, dishid string) error {
+func (s *MenuStorage) InsertDishInMenu(ctx context.Context, menuid, dishid string) error {
 
-	log.Println("STORAGE--- CreateMenuDish()")
+	log.Println("STORAGE--- InsertDishInMenu()")
 
 	if menuid == "" {
 		err := errors.New("menuid can not be nil")
@@ -149,7 +128,7 @@ func (s *MenuStorage) Fetch(ctx context.Context, idplace, name string) (*types.M
 
 }
 
-func (s *MenuStorage) ListMenuDish(ctx context.Context, menuid, typedishid string) (map[string]*types.Dish, error) {
+func (s *MenuStorage) ListDishesInMenu(ctx context.Context, menuid, typedishid string) (map[string]*types.Dish, error) {
 
 	menudishes := make(map[string]*types.Dish)
 
