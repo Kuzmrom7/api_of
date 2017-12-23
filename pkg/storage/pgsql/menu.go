@@ -51,7 +51,6 @@ func (s *MenuStorage) GetPlaceByName(ctx context.Context, name string) (string, 
 	return placeID, nil
 }
 
-
 func (s *MenuStorage) List(ctx context.Context, placeid string) (map[string]*types.Menu, error) {
 
 	menus := make(map[string]*types.Menu)
@@ -65,7 +64,6 @@ func (s *MenuStorage) List(ctx context.Context, placeid string) (map[string]*typ
 
 		return nil, err
 	}
-
 
 	for rows.Next() {
 
@@ -82,7 +80,6 @@ func (s *MenuStorage) List(ctx context.Context, placeid string) (map[string]*typ
 
 	return menus, nil
 }
-
 
 func (s *MenuStorage) GetIDmenuByName(ctx context.Context, name string) (string, error) {
 	var (
@@ -128,14 +125,14 @@ func (s *MenuStorage) CreateMenuDish(ctx context.Context, menuid, dishid string)
 	return err
 }
 
-func (s *PlaceStorage) Fetch(ctx context.Context, idplace, name string) (*types.Menu, error) {
+func (s *MenuStorage) Fetch(ctx context.Context, idplace, name string) (*types.Menu, error) {
 
 	var (
 		err error
 		mn  = new(menuModel)
 	)
 
-	err = s.client.QueryRow(sqlFetchMenu, idplace, name).Scan(&mn.id, &mn.name, &mn.url, &mn.created, &mn.updated)
+	err = s.client.QueryRow(sqlFetchMenu, idplace, name).Scan(&mn.id, &mn.url, &mn.created, &mn.updated)
 	switch err {
 	case nil:
 	case sql.ErrNoRows:
@@ -145,6 +142,8 @@ func (s *PlaceStorage) Fetch(ctx context.Context, idplace, name string) (*types.
 	}
 
 	men := mn.convert()
+
+	men.Meta.Name = name
 
 	return men, nil
 

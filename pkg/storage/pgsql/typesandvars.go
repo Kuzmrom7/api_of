@@ -52,7 +52,7 @@ const (
 		RETURNING id_menu;
 	`
 	sqlFetchMenu = `
-		SELECT menu.id_menu, menu.name_menu, menu.url, menu.created, menu.updated
+		SELECT menu.id_menu, menu.url, menu.created, menu.updated
 		FROM menu
 		WHERE menu.id_place = $1 AND menu.name_menu = $2;`
 
