@@ -6,12 +6,24 @@ func NewPersonal(obj *types.Personal) *Personal{
 	return newPersonal(obj)
 }
 
-func NewList(obj map[string]*types.TypePersonals) *TypePersonalList {
+func NewListType(obj map[string]*types.TypePersonals) *TypePersonalList {
 	if obj == nil {
 		return nil
 	}
 
 	r := make(TypePersonalList, 0)
+	for _, v := range obj {
+		r = append(r, Newt(v))
+	}
+	return &r
+}
+
+func NewList(obj map[string]*types.Personal) *PersonalList {
+	if obj == nil {
+		return nil
+	}
+
+	r := make(PersonalList, 0)
 	for _, v := range obj {
 		r = append(r, New(v))
 	}

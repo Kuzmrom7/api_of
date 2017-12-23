@@ -72,7 +72,7 @@ func (s *PersonalStorage) CreatePerson(ctx context.Context, personal *types.Pers
 	return err
 }
 
-func (s *PersonalStorage) List(ctx context.Context) (map[string]*types.TypePersonals, error) {
+func (s *PersonalStorage) ListType(ctx context.Context) (map[string]*types.TypePersonals, error) {
 
 	personals := make(map[string]*types.TypePersonals)
 
@@ -100,10 +100,53 @@ func (s *PersonalStorage) List(ctx context.Context) (map[string]*types.TypePerso
 	return personals, nil
 }
 
+func (s *PersonalStorage) List(ctx context.Context, placeid string) (map[string]*types.Personal, error) {
+
+	personals := make(map[string]*types.Personal)
+
+	rows, err := s.client.Query(sqlstrListPersonal, placeid)
+	switch err {
+	case nil:
+	case sql.ErrNoRows:
+		return nil, nil
+	default:
+
+		return nil, err
+	}
+
+
+	for rows.Next() {
+
+		di := new(personalModel)
+
+		if err := rows.Scan(&di.id, &di.fio, &di.phone, &di.updated); err != nil {
+
+			return nil, err
+		}
+
+		c := di.convert()
+		personals[c.Meta.ID] = c
+	}
+
+	return personals, nil
+}
+
+
 func (nm *typeModelPersonals) convert() *types.TypePersonals {
 	c := new(types.TypePersonals)
 
 	c.ID = nm.id.String
 	c.NameType = nm.name.String
+	return c
+}
+
+func (nm *personalModel) convert() *types.Personal {
+	c := new(types.Personal)
+
+	c.Meta.ID = nm.id.String
+	c.Meta.Fio = nm.fio.String
+	c.Meta.Phone = nm.phone.String
+	c.Meta.Updated = nm.updated
+
 	return c
 }

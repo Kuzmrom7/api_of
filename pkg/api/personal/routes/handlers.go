@@ -7,7 +7,7 @@ import (
 	"github.com/orderfood/api_of/pkg/api/personal/routes/request"
 	"github.com/orderfood/api_of/pkg/common/errors"
 	"github.com/orderfood/api_of/pkg/api/personal"
-
+	"github.com/orderfood/api_of/pkg/api/place"
 )
 
 func PersonCreate(w http.ResponseWriter, r *http.Request) {
@@ -70,7 +70,47 @@ func PersonCreate(w http.ResponseWriter, r *http.Request) {
 
 func TypePersonList(w http.ResponseWriter, r *http.Request) {
 
-	items, err := personal.New(r.Context()).List()
+	items, err := personal.New(r.Context()).ListType()
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+		return
+	}
+
+	response, err := v1.NewListType(items).ToJson()
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+	}
+
+	w.WriteHeader(http.StatusOK)
+	if _, err = w.Write(response); err != nil {
+		log.Println("Personal list response error")
+		return
+	}
+}
+
+func GetListPersonal(w http.ResponseWriter, r *http.Request) {
+
+	if r.Context().Value("uid") == nil {
+		errors.HTTP.Unauthorized(w)
+		return
+	}
+
+	var (
+		err error
+		id  = r.Context().Value("uid").(string)
+	)
+
+	p := place.New(r.Context())
+	plc, err := p.GetPlaceByIDUsr(id)
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+		return
+	}
+	if plc == nil {
+		errors.New("place").NotFound().Http(w)
+	}
+
+	items, err := personal.New(r.Context()).List(plc.Meta.ID)
 	if err != nil {
 		errors.HTTP.InternalServerError(w)
 		return
@@ -83,7 +123,8 @@ func TypePersonList(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	if _, err = w.Write(response); err != nil {
-		log.Println("Personal list response error")
+		log.Println("Menu list response error")
 		return
 	}
+
 }
