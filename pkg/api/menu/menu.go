@@ -97,3 +97,19 @@ func (p *menu) CreateMenuDish(menuid, dishid string)  error {
 
 	return  nil
 }
+
+func (u *menu) GetMenuByIDPlaceAndNameMenu(idplace, namem string) (*types.Menu, error) {
+	var (
+		storage = ctx.Get().GetStorage()
+	)
+
+	plc, err := storage.Menu().Fetch(u.context, idplace, namem)
+	if err != nil {
+		return nil, err
+	}
+	if plc == nil {
+		return nil, nil
+	}
+
+	return plc, nil
+}

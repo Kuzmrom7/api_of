@@ -10,6 +10,7 @@ import (
 	"log"
 	"github.com/orderfood/api_of/pkg/api/place"
 	"github.com/orderfood/api_of/pkg/api/dich"
+	"github.com/orderfood/api_of/pkg/api/personal"
 )
 
 func MenuCreate(w http.ResponseWriter, r *http.Request) {
@@ -156,4 +157,56 @@ func MenuDishCreate(w http.ResponseWriter, r *http.Request) {
 	//	log.Println("Menu write response error")
 	//	return
 	//}
+}
+
+func GetMenu(w http.ResponseWriter, r *http.Request) {
+
+	if r.Context().Value("uid") == nil {
+		errors.HTTP.Unauthorized(w)
+		return
+	}
+
+	var (
+		err error
+		id  = r.Context().Value("uid").(string)
+	)
+
+	rq := new(request.RequestMenuFetch)
+	if err := rq.DecodeAndValidate(r.Body); err != nil {
+		err.Http(w)
+		return
+	}
+
+	p := personal.New(r.Context())
+	place_id, err := p.GetIDPlaceByUsr(id)
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+		return
+	}
+	log.Print(place_id)
+	if place_id == "" {
+		errors.New("place").NotFound().Http(w)
+	}
+
+	m := menu.New(r.Context())
+	men, err := m.GetMenuByIDPlaceAndNameMenu(place_id, rq.Name)
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+		return
+	}
+	if men == nil {
+		errors.New("menu").NotFound().Http(w)
+	}
+
+	response, err := v1.NewMenu(men).ToJson()
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+	}
+
+	///log.Println("Create user id: " , usr.Meta.ID, " username: " , usr.Meta.Username)
+	w.WriteHeader(http.StatusOK)
+	if _, err = w.Write(response); err != nil {
+		log.Println("Menu write response error")
+		return
+	}
 }

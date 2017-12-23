@@ -25,6 +25,7 @@ type Menu interface {
 	CreateMenuDish(ctx context.Context, menuid, dishid string) error
 	GetPlaceByName(ctx context.Context, name string) (string, error)
 	GetIDmenuByName(ctx context.Context, name string) (string, error)
+	Fetch(ctx context.Context, idplace, name string) (*types.Menu, error)
 	List(ctx context.Context, placeid string) (map[string]*types.Menu, error)
 }
 
