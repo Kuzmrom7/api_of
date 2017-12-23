@@ -27,6 +27,18 @@ func PersonCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	usrid := r.Context().Value("uid").(string)
+
+	place_id, err := place.New(r.Context()).GetIDPlaceByUsrId(usrid)
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+		return
+	}
+	log.Print(place_id)
+	if place_id == "" {
+		errors.New("place").NotFound().Http(w)
+	}
+
 	p := personal.New(r.Context())
 
 	typeperson_id, err := p.GetIDTypePersonByName(rq.NameTypePerson)
@@ -37,19 +49,6 @@ func PersonCreate(w http.ResponseWriter, r *http.Request) {
 	if typeperson_id == "" {
 		errors.New("type_personal").NotFound().Http(w)
 	}
-
-	usrid1 := r.Context().Value("uid").(string)
-
-	place_id, err := p.GetIDPlaceByUsr(usrid1)
-	if err != nil {
-		errors.HTTP.InternalServerError(w)
-		return
-	}
-	log.Print(place_id)
-	if place_id == "" {
-		errors.New("place").NotFound().Http(w)
-	}
-
 
 	pers, err := p.Create(typeperson_id, place_id, rq)
 	if err != nil {
