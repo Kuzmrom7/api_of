@@ -20,7 +20,12 @@ type RequestMenuDishCreate struct {
 }
 
 type RequestMenuFetch struct {
-	Name     string `json:"name,omitempty"`
+	Name string `json:"name,omitempty"`
+}
+
+type RequestMenuDishList struct {
+	NameMenu     string `json:"namemenu,omitempty"`
+	NameTypeDish string `json:"nametypedish,omitempty"`
 }
 
 func (s *RequestMenuCreate) DecodeAndValidate(reader io.Reader) *errors.Err {
@@ -97,5 +102,30 @@ func (s *RequestMenuFetch) DecodeAndValidate(reader io.Reader) *errors.Err {
 		return errors.New("menu").BadParameter("namemenu")
 	}
 
+	return nil
+}
+
+func (s *RequestMenuDishList) DecodeAndValidate(reader io.Reader) *errors.Err {
+
+	var (
+		err error
+	)
+
+	body, err := ioutil.ReadAll(reader)
+	if err != nil {
+		return errors.New("menu").Unknown(err)
+	}
+	err = json.Unmarshal(body, s)
+	if err != nil {
+		return errors.New("menu").IncorrectJSON(err)
+	}
+
+	if s.NameMenu == "" {
+		return errors.New("menu").BadParameter("namemenu")
+	}
+
+	if s.NameTypeDish == "" {
+		return errors.New("menu").BadParameter("nametypedish")
+	}
 	return nil
 }

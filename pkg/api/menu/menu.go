@@ -112,3 +112,16 @@ func (u *menu) GetMenuByIDPlaceAndNameMenu(idplace, name string) (*types.Menu, e
 
 	return men, nil
 }
+
+func (r *menu) ListMenuDish(menuid, typedishid string) (map[string]*types.Dish, error) {
+
+	var (
+		storage = ctx.Get().GetStorage()
+	)
+
+	list, err := storage.Menu().ListMenuDish(r.context, menuid, typedishid)
+	if err != nil {
+		return nil, err
+	}
+	return list, nil
+}

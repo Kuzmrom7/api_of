@@ -65,6 +65,13 @@ const (
 					SELECT menu.id_menu, menu.name_menu, menu.url, menu.created, menu.updated
 					FROM menu
 					WHERE menu.id_place = $1;`
+
+	sqlstrListMenuDishes = `
+					SELECT dish.id_dish, dish.name_dish, dish.description, dish.url, dish.updated
+					FROM dish
+							INNER JOIN menudish on menudish.id_dish = dish.id_dish
+							INNER JOIN menu on menu.id_menu = menudish.id_menu
+					WHERE menu.id_menu = $1 AND dish.id_typeDish = $2;`
 	//-----------------PLACE-------------------//
 
 	sqlstrListTypePlace = `

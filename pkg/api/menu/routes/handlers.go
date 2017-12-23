@@ -11,6 +11,7 @@ import (
 	"github.com/orderfood/api_of/pkg/api/place"
 	"github.com/orderfood/api_of/pkg/api/dich"
 	"github.com/orderfood/api_of/pkg/api/personal"
+	dv1 "github.com/orderfood/api_of/pkg/api/dich/views/v1"
 )
 
 func MenuCreate(w http.ResponseWriter, r *http.Request) {
@@ -209,4 +210,64 @@ func GetMenu(w http.ResponseWriter, r *http.Request) {
 		log.Println("Menu write response error")
 		return
 	}
+}
+
+func GetListMenuDish(w http.ResponseWriter, r *http.Request) {
+
+	if r.Context().Value("uid") == nil {
+		errors.HTTP.Unauthorized(w)
+		return
+	}
+
+	var (
+		err error
+	)
+
+	rq := new(request.RequestMenuDishList)
+	if err := rq.DecodeAndValidate(r.Body); err != nil {
+		err.Http(w)
+		return
+	}
+
+	m := menu.New(r.Context())
+
+	menu_id, err := m.GetIDMenuByName(rq.NameMenu)
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+		return
+	}
+	log.Print(menu_id)
+	if menu_id == "" {
+		errors.New("menu").NotFound().Http(w)
+	}
+
+	d := dich.New(r.Context())
+
+	typedish_id, err := d.GetIDTypeDishByName(rq.NameTypeDish)
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+		return
+	}
+	log.Print(typedish_id)
+	if typedish_id == "" {
+		errors.New("typedish").NotFound().Http(w)
+	}
+
+	items, err := menu.New(r.Context()).ListMenuDish(menu_id, typedish_id)
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+		return
+	}
+
+	response, err := dv1.NewList(items).ToJson()
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+	}
+
+	w.WriteHeader(http.StatusOK)
+	if _, err = w.Write(response); err != nil {
+		log.Println("MenuDish list response error")
+		return
+	}
+
 }
