@@ -17,7 +17,7 @@ type Place interface {
 	GetTypePlaceByName(ctx context.Context, name string) (string, error)
 	List(ctx context.Context) (map[string]*types.TypePlaces, error)
 	GetPlaceByIDUser(ctx context.Context, id string) (*types.Place, error)
-	Update(ctx context.Context, place *types.Place)  error
+	Update(ctx context.Context, place *types.Place) error
 }
 
 type Menu interface {

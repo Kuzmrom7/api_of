@@ -84,32 +84,31 @@ func (r *menu) List(placeid string) (map[string]*types.Menu, error) {
 	return list, nil
 }
 
-func (p *menu) CreateMenuDish(menuid, dishid string)  error {
+func (p *menu) CreateMenuDish(menuid, dishid string) error {
 
 	var (
 		storage = ctx.Get().GetStorage()
-
 	)
 
 	if err := storage.Menu().CreateMenuDish(p.context, menuid, dishid); err != nil {
-		return  err
+		return err
 	}
 
-	return  nil
+	return nil
 }
 
-func (u *menu) GetMenuByIDPlaceAndNameMenu(idplace, namem string) (*types.Menu, error) {
+func (u *menu) GetMenuByIDPlaceAndNameMenu(idplace, name string) (*types.Menu, error) {
 	var (
 		storage = ctx.Get().GetStorage()
 	)
 
-	plc, err := storage.Menu().Fetch(u.context, idplace, namem)
+	men, err := storage.Menu().Fetch(u.context, idplace, name)
 	if err != nil {
 		return nil, err
 	}
-	if plc == nil {
+	if men == nil {
 		return nil, nil
 	}
 
-	return plc, nil
+	return men, nil
 }

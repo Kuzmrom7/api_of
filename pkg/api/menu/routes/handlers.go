@@ -112,7 +112,7 @@ func MenuDishCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	usrid  := r.Context().Value("uid").(string)
+	usrid := r.Context().Value("uid").(string)
 
 	rq := new(request.RequestMenuDishCreate)
 	if err := rq.DecodeAndValidate(r.Body); err != nil {
