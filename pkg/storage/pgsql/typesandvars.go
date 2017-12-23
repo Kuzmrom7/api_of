@@ -3,6 +3,7 @@ package pgsql
 import (
 	"github.com/orderfood/api_of/pkg/storage/storage"
 	"github.com/orderfood/api_of/pkg/storage/store"
+	"time"
 )
 
 const (
@@ -155,6 +156,7 @@ type dichModel struct {
 	name        store.NullString
 	description store.NullString
 	url         store.NullString
+	updated			time.Time
 }
 
 //-----------------------MODELs-------------------------//

@@ -145,3 +145,36 @@ func TypeDishList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+//func DishGet(w http.ResponseWriter, r *http.Request) {
+//
+//	if r.Context().Value("uid") == nil {
+//		errors.HTTP.Unauthorized(w)
+//		return
+//	}
+//
+//	var (
+//		err error
+//		id  = r.Context().Value("uid").(string)
+//	)
+//
+//	p := place.New(r.Context())
+//	plc, err := p.GetPlaceByIDUsr(id)
+//	if err != nil {
+//		errors.HTTP.InternalServerError(w)
+//		return
+//	}
+//	if plc == nil {
+//		errors.New("place").NotFound().Http(w)
+//	}
+//
+//	response, err := v1.NewPlace(plc).ToJson()
+//	if err != nil {
+//		errors.HTTP.InternalServerError(w)
+//	}
+//
+//	w.WriteHeader(http.StatusOK)
+//	if _, err = w.Write(response); err != nil {
+//		return
+//	}
+//}

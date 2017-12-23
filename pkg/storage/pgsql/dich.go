@@ -18,6 +18,7 @@ func (nm *dichModel) convert() *types.Dish {
 	c.Meta.Name = nm.name.String
 	c.Meta.Desc = nm.description.String
 	c.Meta.Url = nm.url.String
+	c.Meta.Updated = nm.updated
 
 	return c
 }
@@ -92,7 +93,7 @@ func (s *DishStorage) List(ctx context.Context, userid string) (map[string]*type
 
 		di := new(dichModel)
 
-		if err := rows.Scan(&di.id, &di.name, &di.description, &di.url); err != nil {
+		if err := rows.Scan(&di.id, &di.name, &di.description, &di.url, &di.updated); err != nil {
 
 			return nil, err
 		}
