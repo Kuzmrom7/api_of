@@ -22,7 +22,7 @@ const (
 
 	sqlDichIDGetByName = `SELECT dish.id_dish
 		FROM dish
-		WHERE dish.name_dish = $1;`
+		WHERE dish.name_dish = $1 and dish.user_id = $2;`
 
 	sqlDichRemove = `DELETE FROM dish WHERE id_dish = $1;`
 
@@ -36,11 +36,22 @@ const (
 
 	//-----------------MENU-------------------//
 
+	sqlMenuIDGetByName = `SELECT menu.id_menu
+		FROM menu
+		WHERE menu.name_menu = $1;`
+
 	sqlCreateMenu = `
 		INSERT INTO menu (name_menu, id_place, url)
 		VALUES ($1, $2, $3)
 		RETURNING id_menu;
 	`
+
+	sqlCreateMenuDish = `
+		INSERT INTO menudish (id_menu, id_dish)
+		VALUES ($1, $2)
+		RETURNING id_menu;
+	`
+
 	//for menu and personal
 	sqlPlaceIDGetByName = `SELECT place.id_place
 		FROM place

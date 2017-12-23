@@ -22,14 +22,16 @@ type Place interface {
 
 type Menu interface {
 	CreateMenu(ctx context.Context, menu *types.Menu) error
+	CreateMenuDish(ctx context.Context, menuid, dishid string) error
 	GetPlaceByName(ctx context.Context, name string) (string, error)
+	GetIDmenuByName(ctx context.Context, name string) (string, error)
 	List(ctx context.Context, placeid string) (map[string]*types.Menu, error)
 }
 
 type Dish interface {
 	CreateDich(ctx context.Context, dich *types.Dish) error
 	Remove(ctx context.Context, id string) error
-	GetIDdichByName(ctx context.Context, name string) (string, error)
+	GetIDdichByName(ctx context.Context, name, usrid string) (string, error)
 	List(ctx context.Context, userid string) (map[string]*types.Dish, error)
 	TypeList(ctx context.Context) (map[string]*types.TypeDishes, error)
 	GetTypeDishIDByName(ctx context.Context, name string) (string, error)
