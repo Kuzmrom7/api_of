@@ -10,7 +10,7 @@ const (
 	//-----------------DISH-------------------//
 
 	sqlstrListDish = `
-					SELECT dish.id_dish, dish.name_dish, dish.description, dish.url
+					SELECT dish.id_dish, dish.name_dish, dish.description, dish.url, dish.updated
 					FROM dish
 					WHERE dish.user_id = $1;`
 
