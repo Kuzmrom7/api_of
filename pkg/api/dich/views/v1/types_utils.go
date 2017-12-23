@@ -26,6 +26,9 @@ func New(obj *types.Dish) *Dich {
 	i.Name = obj.Meta.Name
 	i.Desc = obj.Meta.Desc
 	i.Url = obj.Meta.Url
+	i.Timemin = obj.Meta.Timemin
+	i.Updated = obj.Meta.Updated
+	i.Created = obj.Meta.Created
 	return i
 }
 
