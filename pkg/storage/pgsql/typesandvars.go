@@ -133,6 +133,11 @@ const (
 	sqlstrListTypePersonal = `
 		SELECT type_personal.id_typePersonal, type_personal.name_type
 		FROM type_personal;`
+
+	sqlstrListPersonal = `
+					SELECT personal.id_personal, personal.fio, personal.phone, personal.updated
+					FROM personal
+					WHERE personal.id_place = $1;`
 )
 
 //-----------------------STORAGEs------------------------//
@@ -167,7 +172,7 @@ type dichModel struct {
 	name        store.NullString
 	description store.NullString
 	url         store.NullString
-	updated			time.Time
+	updated     time.Time
 }
 
 //-----------------------MODELs-------------------------//
@@ -175,6 +180,13 @@ type menuModel struct {
 	id   store.NullString
 	name store.NullString
 	url  store.NullString
+}
+
+type personalModel struct {
+	id      store.NullString
+	fio     store.NullString
+	phone   store.NullString
+	updated time.Time
 }
 
 type idModel struct {

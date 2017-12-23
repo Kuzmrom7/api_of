@@ -3,11 +3,12 @@ package v1
 import "time"
 
 type Personal struct {
-	Fio    string    `json:"name,omitempty"`
+	Fio     string    `json:"name,omitempty"`
 	Phone   string    `json:"phone,omitempty"`
 	Created time.Time `json:"created"`
 	Updated time.Time `json:"updated"`
 }
+type PersonalList []*Personal
 
 type TypePersonalList []*TypePersonal
 

@@ -75,13 +75,26 @@ func (p *personal) Create(typeperson, place string, rq *request.RequestPersonCre
 	return &pers, nil
 }
 
-func (r *personal) List() (map[string]*types.TypePersonals, error) {
+func (r *personal) ListType() (map[string]*types.TypePersonals, error) {
 
 	var (
 		storage = ctx.Get().GetStorage()
 	)
 
-	list, err := storage.Personal().List(r.context)
+	list, err := storage.Personal().ListType(r.context)
+	if err != nil {
+		return nil, err
+	}
+	return list, nil
+}
+
+func (r *personal) List(placeid string) (map[string]*types.Personal, error) {
+
+	var (
+		storage = ctx.Get().GetStorage()
+	)
+
+	list, err := storage.Personal().List(r.context, placeid)
 	if err != nil {
 		return nil, err
 	}

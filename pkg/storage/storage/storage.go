@@ -42,6 +42,6 @@ type Personal interface {
 	//Remove(ctx context.Context, id string) error
 	GetTypePersonIDByName(ctx context.Context, name string) (string, error)
 	GetPlaceIDByUsrid(ctx context.Context, id string) (string, error)
-	List(ctx context.Context) (map[string]*types.TypePersonals, error)
-
+	ListType(ctx context.Context) (map[string]*types.TypePersonals, error)
+	List(ctx context.Context, placeid string) (map[string]*types.Personal, error)
 }
