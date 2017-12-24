@@ -14,6 +14,11 @@ const (
 					FROM dish
 					WHERE dish.user_id = $1;`
 
+	sqlFetchDish = `
+		SELECT dish.id_dish, dish.name_dish, dish.description, dish.url, dish.updated, dish.created, dish.time_min
+		FROM dish
+		WHERE dish.user_id = $1 AND dish.name_dish = $2;`
+
 	sqlstrListDishNotMenu = `
 					SELECT dish.id_dish, dish.name_dish, dish.description, dish.url, dish.updated, dish.created, dish.time_min
 					FROM dish
@@ -45,6 +50,15 @@ const (
 	ssqlTypeDishlIDGetByName = `SELECT type_dish.id_typeDish
 		FROM type_dish
 		WHERE type_dish.name_typeDish = $1;`
+
+	sqlstrDishUpdate = `
+		UPDATE dish
+		SET
+			time_min = $1,
+			description = $2,
+			updated = now()
+		WHERE name_dish = $3 AND user_id = $4
+		RETURNING updated;`
 
 	//-----------------MENU-------------------//
 
@@ -195,8 +209,8 @@ type dichModel struct {
 	name        store.NullString
 	description store.NullString
 	url         store.NullString
-	timemin			store.NullInt64
-	created			time.Time
+	timemin     store.NullInt64
+	created     time.Time
 	updated     time.Time
 }
 

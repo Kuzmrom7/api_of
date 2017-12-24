@@ -35,10 +35,12 @@ type Menu interface {
 type Dish interface {
 	CreateDish(ctx context.Context, dich *types.Dish) error
 	RemoveDish(ctx context.Context, id string) error
+	Fetch(ctx context.Context, usrid, name string) (*types.Dish, error)
 	GetIdDishByName(ctx context.Context, name, usrid string) (string, error)
 	List(ctx context.Context, userid string) (map[string]*types.Dish, error)
 	TypeList(ctx context.Context) (map[string]*types.TypeDishes, error)
 	GetTypeDishIDByName(ctx context.Context, name string) (string, error)
+	Update(ctx context.Context, usrid string ,dish *types.Dish) error
 }
 
 type Personal interface {

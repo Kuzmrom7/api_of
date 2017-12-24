@@ -8,7 +8,6 @@ import (
 	"github.com/orderfood/api_of/pkg/api/dich/routes/request"
 	"github.com/orderfood/api_of/pkg/common/errors"
 	"github.com/orderfood/api_of/pkg/api/dich"
-
 )
 
 func DishCreate(w http.ResponseWriter, r *http.Request) {
@@ -59,18 +58,102 @@ func DishCreate(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func DishRemove(w http.ResponseWriter, r *http.Request) {
+func DishUpdate(w http.ResponseWriter, r *http.Request) {
 
-	//nameDich := utils.Vars(r)["dich"]
+	var (
+		err error
+	)
 
 	if r.Context().Value("uid") == nil {
 		errors.HTTP.Unauthorized(w)
 		return
 	}
 
-	usrid  := r.Context().Value("uid").(string)
+	rq := new(request.RequestDichUpdate)
+	if err := rq.DecodeAndValidate(r.Body); err != nil {
+		err.Http(w)
+		return
+	}
 
-	rq := new(request.RequestDichRemove)
+	usrid1 := r.Context().Value("uid").(string)
+
+	dish, err := dich.New(r.Context()).GetDishByUsrIdAndDishName(usrid1, *rq.Name)
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+		return
+	}
+	if dish == nil {
+		errors.New("dish").NotFound().Http(w)
+	}
+
+	err = dich.New(r.Context()).Update(usrid1, rq, dish)
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+	}
+
+	response, err := v1.NewDich(dish).ToJson()
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+	}
+
+	w.WriteHeader(http.StatusOK)
+	if _, err = w.Write(response); err != nil {
+		log.Println("Dish update response error")
+		return
+	}
+
+}
+
+func DishGet(w http.ResponseWriter, r *http.Request) {
+
+	if r.Context().Value("uid") == nil {
+		errors.HTTP.Unauthorized(w)
+		return
+	}
+
+	var (
+		err error
+	)
+
+	rq := new(request.RequestDichRemoveFetch)
+	if err := rq.DecodeAndValidate(r.Body); err != nil {
+		err.Http(w)
+		return
+	}
+
+	usrid := r.Context().Value("uid").(string)
+
+	dish, err := dich.New(r.Context()).GetDishByUsrIdAndDishName(usrid, rq.Name)
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+		return
+	}
+	if dish == nil {
+		errors.New("dish").NotFound().Http(w)
+	}
+
+	response, err := v1.NewDich(dish).ToJson()
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+	}
+
+	w.WriteHeader(http.StatusOK)
+	if _, err = w.Write(response); err != nil {
+		log.Println("Dish fetch response error")
+		return
+	}
+}
+
+func DishRemove(w http.ResponseWriter, r *http.Request) {
+
+	if r.Context().Value("uid") == nil {
+		errors.HTTP.Unauthorized(w)
+		return
+	}
+
+	usrid := r.Context().Value("uid").(string)
+
+	rq := new(request.RequestDichRemoveFetch)
 	if err := rq.DecodeAndValidate(r.Body); err != nil {
 		err.Http(w)
 		return
@@ -147,36 +230,3 @@ func TypeDishList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
-
-//func DishGet(w http.ResponseWriter, r *http.Request) {
-//
-//	if r.Context().Value("uid") == nil {
-//		errors.HTTP.Unauthorized(w)
-//		return
-//	}
-//
-//	var (
-//		err error
-//		id  = r.Context().Value("uid").(string)
-//	)
-//
-//	p := place.New(r.Context())
-//	plc, err := p.GetPlaceByIDUsr(id)
-//	if err != nil {
-//		errors.HTTP.InternalServerError(w)
-//		return
-//	}
-//	if plc == nil {
-//		errors.New("place").NotFound().Http(w)
-//	}
-//
-//	response, err := v1.NewPlace(plc).ToJson()
-//	if err != nil {
-//		errors.HTTP.InternalServerError(w)
-//	}
-//
-//	w.WriteHeader(http.StatusOK)
-//	if _, err = w.Write(response); err != nil {
-//		return
-//	}
-//}
