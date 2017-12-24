@@ -171,7 +171,7 @@ const (
 		FROM type_personal;`
 
 	sqlstrListPersonal = `
-					SELECT personal.id_personal, personal.fio, personal.phone, personal.updated
+					SELECT personal.id_personal, personal.fio, personal.phone, personal.updated, personal.created
 					FROM personal
 					WHERE personal.id_place = $1;`
 )
@@ -227,6 +227,7 @@ type personalModel struct {
 	id      store.NullString
 	fio     store.NullString
 	phone   store.NullString
+	created time.Time
 	updated time.Time
 }
 

@@ -10,7 +10,6 @@ import (
 )
 
 
-
 func (s *PersonalStorage) GetTypePersonIDByName(ctx context.Context, name string) (string, error) {
 	var (
 		err error
@@ -100,7 +99,7 @@ func (s *PersonalStorage) List(ctx context.Context, placeid string) (map[string]
 
 		di := new(personalModel)
 
-		if err := rows.Scan(&di.id, &di.fio, &di.phone, &di.updated); err != nil {
+		if err := rows.Scan(&di.id, &di.fio, &di.phone, &di.updated, &di.created); err != nil {
 
 			return nil, err
 		}
@@ -128,6 +127,7 @@ func (nm *personalModel) convert() *types.Personal {
 	c.Meta.Fio = nm.fio.String
 	c.Meta.Phone = nm.phone.String
 	c.Meta.Updated = nm.updated
+	c.Meta.Created = nm.created
 
 	return c
 }

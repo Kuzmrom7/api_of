@@ -52,16 +52,16 @@ VALUES ('2c567271-9bd3-405f-980d-f596e509cb0d', 'мясное');
 
 -------DISH-------
 
-INSERT INTO dish (id_dish, user_id,  name_dish, id_typedish, description, url)
-VALUES ('31ba1f68-6eb3-4362-8d4d-24616fa9593d','ba7f171c-8bd2-4470-99de-6d82ca9402e9','Классический бургер', '2c567271-9bd3-405f-980d-f596e509cb0d', 'Лучший в мире бургер', 'http://www.goodman.ru/upload/iblock/e02/burger-with-roast-beef.png');
+INSERT INTO dish (id_dish, user_id,  name_dish, id_typedish, description, url, time_min)
+VALUES ('31ba1f68-6eb3-4362-8d4d-24616fa9593d','ba7f171c-8bd2-4470-99de-6d82ca9402e9','Классический бургер', '2c567271-9bd3-405f-980d-f596e509cb0d', 'Лучший в мире бургер', 'http://www.goodman.ru/upload/iblock/e02/burger-with-roast-beef.png', 10);
 
 
-INSERT INTO dish (id_dish, user_id,  name_dish, id_typedish, description, url)
-VALUES ('8072b173-baaa-4d0f-a1c7-8af3995ffefa','ba7f171c-8bd2-4470-99de-6d82ca9402e9','Русский бургер', '2c567271-9bd3-405f-980d-f596e509cb0d', 'Лучший в мире бургер2', 'http://goodman.ru/upload/iblock/570/classic-burger.png');
+INSERT INTO dish (id_dish, user_id,  name_dish, id_typedish, description, url, time_min)
+VALUES ('8072b173-baaa-4d0f-a1c7-8af3995ffefa','ba7f171c-8bd2-4470-99de-6d82ca9402e9','Русский бургер', '2c567271-9bd3-405f-980d-f596e509cb0d', 'Лучший в мире бургер2', 'http://goodman.ru/upload/iblock/570/classic-burger.png', 10);
 
 
-INSERT INTO dish (id_dish, user_id,  name_dish, id_typedish, description, url)
-VALUES ('5cb7e111-3860-424b-a14e-83a93db1e889','ba7f171c-8bd2-4470-99de-6d82ca9402e9','Исландский бургер', '2c567271-9bd3-405f-980d-f596e509cb0d', 'Лучший в мире бургер3', 'http://goodman.ru/upload/iblock/f18/American-burger.png');
+INSERT INTO dish (id_dish, user_id,  name_dish, id_typedish, description, url, time_min)
+VALUES ('5cb7e111-3860-424b-a14e-83a93db1e889','ba7f171c-8bd2-4470-99de-6d82ca9402e9','Исландский бургер', '2c567271-9bd3-405f-980d-f596e509cb0d', 'Лучший в мире бургер3', 'http://goodman.ru/upload/iblock/f18/American-burger.png', 10);
 
 INSERT INTO menudish (id_menu, id_dish)
 VALUES ('a93ba633-7547-491f-a4ae-339b1420b1c7', '31ba1f68-6eb3-4362-8d4d-24616fa9593d');
