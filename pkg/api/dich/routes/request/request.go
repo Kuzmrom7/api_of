@@ -16,7 +16,13 @@ type RequestDichCreate struct {
 	Url      string `json:"url"`
 }
 
-type RequestDichRemove struct {
+type RequestDichUpdate struct {
+	Name     *string `json:"name,omitempty"`
+	Desc     *string `json:"description,omitempty"`
+	Timemin  *int64  `json:"timemin,omitempty"`
+}
+
+type RequestDichRemoveFetch struct {
 	Name string `json:"name,omitempty"`
 }
 
@@ -54,7 +60,30 @@ func (s *RequestDichCreate) DecodeAndValidate(reader io.Reader) *errors.Err {
 	return nil
 }
 
-func (s *RequestDichRemove) DecodeAndValidate(reader io.Reader) *errors.Err {
+
+func (s *RequestDichUpdate) DecodeAndValidate(reader io.Reader) *errors.Err {
+
+	var (
+		err error
+	)
+
+	body, err := ioutil.ReadAll(reader)
+	if err != nil {
+		return errors.New("dich").Unknown(err)
+	}
+	err = json.Unmarshal(body, s)
+	if err != nil {
+		return errors.New("dich").IncorrectJSON(err)
+	}
+
+	if s.Name == nil {
+		return errors.New("dish").BadParameter("name")
+	}
+
+	return nil
+}
+
+func (s *RequestDichRemoveFetch) DecodeAndValidate(reader io.Reader) *errors.Err {
 
 	var (
 		err error

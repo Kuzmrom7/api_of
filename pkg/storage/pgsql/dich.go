@@ -9,6 +9,7 @@ import (
 	"errors"
 	"database/sql"
 	//"encoding/json"
+	"time"
 )
 
 func (nm *dichModel) convert() *types.Dish {
@@ -20,6 +21,8 @@ func (nm *dichModel) convert() *types.Dish {
 	c.Meta.Url = nm.url.String
 	c.Meta.Updated = nm.updated
 	c.Meta.TypeDishID = nm.id_Type.String
+	c.Meta.Created = nm.created
+	c.Meta.Timemin = nm.timemin.Int64
 
 	return c
 }
@@ -75,6 +78,49 @@ func (s *DishStorage) RemoveDish(ctx context.Context, id string) error {
 	return nil
 }
 
+func (s *DishStorage) Update(ctx context.Context, usrid string, dish *types.Dish) error {
+
+	if dish == nil {
+		err := errors.New("dish can not be nil")
+		return err
+	}
+	if usrid == "" {
+		err := errors.New("usrid can not be nil")
+		return err
+	}
+
+	dish.Meta.Updated = time.Now()
+
+	err := s.client.QueryRow(sqlstrDishUpdate, dish.Meta.Timemin, dish.Meta.Desc,
+		dish.Meta.Name, usrid).Scan(&dish.Meta.Updated)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *DishStorage) Fetch(ctx context.Context, usrid, name string) (*types.Dish, error) {
+
+	var (
+		err error
+		di  = new(dichModel)
+	)
+
+	err = s.client.QueryRow(sqlFetchDish, usrid, name).Scan(&di.id, &di.name, &di.description, &di.url, &di.updated, &di.created, &di.timemin)
+	switch err {
+	case nil:
+	case sql.ErrNoRows:
+		return nil, nil
+	default:
+		return nil, err
+	}
+
+	dish := di.convert()
+
+	return dish, nil
+
+}
+
 func (s *DishStorage) List(ctx context.Context, userid string) (map[string]*types.Dish, error) {
 
 	dishes := make(map[string]*types.Dish)
@@ -94,7 +140,7 @@ func (s *DishStorage) List(ctx context.Context, userid string) (map[string]*type
 
 		di := new(dichModel)
 
-		if err := rows.Scan(&di.id, &di.name, &di.description, &di.url, &di.updated); err != nil {
+		if err := rows.Scan(&di.id, &di.name, &di.description, &di.url, &di.updated, &di.created, &di.timemin); err != nil {
 
 			return nil, err
 		}
@@ -133,10 +179,9 @@ func (s *DishStorage) TypeList(ctx context.Context) (map[string]*types.TypeDishe
 	return tydishes, nil
 }
 
-
 func (s *DishStorage) GetTypeDishIDByName(ctx context.Context, name string) (string, error) {
 	var (
-		err error
+		err  error
 		dish = new(idModel)
 	)
 

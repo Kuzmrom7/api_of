@@ -114,3 +114,39 @@ func (p *dish) GetIDTypeDishByName(type_name string) (string, error) {
 
 	return typedish_id, nil
 }
+
+func (u *dish) GetDishByUsrIdAndDishName(usrid, name string) (*types.Dish, error) {
+	var (
+		storage = ctx.Get().GetStorage()
+	)
+
+	dish, err := storage.Dish().Fetch(u.context, usrid, name)
+	if err != nil {
+		return nil, err
+	}
+	if dish == nil {
+		return nil, nil
+	}
+
+	return dish, nil
+}
+
+
+func (p *dish) Update(usrid string, rq *request.RequestDichUpdate, dish *types.Dish) error{
+	var (
+		err     error
+		storage = ctx.Get().GetStorage()
+	)
+
+	if rq.Timemin != nil {
+		dish.Meta.Timemin = *rq.Timemin
+	}
+	if rq.Desc != nil {
+		dish.Meta.Desc = *rq.Desc
+	}
+
+	if err = storage.Dish().Update(p.context, usrid, dish); err != nil {
+		return err
+	}
+	return nil
+}

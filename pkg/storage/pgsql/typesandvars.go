@@ -10,9 +10,26 @@ const (
 	//-----------------DISH-------------------//
 
 	sqlstrListDish = `
-					SELECT dish.id_dish, dish.name_dish, dish.description, dish.url, dish.updated
+					SELECT dish.id_dish, dish.name_dish, dish.description, dish.url, dish.updated, dish.created, dish.time_min
 					FROM dish
 					WHERE dish.user_id = $1;`
+
+	sqlFetchDish = `
+		SELECT dish.id_dish, dish.name_dish, dish.description, dish.url, dish.updated, dish.created, dish.time_min
+		FROM dish
+		WHERE dish.user_id = $1 AND dish.name_dish = $2;`
+
+	sqlstrListDishNotMenu = `
+					SELECT dish.id_dish, dish.name_dish, dish.description, dish.url, dish.updated, dish.created, dish.time_min
+					FROM dish
+					WHERE dish.user_id = $2 AND dish.id_dish NOT IN
+								(
+									SELECT dish.id_dish
+									FROM dish
+										INNER JOIN menudish on menudish.id_dish = dish.id_dish
+										INNER JOIN menu on menu.id_menu = menudish.id_menu
+									WHERE menu.id_menu = $1 AND dish.user_id = $2
+								);`
 
 	sqlCreateDich = `
 		INSERT INTO dish (name_dish, description, time_min, id_typeDish, url, user_id)
@@ -33,6 +50,15 @@ const (
 	ssqlTypeDishlIDGetByName = `SELECT type_dish.id_typeDish
 		FROM type_dish
 		WHERE type_dish.name_typeDish = $1;`
+
+	sqlstrDishUpdate = `
+		UPDATE dish
+		SET
+			time_min = $1,
+			description = $2,
+			updated = now()
+		WHERE name_dish = $3 AND user_id = $4
+		RETURNING updated;`
 
 	//-----------------MENU-------------------//
 
@@ -65,7 +91,7 @@ const (
 					WHERE menu.id_place = $1;`
 
 	sqlstrListMenuDishes = `
-					SELECT dish.id_dish, dish.name_dish, dish.description, dish.url, dish.updated, dish.id_typeDish
+					SELECT dish.id_dish, dish.name_dish, dish.description, dish.url, dish.updated, dish.id_typeDish, dish.created, dish.time_min
 					FROM dish
 							INNER JOIN menudish on menudish.id_dish = dish.id_dish
 							INNER JOIN menu on menu.id_menu = menudish.id_menu
@@ -183,6 +209,8 @@ type dichModel struct {
 	name        store.NullString
 	description store.NullString
 	url         store.NullString
+	timemin     store.NullInt64
+	created     time.Time
 	updated     time.Time
 }
 
