@@ -13,6 +13,8 @@ type Dich struct {
 
 type DichList []*Dich
 
+type TypeDishListinMenu map[string] DichList
+
 type TypeDishList []*TypeDish
 
 type TypeDish struct {

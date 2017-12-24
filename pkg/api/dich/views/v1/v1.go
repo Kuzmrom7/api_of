@@ -18,6 +18,29 @@ func NewList(obj map[string]*types.Dish) *DichList {
 	return &r
 }
 
+func NewListD(dish map[string]*types.Dish, typedish map[string]*types.TypeDishes) *TypeDishListinMenu {
+	if dish == nil {
+		return nil
+	}
+	if typedish == nil {
+		return nil
+	}
+
+	menudish := make(TypeDishListinMenu)
+	dishlist := make(DichList, 0)
+
+	for _, v := range typedish {
+		for _, s := range dish {
+			if v.ID == s.Meta.TypeDishID {
+				dishlist = append(dishlist, NewDm(s))
+			}
+		}
+		menudish[v.NameType] = dishlist
+		dishlist = nil
+	}
+	return &menudish
+}
+
 func NewListType(obj map[string]*types.TypeDishes) *TypeDishList {
 	if obj == nil {
 		return nil

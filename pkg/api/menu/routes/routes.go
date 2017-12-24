@@ -12,7 +12,7 @@ var Routes = []http.Route{
 	{Path: "/menu", Method: http.MethodPost, Middleware: []http.Middleware{middleware.Authenticate}, Handler: MenuCreate},
 	{Path: "/menudish", Method: http.MethodPost, Middleware: []http.Middleware{middleware.Authenticate}, Handler: MenuDishCreate},
 	{Path: "/menudish", Method: http.MethodDelete, Middleware: []http.Middleware{middleware.Authenticate}, Handler: MenuDishRemove},
-	{Path: "/menudish/list", Method: http.MethodPost, Middleware: []http.Middleware{middleware.Authenticate}, Handler: GetListMenuDish},
+	{Path: "/menudish/list", Method: http.MethodPost, Middleware: []http.Middleware{middleware.Authenticate}, Handler: GetFetchMenuDish},
 
 }
 

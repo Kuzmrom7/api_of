@@ -180,7 +180,7 @@ func GetMenu(w http.ResponseWriter, r *http.Request) {
 		errors.New("place").NotFound().Http(w)
 	}
 
-	men, err := menu.New(r.Context()).GetMenuByIDPlaceAndNameMenu(place_id, rq.Name)
+	men, err := menu.New(r.Context()).GetMenuByIDPlaceAndNameMenu(place_id, rq.NameMenu)
 	if err != nil {
 		errors.HTTP.InternalServerError(w)
 		return
@@ -201,7 +201,7 @@ func GetMenu(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func GetListMenuDish(w http.ResponseWriter, r *http.Request) {
+func GetFetchMenuDish(w http.ResponseWriter, r *http.Request) {
 
 	if r.Context().Value("uid") == nil {
 		errors.HTTP.Unauthorized(w)
@@ -212,7 +212,7 @@ func GetListMenuDish(w http.ResponseWriter, r *http.Request) {
 		err error
 	)
 
-	rq := new(request.RequestMenuDishList)
+	rq := new(request.RequestMenuFetch)
 	if err := rq.DecodeAndValidate(r.Body); err != nil {
 		err.Http(w)
 		return
@@ -230,25 +230,21 @@ func GetListMenuDish(w http.ResponseWriter, r *http.Request) {
 		errors.New("menu").NotFound().Http(w)
 	}
 
-	d := dich.New(r.Context())
+	usrid := r.Context().Value("uid").(string)
 
-	typedish_id, err := d.GetIDTypeDishByName(rq.NameTypeDish)
-	if err != nil {
-		errors.HTTP.InternalServerError(w)
-		return
-	}
-	log.Print(typedish_id)
-	if typedish_id == "" {
-		errors.New("typedish").NotFound().Http(w)
-	}
-
-	items, err := menu.New(r.Context()).ListMenuDish(menu_id, typedish_id)
+	dishList, err := menu.New(r.Context()).ListMenuDish(menu_id, usrid)
 	if err != nil {
 		errors.HTTP.InternalServerError(w)
 		return
 	}
 
-	response, err := dv1.NewList(items).ToJson()
+	typedishList, err := dich.New(r.Context()).TypeList()
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+		return
+	}
+
+	response, err := dv1.NewListD(dishList, typedishList).ToJson()
 	if err != nil {
 		errors.HTTP.InternalServerError(w)
 	}
