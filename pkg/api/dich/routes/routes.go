@@ -14,3 +14,5 @@ var Routes = []http.Route{
 	{Path: "/listdish", Method: http.MethodGet, Middleware: []http.Middleware{middleware.Authenticate}, Handler: DishList},
 	{Path: "/typedish", Method: http.MethodGet, Handler: TypeDishList},
 }
+
+//TODO обновление и fethc добавить

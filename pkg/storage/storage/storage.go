@@ -29,6 +29,7 @@ type Menu interface {
 	Fetch(ctx context.Context, idplace, name string) (*types.Menu, error)
 	List(ctx context.Context, placeid string) (map[string]*types.Menu, error)
 	ListDishesInMenu(ctx context.Context, menuid, usrid string) (map[string]*types.Dish, error)
+	ListDishesNotMenu(ctx context.Context, menuid, userid string) (map[string]*types.Dish, error)
 }
 
 type Dish interface {

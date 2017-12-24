@@ -169,7 +169,7 @@ func (s *MenuStorage) ListDishesInMenu(ctx context.Context, menuid, usrid string
 
 		di := new(dichModel)
 
-		if err := rows.Scan(&di.id, &di.name, &di.description, &di.url, &di.updated, &di.id_Type); err != nil {
+		if err := rows.Scan(&di.id, &di.name, &di.description, &di.url, &di.updated, &di.id_Type, &di.created, &di.timemin); err != nil {
 
 			return nil, err
 		}
@@ -179,6 +179,38 @@ func (s *MenuStorage) ListDishesInMenu(ctx context.Context, menuid, usrid string
 	}
 
 	return menudishes, nil
+}
+
+
+func (s *MenuStorage) ListDishesNotMenu(ctx context.Context, menuid, userid string) (map[string]*types.Dish, error) {
+
+	dishes := make(map[string]*types.Dish)
+
+	rows, err := s.client.Query(sqlstrListDishNotMenu, menuid, userid)
+	switch err {
+	case nil:
+	case sql.ErrNoRows:
+		return nil, nil
+	default:
+
+		return nil, err
+	}
+	log.Println(userid)
+
+	for rows.Next() {
+
+		di := new(dichModel)
+
+		if err := rows.Scan(&di.id, &di.name, &di.description, &di.url, &di.updated, &di.created, &di.timemin); err != nil {
+
+			return nil, err
+		}
+
+		c := di.convert()
+		dishes[c.Meta.ID] = c
+	}
+
+	return dishes, nil
 }
 
 func (nm *menuModel) convert() *types.Menu {

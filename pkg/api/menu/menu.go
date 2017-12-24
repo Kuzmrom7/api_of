@@ -121,3 +121,16 @@ func (r *menu) ListMenuDish(menuid, usrid string) (map[string]*types.Dish, error
 	}
 	return list, nil
 }
+
+func (r *menu) ListDishNotMenu(menuid, usrid string) (map[string]*types.Dish, error) {
+
+	var (
+		storage = ctx.Get().GetStorage()
+	)
+
+	list, err := storage.Menu().ListDishesNotMenu(r.context, menuid, usrid)
+	if err != nil {
+		return nil, err
+	}
+	return list, nil
+}

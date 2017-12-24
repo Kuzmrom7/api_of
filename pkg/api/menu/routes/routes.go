@@ -13,7 +13,9 @@ var Routes = []http.Route{
 	{Path: "/menudish", Method: http.MethodPost, Middleware: []http.Middleware{middleware.Authenticate}, Handler: MenuDishCreate},
 	{Path: "/menudish", Method: http.MethodDelete, Middleware: []http.Middleware{middleware.Authenticate}, Handler: MenuDishRemove},
 	{Path: "/menudish/list", Method: http.MethodPost, Middleware: []http.Middleware{middleware.Authenticate}, Handler: GetFetchMenuDish},
+	//TODO подумать как по другому назвать роуты, пока так
+	{Path: "/menudish/listnotmenu", Method: http.MethodPost, Middleware: []http.Middleware{middleware.Authenticate}, Handler: DishListNotMenu},
 
 }
 
-//TODO удаление добавить
+//TODO удаление меню добавить

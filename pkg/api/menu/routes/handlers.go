@@ -307,3 +307,49 @@ func MenuDishRemove(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+func DishListNotMenu(w http.ResponseWriter, r *http.Request) {
+
+	if r.Context().Value("uid") == nil {
+		errors.HTTP.Unauthorized(w)
+		return
+	}
+
+	rq := new(request.RequestMenuFetch)
+	if err := rq.DecodeAndValidate(r.Body); err != nil {
+		err.Http(w)
+		return
+	}
+
+	m := menu.New(r.Context())
+
+	menu_id, err := m.GetIDMenuByName(rq.NameMenu)
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+		return
+	}
+	log.Print(menu_id)
+	if menu_id == "" {
+		errors.New("menu").NotFound().Http(w)
+	}
+
+	usrid := r.Context().Value("uid").(string)
+
+	dishList, err := menu.New(r.Context()).ListDishNotMenu(menu_id, usrid)
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+		return
+	}
+
+	response, err := dv1.NewList(dishList).ToJson()
+	if err != nil {
+		errors.HTTP.InternalServerError(w)
+	}
+
+	w.WriteHeader(http.StatusOK)
+	if _, err = w.Write(response); err != nil {
+		log.Println("Dich list response error")
+		return
+	}
+}
+
