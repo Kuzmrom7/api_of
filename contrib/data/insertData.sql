@@ -4,8 +4,8 @@ DELETE FROM users;
 -------USERS-------
 
 INSERT INTO users (user_id, username, email, gravatar, password, salt)
-VALUES ('4f2858bb-ecab-4f88-b773-551d34f07bad', 'orderfood', 'orderfood@of.ru', 'bfb0bb1efe0e40b2ff1aebf6c2eeb0e9',
-        '$2a$10$WSVzrY9EUUtWAL0QH0XeAuuvdAJvJ9RlaZ5bDUHv3f6IfXDUL5xXG', 'a560cd9d9969a000d24d4b012a755d7217c1561648ec682128abc9fe762a');
+VALUES ('ba7f171c-8bd2-4470-99de-6d82ca9402e9', 'orderfood', 'orderfood@of.com', 'd68ec67243ffcc5184afb4619d0ee447',
+        '$2a$10$2zfn8HqZnE0oNnvnB9SmNeCNExnumDSNnnDGvr/KASKWktaSWWXeS', '8fcc5cfa90d2304e3b8c9f3486c5f32447227eedf15d0ebc172ef8966c36');
 
 -------TYPES PLACES-------
 
@@ -28,16 +28,13 @@ VALUES ('3b896b95-928a-4107-934b-d7dace83b83a', 'кофейнная');
 -------PLACES-------
 
 INSERT INTO place (id_place, name, phone_number, url, city, adress, user_id, id_typeplace)
-VALUES ('9ba48d7c-b573-4dcb-b8bb-fbb196753231', 'Бургерная Lil_ASCII', '+79999', 'kuzmrom7.github.io', 'Saint-P','blavla','4f2858bb-ecab-4f88-b773-551d34f07bad',
+VALUES ('9ba48d7c-b573-4dcb-b8bb-fbb196753231', 'RKLplace', '+79995207691', 'rklplace.com', 'Saint Petersburg','Невский пр., 92','ba7f171c-8bd2-4470-99de-6d82ca9402e9',
 '68c65b87-925b-4227-bada-c543b55048e2');
 
 -------MENUS-------
 
-INSERT INTO menu (id_menu, name_menu, id_place)
-VALUES ('a93ba633-7547-491f-a4ae-339b1420b1c7', 'Летнее меню','9ba48d7c-b573-4dcb-b8bb-fbb196753231' );
-
--------SECTIONS MENUS-------
-
+INSERT INTO menu (id_menu, name_menu, id_place, url)
+VALUES ('a93ba633-7547-491f-a4ae-339b1420b1c7', 'Новогоднее','9ba48d7c-b573-4dcb-b8bb-fbb196753231', 'http://yberisama.ru/wp-content/uploads/2016/12/%D0%BF%D1%80%D0%B0%D0%B7%D0%B4%D0%BD%D0%B5%D1%87%D0%BD%D1%8B%D0%B9-%D0%BD%D0%BE%D0%B2%D0%BE%D0%B3%D0%BE%D0%B4%D0%BD%D0%B8%D0%B9-%D1%81%D1%82%D0%BE%D0%BB.jpg' );
 
 
 -------TYPES DISHES-------
@@ -55,19 +52,23 @@ VALUES ('2c567271-9bd3-405f-980d-f596e509cb0d', 'мясное');
 
 -------DISH-------
 
-INSERT INTO dish (id_dish, name_dish, id_typedish, description)
-VALUES ('31ba1f68-6eb3-4362-8d4d-24616fa9593d','Классический бургер', '2c567271-9bd3-405f-980d-f596e509cb0d', 'Лучший в мире бургер');
+INSERT INTO dish (id_dish, user_id,  name_dish, id_typedish, description, url)
+VALUES ('31ba1f68-6eb3-4362-8d4d-24616fa9593d','ba7f171c-8bd2-4470-99de-6d82ca9402e9','Классический бургер', '2c567271-9bd3-405f-980d-f596e509cb0d', 'Лучший в мире бургер', 'http://www.goodman.ru/upload/iblock/e02/burger-with-roast-beef.png');
 
 
-INSERT INTO dish (id_dish, name_dish, id_typedish, description)
-VALUES ('8072b173-baaa-4d0f-a1c7-8af3995ffefa','Русский бургер', '2c567271-9bd3-405f-980d-f596e509cb0d', 'Лучший в мире бургер');
+INSERT INTO dish (id_dish, user_id,  name_dish, id_typedish, description, url)
+VALUES ('8072b173-baaa-4d0f-a1c7-8af3995ffefa','ba7f171c-8bd2-4470-99de-6d82ca9402e9','Русский бургер', '2c567271-9bd3-405f-980d-f596e509cb0d', 'Лучший в мире бургер2', 'http://goodman.ru/upload/iblock/570/classic-burger.png');
 
 
-INSERT INTO dish (id_dish, name_dish, id_typedish, description)
-VALUES ('5cb7e111-3860-424b-a14e-83a93db1e889','Исландский бургер', '2c567271-9bd3-405f-980d-f596e509cb0d', 'Лучший в мире бургер');
+INSERT INTO dish (id_dish, user_id,  name_dish, id_typedish, description, url)
+VALUES ('5cb7e111-3860-424b-a14e-83a93db1e889','ba7f171c-8bd2-4470-99de-6d82ca9402e9','Исландский бургер', '2c567271-9bd3-405f-980d-f596e509cb0d', 'Лучший в мире бургер3', 'http://goodman.ru/upload/iblock/f18/American-burger.png');
+
+INSERT INTO menudish (id_menu, id_dish)
+VALUES ('a93ba633-7547-491f-a4ae-339b1420b1c7', '31ba1f68-6eb3-4362-8d4d-24616fa9593d');
 
 INSERT INTO menudish (id_menu, id_dish)
 VALUES ('a93ba633-7547-491f-a4ae-339b1420b1c7', '5cb7e111-3860-424b-a14e-83a93db1e889');
+
 
 INSERT INTO type_personal (id_typePersonal, name_type)
 VALUES ('ad64c48a-33f4-4cb7-abe6-4da9e56a403d', 'охранник');
