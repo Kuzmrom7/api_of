@@ -32,6 +32,18 @@ func New(obj *types.Dish) *Dich {
 	return i
 }
 
+func NewDm(obj *types.Dish) *Dich {
+	i := new(Dich)
+	i.Name = obj.Meta.Name
+	i.Desc = obj.Meta.Desc
+	i.Url = obj.Meta.Url
+	i.Timemin = obj.Meta.Timemin
+	i.Updated = obj.Meta.Updated
+	i.Created = obj.Meta.Created
+	return i
+}
+
+
 func Newt(obj *types.TypeDishes) *TypeDish {
 	i := new(TypeDish)
 	i.Meta.Name = obj.NameType
@@ -49,6 +61,13 @@ func (obj *DichList) ToJson() ([]byte, error) {
 func (obj *TypeDishList) ToJson() ([]byte, error) {
 	if obj == nil {
 		obj = &TypeDishList{}
+	}
+	return json.Marshal(obj)
+}
+
+func (obj *TypeDishListinMenu) ToJson() ([]byte, error) {
+	if obj == nil {
+		obj = &TypeDishListinMenu{}
 	}
 	return json.Marshal(obj)
 }

@@ -104,6 +104,29 @@ func (s *MenuStorage) InsertDishInMenu(ctx context.Context, menuid, dishid strin
 	return err
 }
 
+
+func (s *MenuStorage) DeleteDishInMenu(ctx context.Context, menuid, dishid string) error {
+
+	log.Println("STORAGE--- DeleteDishInMenu()")
+
+	if menuid == "" {
+		err := errors.New("menuid can not be nil")
+		return err
+	}
+	if dishid == "" {
+		err := errors.New("dishid can not be nil")
+		return err
+	}
+
+	_, err := s.client.Exec(sqlMenuDishRemove, menuid, dishid)
+	if err != nil {
+		return err
+	}
+	return nil
+
+}
+
+
 func (s *MenuStorage) Fetch(ctx context.Context, idplace, name string) (*types.Menu, error) {
 
 	var (
@@ -128,11 +151,11 @@ func (s *MenuStorage) Fetch(ctx context.Context, idplace, name string) (*types.M
 
 }
 
-func (s *MenuStorage) ListDishesInMenu(ctx context.Context, menuid, typedishid string) (map[string]*types.Dish, error) {
+func (s *MenuStorage) ListDishesInMenu(ctx context.Context, menuid, usrid string) (map[string]*types.Dish, error) {
 
 	menudishes := make(map[string]*types.Dish)
 
-	rows, err := s.client.Query(sqlstrListMenuDishes, menuid, typedishid)
+	rows, err := s.client.Query(sqlstrListMenuDishes, menuid, usrid)
 	switch err {
 	case nil:
 	case sql.ErrNoRows:
@@ -146,7 +169,7 @@ func (s *MenuStorage) ListDishesInMenu(ctx context.Context, menuid, typedishid s
 
 		di := new(dichModel)
 
-		if err := rows.Scan(&di.id, &di.name, &di.description, &di.url, &di.updated); err != nil {
+		if err := rows.Scan(&di.id, &di.name, &di.description, &di.url, &di.updated, &di.id_Type); err != nil {
 
 			return nil, err
 		}

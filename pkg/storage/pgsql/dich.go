@@ -19,6 +19,7 @@ func (nm *dichModel) convert() *types.Dish {
 	c.Meta.Desc = nm.description.String
 	c.Meta.Url = nm.url.String
 	c.Meta.Updated = nm.updated
+	c.Meta.TypeDishID = nm.id_Type.String
 
 	return c
 }

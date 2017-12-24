@@ -51,6 +51,9 @@ const (
 		VALUES ($1, $2)
 		RETURNING id_menu;
 	`
+
+	sqlMenuDishRemove = `DELETE FROM menudish WHERE id_menu = $1 AND id_dish = $2;`
+
 	sqlFetchMenu = `
 		SELECT menu.id_menu, menu.url, menu.created, menu.updated
 		FROM menu
@@ -62,11 +65,11 @@ const (
 					WHERE menu.id_place = $1;`
 
 	sqlstrListMenuDishes = `
-					SELECT dish.id_dish, dish.name_dish, dish.description, dish.url, dish.updated
+					SELECT dish.id_dish, dish.name_dish, dish.description, dish.url, dish.updated, dish.id_typeDish
 					FROM dish
 							INNER JOIN menudish on menudish.id_dish = dish.id_dish
 							INNER JOIN menu on menu.id_menu = menudish.id_menu
-					WHERE menu.id_menu = $1 AND dish.id_typeDish = $2;`
+					WHERE menu.id_menu = $1 AND dish.user_id = $2;`
 	//-----------------PLACE-------------------//
 
 	sqlstrListTypePlace = `
@@ -176,6 +179,7 @@ type UserStorage struct {
 //-----------------------MODELs-------------------------//
 type dichModel struct {
 	id          store.NullString
+	id_Type     store.NullString
 	name        store.NullString
 	description store.NullString
 	url         store.NullString

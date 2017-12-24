@@ -24,10 +24,11 @@ type Place interface {
 type Menu interface {
 	CreateMenu(ctx context.Context, menu *types.Menu) error
 	InsertDishInMenu(ctx context.Context, menuid, dishid string) error
+	DeleteDishInMenu(ctx context.Context, menuid, dishid string) error
 	GetIDmenuByName(ctx context.Context, name string) (string, error)
 	Fetch(ctx context.Context, idplace, name string) (*types.Menu, error)
 	List(ctx context.Context, placeid string) (map[string]*types.Menu, error)
-	ListDishesInMenu(ctx context.Context, menuid, typedishid string) (map[string]*types.Dish, error)
+	ListDishesInMenu(ctx context.Context, menuid, usrid string) (map[string]*types.Dish, error)
 }
 
 type Dish interface {
