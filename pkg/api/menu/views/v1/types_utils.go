@@ -18,11 +18,12 @@ func (obj *Menu) ToJson() ([]byte, error) {
 	return json.Marshal(obj)
 }
 
-
 func New(obj *types.Menu) *Menu {
 	i := new(Menu)
 	i.Name = obj.Meta.Name
 	i.Url = obj.Meta.Url
+	i.Created = obj.Meta.Created
+	i.Updated = obj.Meta.Updated
 	return i
 }
 
