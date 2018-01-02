@@ -8,7 +8,7 @@ import (
 	"os/signal"
 	"syscall"
 	"os"
-	"log"
+	"github.com/orderfood/api_of/pkg/log"
 )
 
 func Daemon(_cfg *config.Config) {
@@ -22,7 +22,7 @@ func Daemon(_cfg *config.Config) {
 	ctx.SetConfig(cfg)
 	stg, err := storage.Get(cfg.GetPGDB())
 	if err != nil {
-		log.Println("Cannot initialize storage: %v", err)
+		log.Errorf("Cannot initialize storage: %v",err)
 	}
 
 	ctx.SetStorage(stg)

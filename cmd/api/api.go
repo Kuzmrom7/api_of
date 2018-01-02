@@ -4,7 +4,6 @@ import (
 	"github.com/orderfood/api_of/pkg/api"
 	"github.com/orderfood/api_of/pkg/api/config"
 	"github.com/jawher/mow.cli"
-	"fmt"
 	"os"
 	"github.com/orderfood/api_of/pkg/log"
 )
@@ -61,7 +60,7 @@ func main() {
 
 	err := app.Run(os.Args)
 	if err != nil {
-		fmt.Errorf("Error: run application: %s", err.Error())
+		log.Errorf("Error: run application: %s", err.Error())
 		return
 	}
 
