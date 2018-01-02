@@ -6,6 +6,7 @@ import (
 	"github.com/jawher/mow.cli"
 	"fmt"
 	"os"
+	"github.com/orderfood/api_of/pkg/log"
 )
 
 const (
@@ -51,6 +52,7 @@ func main() {
 		if *help {
 			app.PrintLongHelp()
 		}
+		log.New(true)
 	}
 
 	app.Action = func() {

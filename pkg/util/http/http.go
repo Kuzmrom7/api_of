@@ -3,7 +3,7 @@ package http
 import (
 	"net/http"
 	"fmt"
-	"log"
+	"github.com/orderfood/api_of/pkg/log"
 )
 
 func Handle(h http.HandlerFunc, middleware ...Middleware) http.HandlerFunc {
@@ -24,6 +24,7 @@ func Handle(h http.HandlerFunc, middleware ...Middleware) http.HandlerFunc {
 
 func Listen(host string, port int, router http.Handler) error {
 
-	log.Print("Server up and run on : ", host, ":", port)
+	log.Debugf("HTTP: listen HTTP server on %s:%d", host, port)
+
 	return http.ListenAndServe(fmt.Sprintf("%s:%d", host, port), router)
 }
