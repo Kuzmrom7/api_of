@@ -8,10 +8,9 @@ import (
 	"github.com/orderfood/api_of/pkg/api/place/routes/request"
 	"github.com/orderfood/api_of/pkg/common/errors"
 	"github.com/orderfood/api_of/pkg/api/place"
-	"fmt"
 )
 
-//------------------------------------СОЗДАНИЕ ЗАВЕДЕНИЯ----------------------------------------------//
+//------------------------------------CREATE PLACE----------------------------------------------//
 func PlaceCreate(w http.ResponseWriter, r *http.Request) {
 
 	var (
@@ -68,28 +67,33 @@ func PlaceCreate(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-//------------------------------------СПИСОК ТИПОВ ЗАВЕДЕНИЙ--------------------------------------------//
+//------------------------------------LIST TYPE PLACE-------------------------------------------//
 func TypePlaceList(w http.ResponseWriter, r *http.Request) {
+
+	log.Debug("Handler: TypePlace: list type place")
 
 	items, err := place.New(r.Context()).List()
 	if err != nil {
+		log.Errorf("Handler: TypePlace: list type place err ", err)
 		errors.HTTP.InternalServerError(w)
 		return
 	}
 
 	response, err := v1.NewList(items).ToJson()
 	if err != nil {
+		log.Errorf("Handler: TypePlace: convert struct to json err: %s", err)
 		errors.HTTP.InternalServerError(w)
+		return
 	}
 
 	w.WriteHeader(http.StatusOK)
 	if _, err = w.Write(response); err != nil {
-		log.Println("Dich list response error")
+		log.Errorf("Handler: TypePlace: write response err: %s", err)
 		return
 	}
 }
 
-//------------------------------------ИНФОРМАЦИЯ О ЗАВЕДЕНИИ--------------------------------------------//
+//------------------------------------INFORMATION ABOUT PLACE--------------------------------------------//
 func GetPlace(w http.ResponseWriter, r *http.Request) {
 
 	if r.Context().Value("uid") == nil {
@@ -102,28 +106,36 @@ func GetPlace(w http.ResponseWriter, r *http.Request) {
 		id  = r.Context().Value("uid").(string)
 	)
 
+	log.Debug("Handler: Place: get place")
+
 	p := place.New(r.Context())
 	plc, err := p.GetPlaceByIDUsr(id)
 	if err != nil {
+		log.Errorf("Handler: Place: get place", err)
 		errors.HTTP.InternalServerError(w)
 		return
 	}
 	if plc == nil {
+		log.Warnf("Handler: Place: place by user id `%s` not found", id)
 		errors.New("place").NotFound().Http(w)
+		return
 	}
 
 	response, err := v1.NewPlace(plc).ToJson()
 	if err != nil {
+		log.Errorf("Handler: Place: convert struct to json err: %s", err)
 		errors.HTTP.InternalServerError(w)
+		return
 	}
 
 	w.WriteHeader(http.StatusOK)
 	if _, err = w.Write(response); err != nil {
+		log.Errorf("Handler: Place: write response err: %s", err)
 		return
 	}
 }
 
-//------------------------------------ОБНОВЛЕНИЕ ЗАВЕДЕНИЯ--------------------------------------------//
+//------------------------------------UPDATE PLACE--------------------------------------------//
 func PlaceUpdate(w http.ResponseWriter, r *http.Request) {
 
 	var (
@@ -135,38 +147,46 @@ func PlaceUpdate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	log.Debug("Handler: Place: update place")
+
 	rq := new(request.RequestPlaceUpdate)
 	if err := rq.DecodeAndValidate(r.Body); err != nil {
 		err.Http(w)
 		return
 	}
 
-	usrid1 := r.Context().Value("uid").(string)
+	id := r.Context().Value("uid").(string)
 
 	p := place.New(r.Context())
 
-	plc, err := p.GetPlaceByIDUsr(usrid1)
+	plc, err := p.GetPlaceByIDUsr(id)
 	if err != nil {
 		errors.HTTP.InternalServerError(w)
 		return
 	}
 	if plc == nil {
+		log.Warnf("Handler: Place: place by user id `%s` not found", id)
 		errors.New("place").NotFound().Http(w)
+		return
 	}
 
 	err = p.Update(plc, rq)
 	if err != nil {
+		log.Errorf("Handler: Place: update place err: %s", err)
 		errors.HTTP.InternalServerError(w)
+		return
 	}
-	fmt.Println("-----")
+
 	response, err := v1.NewPlace(plc).ToJson()
 	if err != nil {
+		log.Errorf("Handler: Place: convert struct to json err: %s", err)
 		errors.HTTP.InternalServerError(w)
+		return
 	}
-	fmt.Println("---+++++++++++++--")
+
 	w.WriteHeader(http.StatusOK)
 	if _, err = w.Write(response); err != nil {
-		log.Println("Place write response error")
+		log.Errorf("Handler: Place: write response err: %s", err)
 		return
 	}
 
