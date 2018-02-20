@@ -46,7 +46,7 @@ func (u *user) GetByID(id string) (*types.User, error) {
 
 	log.Debugf("User: get user by id %s", id)
 
-	usr, err := storage.User().GetUserByID(u.context, id)
+	usr, err := storage.User().GetByLoginOrId(u.context, id)
 	if err != nil {
 		log.Errorf("User: get user by id err %s", err)
 		return nil, err

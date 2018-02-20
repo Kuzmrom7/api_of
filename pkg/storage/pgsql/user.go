@@ -38,16 +38,16 @@ func (s *UserStorage) CheckExistsByLogin(ctx context.Context, login string) (boo
 	return rows != 0, nil
 }
 
-func (s *UserStorage) GetByLogin(ctx context.Context, login string) (*types.User, error) {
+func (s *UserStorage) GetByLoginOrId(ctx context.Context, log_id string) (*types.User, error) {
 
-	log.Debugf("Storage: User: get user by login: %s", login)
+	log.Debugf("Storage: User: get user by login or id: %s", log_id)
 
 	var (
 		err error
 		um  = new(userModel)
 	)
 
-	err = s.client.QueryRow(sqlstrUserGetByLogin, login).Scan(&um.id, &um.username, &um.email,
+	err = s.client.QueryRow(sqlstrUserGetByLogin, log_id).Scan(&um.id, &um.username, &um.email,
 		&um.gravatar, &um.password, &um.salt)
 	if err != nil {
 		log.Errorf("Storage: User: get user by login err: %s", err)
@@ -65,29 +65,29 @@ func (s *UserStorage) GetByLogin(ctx context.Context, login string) (*types.User
 
 	return usr, nil
 }
-
-func (s *UserStorage) GetUserByID(ctx context.Context, id string) (*types.User, error) {
-	var (
-		err error
-		um  = new(userModel)
-	)
-
-	log.Debugf("Storage: User: get user by id : %s", id)
-
-	err = s.client.QueryRow(sqlstrUserGetById, id).Scan(&um.id, &um.username, &um.email,
-		&um.gravatar, &um.password, &um.salt)
-	switch err {
-	case nil:
-	case sql.ErrNoRows:
-		return nil, nil
-	default:
-		return nil, err
-	}
-
-	usr := um.convert()
-
-	return usr, nil
-}
+//
+//func (s *UserStorage) GetUserByID(ctx context.Context, id string) (*types.User, error) {
+//	var (
+//		err error
+//		um  = new(userModel)
+//	)
+//
+//	log.Debugf("Storage: User: get user by id : %s", id)
+//
+//	err = s.client.QueryRow(sqlstrUserGetById, id).Scan(&um.id, &um.username, &um.email,
+//		&um.gravatar, &um.password, &um.salt)
+//	switch err {
+//	case nil:
+//	case sql.ErrNoRows:
+//		return nil, nil
+//	default:
+//		return nil, err
+//	}
+//
+//	usr := um.convert()
+//
+//	return usr, nil
+//}
 
 func (s *UserStorage) CreateUser(ctx context.Context, user *types.User) error {
 
