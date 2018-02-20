@@ -2,7 +2,7 @@ package routes
 
 import (
 	"net/http"
-	"log"
+	"github.com/orderfood/api_of/pkg/log"
 
 	"github.com/orderfood/api_of/pkg/api/place/views/v1"
 	"github.com/orderfood/api_of/pkg/api/place/routes/request"
@@ -18,6 +18,8 @@ func PlaceCreate(w http.ResponseWriter, r *http.Request) {
 		err error
 	)
 
+	log.Debug("Handler: Place: create place")
+
 	if r.Context().Value("uid") == nil {
 		errors.HTTP.Unauthorized(w)
 		return
@@ -25,7 +27,8 @@ func PlaceCreate(w http.ResponseWriter, r *http.Request) {
 
 	rq := new(request.RequestPlaceCreate)
 	if err := rq.DecodeAndValidate(r.Body); err != nil {
-		err.Http(w)
+		log.Errorf("Handler: Place: validation incoming data err: %s", err.Err())
+		errors.New("Invalid incoming data").Unknown().Http(w)
 		return
 	}
 	usrid1 := r.Context().Value("uid").(string)
@@ -34,27 +37,33 @@ func PlaceCreate(w http.ResponseWriter, r *http.Request) {
 
 	typeplace_id, err := p.GetIDTypePlaceByName(rq.NameTypePlace)
 	if err != nil {
+		log.Errorf("Handler: Place: get id type place by type name err: %s", err)
 		errors.HTTP.InternalServerError(w)
 		return
 	}
 	if typeplace_id == "" {
+		log.Warnf("Handler: Place: id type place by name `%s` not found", rq.NameTypePlace)
 		errors.New("type_place").NotFound().Http(w)
+		return
 	}
 
 	plc, err := p.Create(usrid1, typeplace_id, rq)
 	if err != nil {
+		log.Errorf("Handler: Place: create place", err)
 		errors.HTTP.InternalServerError(w)
+		return
 	}
 
 	response, err := v1.NewPlace(plc).ToJson()
 	if err != nil {
+		log.Errorf("Handler: Place: convert struct to json err: %s", err)
 		errors.HTTP.InternalServerError(w)
+		return
 	}
 
-	///log.Println("Create user id: " , usr.Meta.ID, " username: " , usr.Meta.Username)
 	w.WriteHeader(http.StatusOK)
 	if _, err = w.Write(response); err != nil {
-		log.Println("Place write response error")
+		log.Errorf("Handler: Place: write response err: %s", err)
 		return
 	}
 }
@@ -113,8 +122,9 @@ func GetPlace(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
 //------------------------------------ОБНОВЛЕНИЕ ЗАВЕДЕНИЯ--------------------------------------------//
-func PlaceUpdate(w http.ResponseWriter, r *http.Request){
+func PlaceUpdate(w http.ResponseWriter, r *http.Request) {
 
 	var (
 		err error
