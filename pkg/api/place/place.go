@@ -133,24 +133,3 @@ func (p *place) Update(place *types.Place, rq *request.RequestPlaceUpdate) error
 	}
 	return nil
 }
-
-func (p *place) GetIDPlaceByUsrId(id string) (string, error) {
-
-	var (
-		storage = ctx.Get().GetStorage()
-	)
-
-	log.Debugf("Place: get id place by user id %s", id)
-
-	placeId, err := storage.Place().GetPlaceIDByUsrid(p.context, id)
-	if err != nil {
-		log.Errorf("Place: get id place by user id `%s` err: %s", id, err)
-		return "", err
-	}
-	if placeId == "" {
-		log.Warnf("Place: get place id by user id `%s` not found", id)
-		return "", nil
-	}
-
-	return placeId, nil
-}

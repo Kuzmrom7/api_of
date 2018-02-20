@@ -29,13 +29,13 @@ func PersonCreate(w http.ResponseWriter, r *http.Request) {
 
 	usrid := r.Context().Value("uid").(string)
 
-	place_id, err := place.New(r.Context()).GetIDPlaceByUsrId(usrid)
+	place, err := place.New(r.Context()).GetPlaceByIDUsr(usrid)
 	if err != nil {
 		errors.HTTP.InternalServerError(w)
 		return
 	}
-	log.Print(place_id)
-	if place_id == "" {
+
+	if place == nil {
 		errors.New("place").NotFound().Http(w)
 	}
 
@@ -50,7 +50,7 @@ func PersonCreate(w http.ResponseWriter, r *http.Request) {
 		errors.New("type_personal").NotFound().Http(w)
 	}
 
-	pers, err := p.Create(typeperson_id, place_id, rq)
+	pers, err := p.Create(typeperson_id, place.Meta.ID, rq)
 	if err != nil {
 		errors.HTTP.InternalServerError(w)
 	}
