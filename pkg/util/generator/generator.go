@@ -5,16 +5,10 @@ import (
 	"crypto/rand"
 	"crypto/sha1"
 	"fmt"
-	"github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
 	"io"
 	"strings"
-	//"time"
 )
-
-func GetUUIDV4() string {
-	return uuid.NewV4().String()
-}
 
 func Generatepassword(password string, salt string) (string, error) {
 	pass := []byte(password + salt)
@@ -32,21 +26,6 @@ func GenerateGravatar(email string) string {
 		return ""
 	}
 	return fmt.Sprintf("%x", m.Sum(nil))
-}
-
-func GenerateRandomString(n int) string {
-
-	var str string
-	var index int
-
-	for len(str)-(index*4) < n {
-		str += GetUUIDV4()
-		index++
-	}
-
-	str = strings.Replace(str, "-", "", -1)
-
-	return str[:n]
 }
 
 func GenerateSalt(password string) (string, error) {
