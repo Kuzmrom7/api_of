@@ -36,7 +36,7 @@ func (p *menu) GetIDMenuByName(name_menu string) (string, error) {
 }
 
 //
-func (p *menu) Create(place string, rq *request.RequestMenuCreate) (*types.Menu, error) {
+func (p *menu) Create(place string, rq *request.MenuCreate) (*types.Menu, error) {
 
 	var (
 		storage = ctx.Get().GetStorage()

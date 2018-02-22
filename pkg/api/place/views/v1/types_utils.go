@@ -5,14 +5,27 @@ import (
 	"encoding/json"
 )
 
-func newPlace(obj *types.Place) *Place{
+func newPlace(obj *types.Place) *Place {
 	p := new(Place)
 	p.City = obj.Meta.City
 	p.Name = obj.Meta.Name
 	p.Url = obj.Meta.Url
 	p.Phone = obj.Meta.Phone
-	p.Adress = obj.Meta.Adress
-	//u.NameTypePlace = obj.Meta.TypePlaceID
+	p.Id = obj.Meta.ID
+
+	if obj.Adresses != nil {
+		for i, adr := range obj.Adresses {
+			p.Adresses[i].Adress = adr.Adress
+		}
+	}
+
+	if obj.TypesPlace != nil {
+		for i, typepl := range obj.TypesPlace {
+			p.TypesPlace[i].ID = typepl.ID
+			p.TypesPlace[i].NameType = typepl.NameType
+		}
+	}
+
 	return p
 }
 
@@ -26,7 +39,6 @@ func New(obj *types.TypePlaces) *TypePlace {
 	i.Meta.ID = obj.ID
 	return i
 }
-
 
 func (obj *TypePlaceList) ToJson() ([]byte, error) {
 	if obj == nil {

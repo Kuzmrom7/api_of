@@ -27,7 +27,7 @@ VALUES ('3b896b95-928a-4107-934b-d7dace83b83a', 'кофейнная');
 
 -------PLACES-------
 
-INSERT INTO place (id_place, name, phone_number, url, city, adress, user_id, id_typeplace)
+INSERT INTO place (id_place, name, phone_number, url, city, adress, user_id, type)
 VALUES ('9ba48d7c-b573-4dcb-b8bb-fbb196753231', 'RKLplace', '+79995207691', 'rklplace.com', 'Saint Petersburg','Невский пр., 92','ba7f171c-8bd2-4470-99de-6d82ca9402e9',
 '68c65b87-925b-4227-bada-c543b55048e2');
 

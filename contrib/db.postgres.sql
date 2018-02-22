@@ -62,7 +62,7 @@ CREATE EXTENSION "uuid-ossp";
    city                  VARCHAR(256)                                 DEFAULT '',
    adress                VARCHAR(256)                                 DEFAULT '',
    user_id               UUID REFERENCES users (user_id)              NOT NULL,
-   id_typePlace          UUID REFERENCES type_place (id_typePlace)    NOT NULL,
+   type                  VARCHAR(256)                                 DEFAULT '',
    created               TIMESTAMP                                    DEFAULT now(),
    updated               TIMESTAMP                                    DEFAULT now()
  );

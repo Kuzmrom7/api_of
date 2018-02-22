@@ -3,8 +3,9 @@ package types
 import "time"
 
 type Place struct {
-	Meta PlaceMeta `json:"meta"`
-	//Type TypePlaces `json:"type"`
+	Meta       PlaceMeta    `json:"meta"`
+	TypesPlace []TypePlaces `json:"typesplace"`
+	Adresses   []AdressOpt  `json:"adresses,omitempty"`
 }
 
 type PlaceMeta struct {
@@ -13,7 +14,6 @@ type PlaceMeta struct {
 	Phone       string    `json:"phone,omitempty"`
 	Url         string    `json:"url,omitempty"`
 	City        string    `json:"city,omitempty"`
-	Adress      string    `json:"adress,omitempty"`
 	TypePlaceID string    `json:"typeplace,omitempty"`
 	UserID      string    `json:"user,omitempty"`
 	Created     time.Time `json:"created"`
@@ -23,4 +23,8 @@ type PlaceMeta struct {
 type TypePlaces struct {
 	ID       string `json:"id"`
 	NameType string `json:"nametype"`
+}
+
+type AdressOpt struct {
+	Adress string `json:"adress"`
 }

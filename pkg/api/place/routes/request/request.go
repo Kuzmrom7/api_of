@@ -10,19 +10,24 @@ import (
 )
 
 type RequestPlaceCreate struct {
-	Name          string `json:"name,omitempty"`
-	Phone         string `json:"phone,omitempty"`
-	Url           string `json:"url,omitempty"`
-	City          string `json:"city,omitempty"`
-	Adress        string `json:"adress,omitempty"`
-	NameTypePlace string `json:"nametypeplace,omitempty"`
+	Name       string         `json:"name,omitempty"`
+	TypesPlace []TypePlaceOpt `json:"typesplace,omitempty"`
+}
+
+type TypePlaceOpt struct {
+	IdTypePlace string `json:"idtypeplace"`
 }
 
 type RequestPlaceUpdate struct {
-	Phone  *string `json:"phone,omitempty"`
-	Url    *string `json:"url,omitempty"`
-	City   *string `json:"city,omitempty"`
-	Adress *string `json:"adress,omitempty"`
+	Id       string       `json:"id,omitempty"`
+	Phone    *string      `json:"phone,omitempty"`
+	Url      *string      `json:"url,omitempty"`
+	City     *string      `json:"city,omitempty"`
+	Adresses *[]AdressOpt `json:"adresses,omitempty"`
+}
+
+type AdressOpt struct {
+	Adress string `json:"adress"`
 }
 
 func (s *RequestPlaceCreate) DecodeAndValidate(reader io.Reader) *errors.Err {
@@ -49,9 +54,9 @@ func (s *RequestPlaceCreate) DecodeAndValidate(reader io.Reader) *errors.Err {
 		return errors.New("place").BadParameter("name")
 	}
 
-	if s.NameTypePlace == "" {
+	if len(s.TypesPlace) == 0 {
 		log.Error("Request: Place: parameter type place can not be empty")
-		return errors.New("place").BadParameter("nametypeplace")
+		return errors.New("place").BadParameter("typepslace")
 	}
 
 	return nil

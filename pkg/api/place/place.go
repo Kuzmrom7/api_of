@@ -43,7 +43,7 @@ func (p *place) GetIDTypePlaceByName(name_typeplace string) (string, error) {
 	return typeplace_id, nil
 }
 
-func (p *place) Create(user, typeplace string, rq *request.RequestPlaceCreate) (*types.Place, error) {
+func (p *place) Create(user string, rq *request.RequestPlaceCreate) (*types.Place, error) {
 
 	var (
 		storage = ctx.Get().GetStorage()
@@ -52,12 +52,10 @@ func (p *place) Create(user, typeplace string, rq *request.RequestPlaceCreate) (
 
 	log.Debugf("Place: create place %#v", rq)
 
-	plc.Meta.Adress = rq.Adress
-	plc.Meta.City = rq.City
 	plc.Meta.Name = rq.Name
-	plc.Meta.Phone = rq.Phone
-	plc.Meta.Url = rq.Url
-	plc.Meta.TypePlaceID = typeplace
+	for i, typepl := range rq.TypesPlace{
+		plc.TypesPlace[i].ID = typepl.IdTypePlace
+	}
 	plc.Meta.UserID = user
 
 	if err := storage.Place().CreatePlace(p.context, &plc); err != nil {
@@ -82,6 +80,26 @@ func (r *place) List() (map[string]*types.TypePlaces, error) {
 		return nil, err
 	}
 	return list, nil
+}
+
+func (u *place)GetPlaceByID(id string)(*types.Place, error){
+	var (
+		storage = ctx.Get().GetStorage()
+	)
+
+	log.Debugf("Place: get place by id %s", id)
+
+	plc, err := storage.Place().GetPlaceByID(u.context, id)
+	if err != nil {
+		log.Errorf("Place: get place by id `%s` err: %s", id, err)
+		return nil, err
+	}
+	if plc == nil {
+		log.Warnf("Place: Place by id `%s` not found", id)
+		return nil, nil
+	}
+
+	return plc, nil
 }
 
 func (u *place) GetPlaceByIDUsr(id string) (*types.Place, error) {
@@ -119,9 +137,9 @@ func (p *place) Update(place *types.Place, rq *request.RequestPlaceUpdate) error
 		place.Meta.City = *rq.City
 	}
 
-	if rq.Adress != nil {
-		place.Meta.Adress = *rq.Adress
-	}
+	//if rq.Adress != nil {
+	//	place.Meta.Adress = *rq.Adress
+	//}
 
 	if rq.Phone != nil {
 		place.Meta.Phone = *rq.Phone

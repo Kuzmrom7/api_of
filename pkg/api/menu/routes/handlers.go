@@ -24,7 +24,7 @@ func MenuCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rq := new(request.RequestMenuCreate)
+	rq := new(request.MenuCreate)
 	if err := rq.DecodeAndValidate(r.Body); err != nil {
 		err.Http(w)
 		return
@@ -32,17 +32,17 @@ func MenuCreate(w http.ResponseWriter, r *http.Request) {
 
 	usrid := r.Context().Value("uid").(string)
 
-	place, err := place.New(r.Context()).GetPlaceByIDUsr(usrid)
+	pl, err := place.New(r.Context()).GetPlaceByIDUsr(usrid)
 	if err != nil {
 		errors.HTTP.InternalServerError(w)
 		return
 	}
 
-	if place == nil {
+	if pl == nil {
 		errors.New("place").NotFound().Http(w)
 	}
 
-	men, err := menu.New(r.Context()).Create(place.Meta.ID, rq)
+	men, err := menu.New(r.Context()).Create(pl.Meta.ID, rq)
 	if err != nil {
 		errors.HTTP.InternalServerError(w)
 	}
@@ -72,16 +72,16 @@ func GetListMenu(w http.ResponseWriter, r *http.Request) {
 	)
 
 	p := place.New(r.Context())
-	plc, err := p.GetPlaceByIDUsr(id)
+	pl, err := p.GetPlaceByIDUsr(id)
 	if err != nil {
 		errors.HTTP.InternalServerError(w)
 		return
 	}
-	if plc == nil {
+	if pl == nil {
 		errors.New("place").NotFound().Http(w)
 	}
 
-	items, err := menu.New(r.Context()).List(plc.Meta.ID)
+	items, err := menu.New(r.Context()).List(pl.Meta.ID)
 	if err != nil {
 		errors.HTTP.InternalServerError(w)
 		return
@@ -169,17 +169,17 @@ func GetMenu(w http.ResponseWriter, r *http.Request) {
 
 	usrid := r.Context().Value("uid").(string)
 
-	place, err := place.New(r.Context()).GetPlaceByIDUsr(usrid)
+	pl, err := place.New(r.Context()).GetPlaceByIDUsr(usrid)
 	if err != nil {
 		errors.HTTP.InternalServerError(w)
 		return
 	}
 
-	if place == nil {
+	if pl == nil {
 		errors.New("place").NotFound().Http(w)
 	}
 
-	men, err := menu.New(r.Context()).GetMenuByIDPlaceAndNameMenu(place.Meta.ID, rq.NameMenu)
+	men, err := menu.New(r.Context()).GetMenuByIDPlaceAndNameMenu(pl.Meta.ID, rq.NameMenu)
 	if err != nil {
 		errors.HTTP.InternalServerError(w)
 		return

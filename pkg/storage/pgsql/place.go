@@ -8,6 +8,7 @@ import (
 	"errors"
 	"database/sql"
 	"time"
+	"encoding/json"
 )
 
 func (s *PlaceStorage) GetPlaceByIDUser(ctx context.Context, id string) (*types.Place, error) {
@@ -36,6 +37,53 @@ func (s *PlaceStorage) GetPlaceByIDUser(ctx context.Context, id string) (*types.
 
 }
 
+func (s *PlaceStorage) GetPlaceByID(ctx context.Context, id string) (*types.Place, error) {
+
+	var (
+		err error
+	)
+
+	log.Debugf("Storage: Place: Get: get place by id: %s ", id)
+
+	const sqlPlaceGetByID = `
+			SELECT to_json(
+				json_build_object(
+					'meta', json_build_object(
+					'id', id_place,
+					'name', name,
+					'phone', phone_number,
+					'url', url,
+					'city', city,
+				),
+				'typesplace', type,
+				'adresses', adress,
+				)
+			)
+			FROM place
+			WHERE place.id_place = $1;`
+
+	var buf string
+
+	err = s.client.QueryRow(sqlPlaceGetByID, id).Scan(&buf)
+	switch err {
+	case nil:
+	case sql.ErrNoRows:
+		return nil, nil
+	default:
+		log.Errorf("Storage: Place: Get: get place by id query err: %s", err)
+		return nil, err
+	}
+
+	plc := new(types.Place)
+
+	if err := json.Unmarshal([]byte(buf), &plc); err != nil {
+		return nil, err
+	}
+
+	return plc, nil
+
+}
+
 func (s *PlaceStorage) CreatePlace(ctx context.Context, place *types.Place) error {
 
 	log.Debug("Storage: Place: Insert: insert place: %#v", place)
@@ -51,7 +99,19 @@ func (s *PlaceStorage) CreatePlace(ctx context.Context, place *types.Place) erro
 		id  store.NullString
 	)
 
-	err = s.client.QueryRow(sqlCreatePlace, place.Meta.Name, place.Meta.Phone, place.Meta.Url, place.Meta.City, place.Meta.Adress, place.Meta.UserID, place.Meta.TypePlaceID).Scan(&id)
+	typesplace, err := json.Marshal(place.TypesPlace)
+	if err != nil {
+		log.Errorf("Storage: Place: prepare types struct to database write: %s", err)
+		typesplace = []byte("{}")
+	}
+
+
+	const sqlCreatePlace = `
+		INSERT INTO place (name, user_id, type)
+		VALUES ($1, $2, $3)
+		RETURNING id_place;`
+
+	err = s.client.QueryRow(sqlCreatePlace, place.Meta.Name, place.Meta.UserID, string(typesplace)).Scan(&id)
 	if err != nil {
 		log.Errorf("Storage: Place: Insert: insert place query err: %s", err)
 		return err
@@ -125,9 +185,15 @@ func (s *PlaceStorage) Update(ctx context.Context, place *types.Place) error {
 		return err
 	}
 
+	adress, err := json.Marshal(place.Adresses)
+	if err != nil {
+		log.Errorf("Storage: Place: prepare types struct to database write: %s", err)
+		adress = []byte("{}")
+	}
+
 	place.Meta.Updated = time.Now()
 
-	err := s.client.QueryRow(sqlstrPlaceUpdate, place.Meta.Phone, place.Meta.Adress,
+	err = s.client.QueryRow(sqlstrPlaceUpdate, place.Meta.Phone, string(adress),
 		place.Meta.City, place.Meta.Url, place.Meta.Name).Scan(&place.Meta.Updated)
 	if err != nil {
 		log.Errorf("Storage: Place: Update: update place query err: %s", err)
@@ -149,7 +215,6 @@ func (pl *placeModel) convert() *types.Place {
 
 	c.Meta.Name = pl.name.String
 	c.Meta.Phone = pl.phone.String
-	c.Meta.Adress = pl.adress.String
 	c.Meta.City = pl.city.String
 	c.Meta.Url = pl.url.String
 	c.Meta.ID = pl.id.String

@@ -17,7 +17,7 @@ type Place interface {
 	GetTypePlaceByName(ctx context.Context, name string) (string, error)
 	ListType(ctx context.Context) (map[string]*types.TypePlaces, error)
 	GetPlaceByIDUser(ctx context.Context, id string) (*types.Place, error)
-	GetPlaceIDByUsrid(ctx context.Context, id string) (string, error)
+	GetPlaceByID(ctx context.Context, id string) (*types.Place, error)
 	Update(ctx context.Context, place *types.Place) error
 }
 

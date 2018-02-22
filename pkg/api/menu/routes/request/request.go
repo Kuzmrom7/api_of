@@ -8,9 +8,9 @@ import (
 	"encoding/json"
 )
 
-type RequestMenuCreate struct {
+type MenuCreate struct {
 	Name      string `json:"name,omitempty"`
-	NamePlace string `json:"nameplace"`
+	Id_place 	string `json:"id_place"`
 	Url       string `json:"url"`
 }
 
@@ -23,7 +23,7 @@ type RequestMenuFetch struct {
 	NameMenu string `json:"namemenu,omitempty"`
 }
 
-func (s *RequestMenuCreate) DecodeAndValidate(reader io.Reader) *errors.Err {
+func (s *MenuCreate) DecodeAndValidate(reader io.Reader) *errors.Err {
 
 	var (
 		err error
@@ -44,6 +44,10 @@ func (s *RequestMenuCreate) DecodeAndValidate(reader io.Reader) *errors.Err {
 
 	if s.Url == "" {
 		return errors.New("menu").BadParameter("url")
+	}
+
+	if s.Id_place == "" {
+		return errors.New("menu").BadParameter("id_place")
 	}
 
 	return nil
