@@ -13,16 +13,25 @@ func newPlace(obj *types.Place) *Place {
 	p.Phone = obj.Meta.Phone
 	p.Id = obj.Meta.ID
 
+	p.Adresses = make([]*AdressOpt, 0)
 	if obj.Adresses != nil {
-		for i, adr := range obj.Adresses {
-			p.Adresses[i].Adress = adr.Adress
+		for _, adr := range obj.Adresses {
+			a := new(AdressOpt)
+
+			a.Adress = adr.Adress
+
+			p.Adresses = append(p.Adresses, a)
 		}
 	}
-
+	p.TypesPlace = make([]*TypePlaces, 0)
 	if obj.TypesPlace != nil {
-		for i, typepl := range obj.TypesPlace {
-			p.TypesPlace[i].ID = typepl.ID
-			p.TypesPlace[i].NameType = typepl.NameType
+		for _, typepl := range obj.TypesPlace {
+			t := new(TypePlaces)
+
+			t.ID = typepl.ID
+			t.NameType = typepl.NameType
+
+			p.TypesPlace = append(p.TypesPlace, t)
 		}
 	}
 

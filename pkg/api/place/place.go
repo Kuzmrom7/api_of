@@ -53,9 +53,13 @@ func (p *place) Create(user string, rq *request.RequestPlaceCreate) (*types.Plac
 	log.Debugf("Place: create place %#v", rq)
 
 	plc.Meta.Name = rq.Name
-	for i, typepl := range rq.TypesPlace{
-		plc.TypesPlace[i].ID = typepl.IdTypePlace
+
+	for _, typepl := range rq.TypesPlace{
+		plc.TypesPlace = append(plc.TypesPlace, types.TypePlaces{
+			ID: typepl.IdTypePlace,
+		})
 	}
+
 	plc.Meta.UserID = user
 
 	if err := storage.Place().CreatePlace(p.context, &plc); err != nil {
