@@ -18,11 +18,12 @@ func Daemon(_cfg *config.Config) {
 		done = make(chan bool, 1)
 		sigs = make(chan os.Signal)
 	)
+	log.Info("Start API server")
 
 	ctx.SetConfig(cfg)
 	stg, err := storage.Get(cfg.GetPGDB())
 	if err != nil {
-		log.Errorf("Cannot initialize storage: %v",err)
+		log.Errorf("Cannot initialize storage: %v", err)
 	}
 
 	ctx.SetStorage(stg)
@@ -45,4 +46,6 @@ func Daemon(_cfg *config.Config) {
 	}()
 
 	<-done
+
+	log.Info("Handle SIGINT and SIGTERM.")
 }

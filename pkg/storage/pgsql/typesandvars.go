@@ -136,7 +136,7 @@ const (
 	sqlstrUserGetByLogin = `
 		SELECT users.user_id, users.username, users.email, users.gravatar, users.password, users.salt
 		FROM users
-		WHERE users.username = $1;`
+		WHERE users.username = $1 OR users.user_id = $1;`
 
 	sqlstrUserExistsByLogin = `
 		SELECT TRUE
