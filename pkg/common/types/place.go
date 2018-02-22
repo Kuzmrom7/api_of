@@ -4,7 +4,7 @@ import "time"
 
 type Place struct {
 	Meta       PlaceMeta    `json:"meta"`
-	TypesPlace []TypePlaces `json:"typesplace"`
+	TypesPlace []TypePlaces `json:"typesplace,omitempty"`
 	Adresses   []AdressOpt  `json:"adresses,omitempty"`
 }
 

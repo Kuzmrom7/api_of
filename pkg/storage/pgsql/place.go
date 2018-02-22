@@ -53,10 +53,10 @@ func (s *PlaceStorage) GetPlaceByID(ctx context.Context, id string) (*types.Plac
 					'name', name,
 					'phone', phone_number,
 					'url', url,
-					'city', city,
+					'city', city
 				),
 				'typesplace', type,
-				'adresses', adress,
+				'adresses', adress
 				)
 			)
 			FROM place
