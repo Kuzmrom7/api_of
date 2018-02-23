@@ -19,7 +19,7 @@ func New(c context.Context) *place {
 	}
 }
 
-func (p *place) Create(user string, rq *request.RequestPlaceCreate) (*types.Place, error) {
+func (p *place) Create(user string, rq *request.PlaceCreate) (*types.Place, error) {
 
 	var (
 		storage = ctx.Get().GetStorage()
@@ -32,7 +32,8 @@ func (p *place) Create(user string, rq *request.RequestPlaceCreate) (*types.Plac
 
 	for _, typepl := range rq.TypesPlace {
 		plc.TypesPlace = append(plc.TypesPlace, types.TypePlaces{
-			ID: typepl.IdTypePlace,
+			ID:       typepl.IdTypePlace,
+			NameType: typepl.NameTypePlace,
 		})
 	}
 
@@ -102,7 +103,7 @@ func (u *place) GetPlaceByIDUsr(id string) (*types.Place, error) {
 	return plc, nil
 }
 
-func (p *place) Update(place *types.Place, rq *request.RequestPlaceUpdate) error {
+func (p *place) Update(place *types.Place, rq *request.PlaceUpdate) error {
 	var (
 		err     error
 		storage = ctx.Get().GetStorage()
@@ -117,13 +118,22 @@ func (p *place) Update(place *types.Place, rq *request.RequestPlaceUpdate) error
 		place.Meta.City = *rq.City
 	}
 
-	//if rq.Adress != nil {
-	//	place.Meta.Adress = *rq.Adress
-	//}
+	if rq.Adresses != nil {
+		place.Adresses = make([]types.AdressOpt, 0)
+		for _, typepl := range *rq.Adresses {
+			p := new(types.AdressOpt)
+
+			p.Adress = typepl.Adress
+
+			place.Adresses = append(place.Adresses, *p)
+		}
+	}
 
 	if rq.Phone != nil {
 		place.Meta.Phone = *rq.Phone
 	}
+
+	place.Meta.ID = rq.Id
 
 	if err = storage.Place().Update(p.context, place); err != nil {
 		log.Errorf("Place: update place err: %s", err)

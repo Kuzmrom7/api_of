@@ -25,7 +25,7 @@ func PlaceCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rq := new(request.RequestPlaceCreate)
+	rq := new(request.PlaceCreate)
 	if err := rq.DecodeAndValidate(r.Body); err != nil {
 		log.Errorf("Handler: Place: validation incoming data err: %s", err.Err())
 		errors.New("Invalid incoming data").Unknown().Http(w)
@@ -139,7 +139,7 @@ func PlaceUpdate(w http.ResponseWriter, r *http.Request) {
 
 	log.Debug("Handler: Place: update place")
 
-	rq := new(request.RequestPlaceUpdate)
+	rq := new(request.PlaceUpdate)
 	if err := rq.DecodeAndValidate(r.Body); err != nil {
 		err.Http(w)
 		return

@@ -9,16 +9,17 @@ import (
 	"github.com/orderfood/api_of/pkg/log"
 )
 
-type RequestPlaceCreate struct {
+type PlaceCreate struct {
 	Name       string         `json:"name,omitempty"`
 	TypesPlace []TypePlaceOpt `json:"typesplace,omitempty"`
 }
 
 type TypePlaceOpt struct {
-	IdTypePlace string `json:"idtypeplace"`
+	IdTypePlace   string `json:"idtypeplace"`
+	NameTypePlace string `json:"nametypeplace"`
 }
 
-type RequestPlaceUpdate struct {
+type PlaceUpdate struct {
 	Id       string       `json:"id,omitempty"`
 	Phone    *string      `json:"phone,omitempty"`
 	Url      *string      `json:"url,omitempty"`
@@ -30,7 +31,7 @@ type AdressOpt struct {
 	Adress string `json:"adress"`
 }
 
-func (s *RequestPlaceCreate) DecodeAndValidate(reader io.Reader) *errors.Err {
+func (s *PlaceCreate) DecodeAndValidate(reader io.Reader) *errors.Err {
 
 	var (
 		err error
@@ -62,7 +63,7 @@ func (s *RequestPlaceCreate) DecodeAndValidate(reader io.Reader) *errors.Err {
 	return nil
 }
 
-func (s *RequestPlaceUpdate) DecodeAndValidate(reader io.Reader) *errors.Err {
+func (s *PlaceUpdate) DecodeAndValidate(reader io.Reader) *errors.Err {
 
 	var (
 		err error
@@ -79,6 +80,16 @@ func (s *RequestPlaceUpdate) DecodeAndValidate(reader io.Reader) *errors.Err {
 	if err != nil {
 		log.Errorf("Request: Place: convert struct from json err: %s", err)
 		return errors.New("place").IncorrectJSON(err)
+	}
+
+	if s.Id == "" {
+		log.Error("Request: Place: parameter id place can not be empty")
+		return errors.New("place").BadParameter("name")
+	}
+
+	if len(*s.Adresses) == 0 {
+		log.Error("Request: Place: parameter adresess can not be empty")
+		return errors.New("place").BadParameter("adresess")
 	}
 
 	return nil

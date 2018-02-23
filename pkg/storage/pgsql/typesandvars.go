@@ -115,16 +115,6 @@ const (
 		FROM place
 		WHERE place.user_id = $1;`
 
-	sqlstrPlaceUpdate = `
-		UPDATE place
-		SET
-			phone_number = $1,
-			adress = $2,
-			city = $3,
-			url = $4,
-			updated = now()
-		WHERE name = $5
-		RETURNING updated;`
 
 	//-----------------USERS-------------------//
 

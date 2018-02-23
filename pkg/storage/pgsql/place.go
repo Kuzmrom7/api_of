@@ -189,8 +189,19 @@ func (s *PlaceStorage) Update(ctx context.Context, place *types.Place) error {
 
 	place.Meta.Updated = time.Now()
 
+	const sqlstrPlaceUpdate = `
+		UPDATE place
+		SET
+			phone_number = $1,
+			adress = $2,
+			city = $3,
+			url = $4,
+			updated = now()
+		WHERE id_place = $5
+		RETURNING updated;`
+
 	err = s.client.QueryRow(sqlstrPlaceUpdate, place.Meta.Phone, string(adress),
-		place.Meta.City, place.Meta.Url, place.Meta.Name).Scan(&place.Meta.Updated)
+		place.Meta.City, place.Meta.Url, place.Meta.ID).Scan(&place.Meta.Updated)
 	if err != nil {
 		log.Errorf("Storage: Place: Update: update place query err: %s", err)
 		return err
