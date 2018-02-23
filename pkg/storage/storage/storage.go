@@ -7,14 +7,12 @@ import (
 
 type User interface {
 	GetByLoginOrId(ctx context.Context, login string) (*types.User, error)
-	//GetUserByID(ctx context.Context, id string) (*types.User, error)
 	CreateUser(ctx context.Context, user *types.User) error
 	CheckExistsByLogin(ctx context.Context, login string) (bool, error)
 }
 
 type Place interface {
 	CreatePlace(ctx context.Context, place *types.Place) error
-	GetTypePlaceByName(ctx context.Context, name string) (string, error)
 	ListType(ctx context.Context) (map[string]*types.TypePlaces, error)
 	GetPlaceByIDUser(ctx context.Context, id string) (*types.Place, error)
 	GetPlaceByID(ctx context.Context, id string) (*types.Place, error)
@@ -40,7 +38,7 @@ type Dish interface {
 	List(ctx context.Context, userid string) (map[string]*types.Dish, error)
 	TypeList(ctx context.Context) (map[string]*types.TypeDishes, error)
 	GetTypeDishIDByName(ctx context.Context, name string) (string, error)
-	Update(ctx context.Context, usrid string ,dish *types.Dish) error
+	Update(ctx context.Context, usrid string, dish *types.Dish) error
 }
 
 type Personal interface {

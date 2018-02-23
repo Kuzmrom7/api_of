@@ -15,26 +15,46 @@ func (s *PlaceStorage) GetPlaceByIDUser(ctx context.Context, id string) (*types.
 
 	var (
 		err error
-		pl  = new(placeModel)
 	)
 
 	log.Debugf("Storage: Place: Get: get place by user id: %s ", id)
 
-	err = s.client.QueryRow(sqlPlaceGetByIDUsr, id).Scan(&pl.name, &pl.phone, &pl.adress,
-		&pl.city, &pl.url, &pl.id)
+	const sqlPlaceGetByUserID = `
+			SELECT to_json(
+				json_build_object(
+					'meta', json_build_object(
+					'id', id_place,
+					'name', name,
+					'phone', phone_number,
+					'url', url,
+					'city', city
+				),
+				'typesplace', type,
+				'adresses', adress
+				)
+			)
+			FROM place
+			WHERE place.user_id = $1;`
+
+	var buf string
+
+	err = s.client.QueryRow(sqlPlaceGetByUserID, id).Scan(&buf)
 	switch err {
 	case nil:
 	case sql.ErrNoRows:
 		return nil, nil
 	default:
-		log.Errorf("Storage: Place: Get: get place by user id query err: %s", err)
+		log.Errorf("Storage: Place: Get: get place by id query err: %s", err)
 		return nil, err
 	}
 
-	plc := pl.convert()
+	plc := new(types.Place)
+
+	if err := json.Unmarshal([]byte(buf), &plc); err != nil {
+		return nil, err
+	}
 
 	return plc, nil
-
 }
 
 func (s *PlaceStorage) GetPlaceByID(ctx context.Context, id string) (*types.Place, error) {
@@ -105,7 +125,6 @@ func (s *PlaceStorage) CreatePlace(ctx context.Context, place *types.Place) erro
 		typesplace = []byte("{}")
 	}
 
-
 	const sqlCreatePlace = `
 		INSERT INTO place (name, user_id, type)
 		VALUES ($1, $2, $3)
@@ -119,29 +138,6 @@ func (s *PlaceStorage) CreatePlace(ctx context.Context, place *types.Place) erro
 	place.Meta.ID = id.String
 
 	return err
-}
-
-func (s *PlaceStorage) GetTypePlaceByName(ctx context.Context, name string) (string, error) {
-	var (
-		err error
-		pl  = new(typeModel)
-	)
-
-	log.Debugf("Storage: Place: GetType: get type place by name: %s ", name)
-
-	err = s.client.QueryRow(sqlTypePlaceIDGetByName, name).Scan(&pl.id)
-	switch err {
-	case nil:
-	case sql.ErrNoRows:
-		return "", nil
-	default:
-		log.Errorf("Storage: Place: GetType: get type place by name query err: %s", err)
-		return "", err
-	}
-
-	typeplaceID := pl.id.String
-
-	return typeplaceID, nil
 }
 
 func (s *PlaceStorage) ListType(ctx context.Context) (map[string]*types.TypePlaces, error) {

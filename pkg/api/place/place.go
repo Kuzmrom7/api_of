@@ -7,7 +7,6 @@ import (
 	"github.com/orderfood/api_of/pkg/api/place/routes/request"
 	"github.com/orderfood/api_of/pkg/common/types"
 	"github.com/orderfood/api_of/pkg/log"
-	"strings"
 )
 
 type place struct {
@@ -18,29 +17,6 @@ func New(c context.Context) *place {
 	return &place{
 		context: c,
 	}
-}
-
-func (p *place) GetIDTypePlaceByName(name_typeplace string) (string, error) {
-
-	var (
-		storage = ctx.Get().GetStorage()
-	)
-
-	log.Debugf("Place: get id type place by name %s", name_typeplace)
-
-	name_typeplace = strings.ToLower(name_typeplace)
-
-	typeplace_id, err := storage.Place().GetTypePlaceByName(p.context, name_typeplace)
-	if err != nil {
-		log.Errorf("Place: get id type place by name `%s` err: %s", name_typeplace, err)
-		return "", err
-	}
-	if typeplace_id == "" {
-		log.Warnf("Place: id type place by name `%s` not found", name_typeplace)
-		return "", nil
-	}
-
-	return typeplace_id, nil
 }
 
 func (p *place) Create(user string, rq *request.RequestPlaceCreate) (*types.Place, error) {
@@ -54,7 +30,7 @@ func (p *place) Create(user string, rq *request.RequestPlaceCreate) (*types.Plac
 
 	plc.Meta.Name = rq.Name
 
-	for _, typepl := range rq.TypesPlace{
+	for _, typepl := range rq.TypesPlace {
 		plc.TypesPlace = append(plc.TypesPlace, types.TypePlaces{
 			ID: typepl.IdTypePlace,
 		})
@@ -86,7 +62,7 @@ func (r *place) List() (map[string]*types.TypePlaces, error) {
 	return list, nil
 }
 
-func (u *place)GetPlaceByID(id string)(*types.Place, error){
+func (u *place) GetPlaceByID(id string) (*types.Place, error) {
 	var (
 		storage = ctx.Get().GetStorage()
 	)
