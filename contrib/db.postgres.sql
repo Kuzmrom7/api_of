@@ -86,6 +86,7 @@ CREATE EXTENSION "uuid-ossp";
    updated             TIMESTAMP                                  DEFAULT now()
 
  );
+
  CREATE TABLE dish
  (
    id_dish          UUID PRIMARY KEY                        NOT NULL DEFAULT  uuid_generate_v4(),
@@ -93,7 +94,7 @@ CREATE EXTENSION "uuid-ossp";
    name_dish        VARCHAR(256) ,
    id_typeDish      UUID REFERENCES type_dish (id_typeDish),
    description      VARCHAR(256)                            DEFAULT '',
-   url              VARCHAR(256)                            DEFAULT '',
+   url              JSONB                                   DEFAULT '[]',
    time_min         INTEGER                                 DEFAULT 0,
    created          TIMESTAMP                               DEFAULT now(),
    updated          TIMESTAMP                               DEFAULT now()
@@ -103,16 +104,6 @@ CREATE TABLE menudish
 (
   id_menu UUID REFERENCES menu (id_menu),
   id_dish UUID REFERENCES dish (id_dish)
-);
-
-CREATE TABLE img_dish
-(
-  id_img             UUID PRIMARY KEY               NOT NULL DEFAULT  uuid_generate_v4(),
-  url                VARCHAR(256)                   NOT NULL,
-  id_dish            UUID REFERENCES dish (id_dish) NOT NULL,
-  created            TIMESTAMP                      DEFAULT now(),
-  updated            TIMESTAMP                      DEFAULT now()
-
 );
 
  CREATE TABLE type_personal

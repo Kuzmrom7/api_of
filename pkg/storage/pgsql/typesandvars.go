@@ -9,27 +9,16 @@ import (
 const (
 	//-----------------DISH-------------------//
 
-	sqlstrListDish = `
-					SELECT dish.id_dish, dish.name_dish, dish.description, dish.url, dish.updated, dish.created, dish.time_min
-					FROM dish
-					WHERE dish.user_id = $1;`
+
 
 	sqlFetchDish = `
 		SELECT dish.id_dish, dish.name_dish, dish.description, dish.url, dish.updated, dish.created, dish.time_min
 		FROM dish
 		WHERE dish.user_id = $1 AND dish.name_dish = $2;`
 
-	sqlCreateDich = `
-		INSERT INTO dish (name_dish, description, time_min, id_typeDish, url, user_id)
-		VALUES ($1, $2, $3, $4, $5, $6)
-		RETURNING id_dish;
-	`
-
 	sqlDichIDGetByName = `SELECT dish.id_dish
 		FROM dish
 		WHERE dish.name_dish = $1 and dish.user_id = $2;`
-
-	sqlDichRemove = `DELETE FROM dish WHERE id_dish = $1;`
 
 	sqlstrListTypeDish = `
 		SELECT type_dish.id_typeDish, type_dish.name_typeDish
@@ -38,15 +27,6 @@ const (
 	ssqlTypeDishlIDGetByName = `SELECT type_dish.id_typeDish
 		FROM type_dish
 		WHERE type_dish.name_typeDish = $1;`
-
-	sqlstrDishUpdate = `
-		UPDATE dish
-		SET
-			time_min = $1,
-			description = $2,
-			updated = now()
-		WHERE name_dish = $3 AND user_id = $4
-		RETURNING updated;`
 
 	//-----------------MENU-------------------//
 

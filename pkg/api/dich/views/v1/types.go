@@ -5,15 +5,19 @@ import "time"
 type Dich struct {
 	Name    string    `json:"name,omitempty"`
 	Desc    string    `json:"description,omitempty"`
-	Url     string 		`json:"url"`
-	Timemin int64 		`json:"timemin"`
+	Urls    []*UrlOpt `json:"urls,omitempty"`
+	Timemin int64     `json:"timemin"`
 	Created time.Time `json:"created"`
 	Updated time.Time `json:"updated"`
 }
 
+type UrlOpt struct {
+	Url string `json:"url"`
+}
+
 type DichList []*Dich
 
-type TypeDishListinMenu map[string] DichList
+type TypeDishListinMenu map[string]DichList
 
 type TypeDishList []*TypeDish
 

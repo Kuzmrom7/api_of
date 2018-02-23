@@ -9,7 +9,18 @@ func newDich(obj *types.Dish) *Dich {
 	d := new(Dich)
 	d.Name = obj.Meta.Name
 	d.Desc = obj.Meta.Desc
-	d.Url = obj.Meta.Url
+
+	d.Urls = make([]*UrlOpt, 0)
+	if obj.Urls != nil {
+		for _, url := range obj.Urls {
+			u := new(UrlOpt)
+
+			u.Url = url.Url
+
+			d.Urls = append(d.Urls, u)
+		}
+	}
+
 	d.Timemin = obj.Meta.Timemin
 	d.Created = obj.Meta.Created
 	d.Updated = obj.Meta.Updated
@@ -25,7 +36,16 @@ func New(obj *types.Dish) *Dich {
 	i := new(Dich)
 	i.Name = obj.Meta.Name
 	i.Desc = obj.Meta.Desc
-	i.Url = obj.Meta.Url
+	i.Urls = make([]*UrlOpt, 0)
+	if obj.Urls != nil {
+		for _, url := range obj.Urls {
+			u := new(UrlOpt)
+
+			u.Url = url.Url
+
+			i.Urls = append(i.Urls, u)
+		}
+	}
 	i.Timemin = obj.Meta.Timemin
 	i.Updated = obj.Meta.Updated
 	i.Created = obj.Meta.Created
@@ -36,13 +56,21 @@ func NewDm(obj *types.Dish) *Dich {
 	i := new(Dich)
 	i.Name = obj.Meta.Name
 	i.Desc = obj.Meta.Desc
-	i.Url = obj.Meta.Url
+	i.Urls = make([]*UrlOpt, 0)
+	if obj.Urls != nil {
+		for _, url := range obj.Urls {
+			u := new(UrlOpt)
+
+			u.Url = url.Url
+
+			i.Urls = append(i.Urls, u)
+		}
+	}
 	i.Timemin = obj.Meta.Timemin
 	i.Updated = obj.Meta.Updated
 	i.Created = obj.Meta.Created
 	return i
 }
-
 
 func Newt(obj *types.TypeDishes) *TypeDish {
 	i := new(TypeDish)

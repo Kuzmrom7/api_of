@@ -3,7 +3,12 @@ package types
 import "time"
 
 type Dish struct {
-	Meta DishMeta `json:"meta"`
+	Meta DishMeta  `json:"meta"`
+	Urls []UrlsOpt `json:"urls,omitempty"`
+}
+
+type UrlsOpt struct {
+	Url string `json:"url"`
 }
 
 type DishMeta struct {
@@ -12,7 +17,6 @@ type DishMeta struct {
 	Desc       string    `json:"description,omitempty"`
 	Timemin    int64     `json:"timemin,omitempty"`
 	UserID     string    `json:"userid"`
-	Url        string    `json:"url"`
 	TypeDishID string    `json:"typedish"`
 	Created    time.Time `json:"created"`
 	Updated    time.Time `json:"updated"`

@@ -1,15 +1,14 @@
 package pgsql
 
 import (
-	//"github.com/orderfood/api_of/pkg/storage/storage"
 	"github.com/orderfood/api_of/pkg/storage/store"
+	"github.com/orderfood/api_of/pkg/log"
 	"github.com/orderfood/api_of/pkg/common/types"
 	"context"
-	"log"
 	"errors"
 	"database/sql"
-	//"encoding/json"
 	"time"
+	"encoding/json"
 )
 
 func (nm *dichModel) convert() *types.Dish {
@@ -18,7 +17,6 @@ func (nm *dichModel) convert() *types.Dish {
 	c.Meta.ID = nm.id.String
 	c.Meta.Name = nm.name.String
 	c.Meta.Desc = nm.description.String
-	c.Meta.Url = nm.url.String
 	c.Meta.Updated = nm.updated
 	c.Meta.TypeDishID = nm.id_Type.String
 	c.Meta.Created = nm.created
@@ -27,12 +25,13 @@ func (nm *dichModel) convert() *types.Dish {
 	return c
 }
 
-func (s *DishStorage) CreateDish(ctx context.Context, dich *types.Dish) error {
+func (s *DishStorage) CreateDish(ctx context.Context, dish *types.Dish) error {
 
-	log.Println("STORAGE--- CreateDish()")
+	log.Debug("Storage: Dish: Insert: insert dish: %#v", dish)
 
-	if dich == nil {
-		err := errors.New("dich can not be nil")
+	if dish == nil {
+		err := errors.New("dish can not be nil")
+		log.Errorf("Storage: Dish: Insert: insert dish err: %s", err)
 		return err
 	}
 
@@ -41,89 +40,153 @@ func (s *DishStorage) CreateDish(ctx context.Context, dich *types.Dish) error {
 		id  store.NullString
 	)
 
-	err = s.client.QueryRow(sqlCreateDich, dich.Meta.Name, dich.Meta.Desc, dich.Meta.Timemin, dich.Meta.TypeDishID, dich.Meta.Url, dich.Meta.UserID).Scan(&id)
+	urls, err := json.Marshal(dish.Urls)
+	if err != nil {
+		log.Errorf("Storage: Dish: prepare types struct to database write: %s", err)
+		urls = []byte("{}")
+	}
 
-	dich.Meta.ID = id.String
+	const sqlCreateDich = `
+		INSERT INTO dish (name_dish, description, time_min, id_typeDish, url, user_id)
+		VALUES ($1, $2, $3, $4, $5, $6)
+		RETURNING id_dish;
+	`
+
+	err = s.client.QueryRow(sqlCreateDich, dish.Meta.Name, dish.Meta.Desc, dish.Meta.Timemin, dish.Meta.TypeDishID, string(urls), dish.Meta.UserID).Scan(&id)
+	if err != nil {
+		log.Errorf("Storage: Dish: Insert: insert dish query err: %s", err)
+		return err
+	}
+
+	dish.Meta.ID = id.String
 
 	return err
 }
 
-func (s *DishStorage) GetIdDishByName(ctx context.Context, name, usrid string) (string, error) {
-	var (
-		err error
-		di  = new(dichModel)
-	)
-
-	err = s.client.QueryRow(sqlDichIDGetByName, name, usrid).Scan(&di.id)
-
-	switch err {
-	case nil:
-	case sql.ErrNoRows:
-		return "", nil
-	default:
-		return "", err
-	}
-
-	dishID := di.id.String
-
-	return dishID, nil
-}
-
 func (s *DishStorage) RemoveDish(ctx context.Context, id string) error {
+
+	const sqlDichRemove = `DELETE FROM dish WHERE id_dish = $1;`
+
+	log.Debugf("Storage: Dish: Delete: delete dish by id %s", id)
+
+	if id == "" {
+		err := errors.New("id can not be nil")
+		log.Errorf("Storage: Dish: Delete: delete dish err: %s", err)
+		return err
+	}
 
 	_, err := s.client.Exec(sqlDichRemove, id)
 	if err != nil {
+		log.Errorf("Storage: Dish: Delete: delete dish exec err: %s", err)
 		return err
 	}
 	return nil
 }
 
-func (s *DishStorage) Update(ctx context.Context, usrid string, dish *types.Dish) error {
+func (s *DishStorage) Update(ctx context.Context, dish *types.Dish) error {
+
+	log.Debugf("Storage: Dish: Update: update dish: %#v", dish)
 
 	if dish == nil {
 		err := errors.New("dish can not be nil")
-		return err
-	}
-	if usrid == "" {
-		err := errors.New("usrid can not be nil")
+		log.Errorf("Storage: Dish: Update: update dish err: %s", err)
 		return err
 	}
 
 	dish.Meta.Updated = time.Now()
 
+	const sqlstrDishUpdate = `
+		UPDATE dish
+		SET
+			time_min = $1,
+			description = $2,
+			updated = now()
+		WHERE id_dish = $3
+		RETURNING updated;`
+
 	err := s.client.QueryRow(sqlstrDishUpdate, dish.Meta.Timemin, dish.Meta.Desc,
-		dish.Meta.Name, usrid).Scan(&dish.Meta.Updated)
+		dish.Meta.ID).Scan(&dish.Meta.Updated)
 	if err != nil {
+		log.Errorf("Storage: Dish: Update: update dish query err: %s", err)
 		return err
 	}
 	return nil
 }
 
-func (s *DishStorage) Fetch(ctx context.Context, usrid, name string) (*types.Dish, error) {
+func (s *DishStorage) Fetch(ctx context.Context, id string) (*types.Dish, error) {
 
 	var (
 		err error
-		di  = new(dichModel)
 	)
 
-	err = s.client.QueryRow(sqlFetchDish, usrid, name).Scan(&di.id, &di.name, &di.description, &di.url, &di.updated, &di.created, &di.timemin)
+	log.Debugf("Storage: Dish: Get: get dish by id: %s ", id)
+
+	const sqlFetchDish = `
+			SELECT to_json(
+				json_build_object(
+					'meta', json_build_object(
+					'id', id_dish,
+					'name', name_dish,
+					'description', description,
+					'timemin', time_min,
+					'updated', updated
+					'created', created
+				),
+				'urls', url
+				)
+			)
+			FROM place
+			WHERE place.id_place = $1;`
+
+	var buf string
+
+	err = s.client.QueryRow(sqlFetchDish, id).Scan(&buf)
 	switch err {
 	case nil:
 	case sql.ErrNoRows:
 		return nil, nil
 	default:
+		log.Errorf("Storage: Dish: Get: get dish by id query err: %s", err)
 		return nil, err
 	}
 
-	dish := di.convert()
+	di := new(types.Dish)
 
-	return dish, nil
+	if err := json.Unmarshal([]byte(buf), &di); err != nil {
+		return nil, err
+	}
+
+	return di, nil
 
 }
 
-func (s *DishStorage) List(ctx context.Context, userid string) (map[string]*types.Dish, error) {
+func (s *DishStorage) List(ctx context.Context, userid string) ([]*types.Dish, error) {
 
-	dishes := make(map[string]*types.Dish)
+	var dishes []*types.Dish
+
+	log.Debug("Storage: Dish: List: get list dishes by user id %s", userid)
+
+	const sqlstrListDish = `
+			SELECT to_json(
+				json_build_object(
+					'meta', json_build_object(
+					'id', id_dish,
+					'name', name_dish,
+					'description', description,
+					'timemin', time_min,
+					'updated', updated
+					'created', created
+				),
+				'urls', url
+				)
+			)
+			FROM dish
+			WHERE dish.user_id = $1;`
+
+	//const sqlstrListDish = `
+	//				SELECT dish.id_dish, dish.name_dish, dish.description, dish.url, dish.updated, dish.created, dish.time_min
+	//				FROM dish
+	//				WHERE dish.user_id = $1;`
 
 	rows, err := s.client.Query(sqlstrListDish, userid)
 	switch err {
@@ -131,22 +194,26 @@ func (s *DishStorage) List(ctx context.Context, userid string) (map[string]*type
 	case sql.ErrNoRows:
 		return nil, nil
 	default:
-
+		log.Errorf("Storage: Dish: List: get list dishes query err: %s", err)
 		return nil, err
 	}
-	log.Println(userid)
 
 	for rows.Next() {
 
-		di := new(dichModel)
+		var buf string
 
-		if err := rows.Scan(&di.id, &di.name, &di.description, &di.url, &di.updated, &di.created, &di.timemin); err != nil {
-
+		if err := rows.Scan(&buf); err != nil {
+			log.Errorf("Storage: Dish: List: get list dishes scan rows err: %s", err)
 			return nil, err
 		}
 
-		c := di.convert()
-		dishes[c.Meta.ID] = c
+		di := new(types.Dish)
+
+		if err := json.Unmarshal([]byte(buf), &di); err != nil {
+			return nil, err
+		}
+
+		dishes = append(dishes, di)
 	}
 
 	return dishes, nil
@@ -177,27 +244,6 @@ func (s *DishStorage) TypeList(ctx context.Context) (map[string]*types.TypeDishe
 	}
 
 	return tydishes, nil
-}
-
-func (s *DishStorage) GetTypeDishIDByName(ctx context.Context, name string) (string, error) {
-	var (
-		err  error
-		dish = new(idModel)
-	)
-
-	err = s.client.QueryRow(ssqlTypeDishlIDGetByName, name).Scan(&dish.id)
-
-	switch err {
-	case nil:
-	case sql.ErrNoRows:
-		return "", nil
-	default:
-		return "", err
-	}
-
-	dishID := dish.id.String
-
-	return dishID, nil
 }
 
 func (nm *typeModelDishes) convert() *types.TypeDishes {

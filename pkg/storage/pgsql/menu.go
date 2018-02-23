@@ -7,6 +7,7 @@ import (
 	"github.com/orderfood/api_of/pkg/log"
 	"context"
 	"errors"
+	"encoding/json"
 )
 
 func (s *MenuStorage) CreateMenu(ctx context.Context, menu *types.Menu) error {
@@ -76,27 +77,6 @@ func (s *MenuStorage) List(ctx context.Context, placeid string) (map[string]*typ
 	}
 
 	return menus, nil
-}
-
-func (s *MenuStorage) GetIDmenuByName(ctx context.Context, name string) (string, error) {
-	var (
-		err error
-		di  = new(dichModel)
-	)
-
-	err = s.client.QueryRow(sqlMenuIDGetByName, name).Scan(&di.id)
-
-	switch err {
-	case nil:
-	case sql.ErrNoRows:
-		return "", nil
-	default:
-		return "", err
-	}
-
-	menuID := di.id.String
-
-	return menuID, nil
 }
 
 func (s *MenuStorage) InsertDishInMenu(ctx context.Context, menuid, dishid string) error {
@@ -188,14 +168,26 @@ func (s *MenuStorage) Fetch(ctx context.Context, id string) (*types.Menu, error)
 
 }
 
-func (s *MenuStorage) ListDishesInMenu(ctx context.Context, menuid, usrid string) (map[string]*types.Dish, error) {
+func (s *MenuStorage) ListDishesInMenu(ctx context.Context, menuid, usrid string) ([]*types.Dish, error) {
 
-	menudishes := make(map[string]*types.Dish)
+	var dishes []*types.Dish
 
 	log.Debug("Storage: Menu: Dish: List: get list dishes in menu")
 
 	const sqlstrListMenuDishes = `
-					SELECT dish.id_dish, dish.name_dish, dish.description, dish.url, dish.updated, dish.id_typeDish, dish.created, dish.time_min
+					SELECT to_json(
+				json_build_object(
+					'meta', json_build_object(
+					'id', id_dish,
+					'name', name_dish,
+					'description', description,
+					'timemin', time_min,
+					'updated', updated
+					'created', created
+				),
+				'urls', url
+				)
+			)
 					FROM dish
 							INNER JOIN menudish on menudish.id_dish = dish.id_dish
 							INNER JOIN menu on menu.id_menu = menudish.id_menu
@@ -213,28 +205,45 @@ func (s *MenuStorage) ListDishesInMenu(ctx context.Context, menuid, usrid string
 
 	for rows.Next() {
 
-		di := new(dichModel)
+		var buf string
 
-		if err := rows.Scan(&di.id, &di.name, &di.description, &di.url, &di.updated, &di.id_Type, &di.created, &di.timemin); err != nil {
+		if err := rows.Scan(&buf); err != nil {
 			log.Errorf("Storage: Menu: Dish: List: get list dishes in menu scan rows err: %s", err)
 			return nil, err
 		}
 
-		c := di.convert()
-		menudishes[c.Meta.ID] = c
+		di := new(types.Dish)
+
+		if err := json.Unmarshal([]byte(buf), &di); err != nil {
+			return nil, err
+		}
+
+		dishes = append(dishes, di)
 	}
 
-	return menudishes, nil
+	return dishes, nil
 }
 
-func (s *MenuStorage) ListDishesNotMenu(ctx context.Context, menuid, userid string) (map[string]*types.Dish, error) {
+func (s *MenuStorage) ListDishesNotMenu(ctx context.Context, menuid, userid string) ([]*types.Dish, error) {
 
-	dishes := make(map[string]*types.Dish)
+	var dishes []*types.Dish
 
 	log.Debug("Storage: Menu: Dish: List: get list dishes not menu")
 
 	const sqlstrListDishNotMenu = `
-					SELECT dish.id_dish, dish.name_dish, dish.description, dish.url, dish.updated, dish.created, dish.time_min
+					SELECT to_json(
+				json_build_object(
+					'meta', json_build_object(
+					'id', id_dish,
+					'name', name_dish,
+					'description', description,
+					'timemin', time_min,
+					'updated', updated
+					'created', created
+				),
+				'urls', url
+				)
+			)
 					FROM dish
 					WHERE dish.user_id = $2 AND dish.id_dish NOT IN
 								(
@@ -257,15 +266,20 @@ func (s *MenuStorage) ListDishesNotMenu(ctx context.Context, menuid, userid stri
 
 	for rows.Next() {
 
-		di := new(dichModel)
+		var buf string
 
-		if err := rows.Scan(&di.id, &di.name, &di.description, &di.url, &di.updated, &di.created, &di.timemin); err != nil {
+		if err := rows.Scan(&buf); err != nil {
 			log.Errorf("Storage: Menu: Dish: List: get list dishes not menu scan rows err: %s", err)
 			return nil, err
 		}
 
-		c := di.convert()
-		dishes[c.Meta.ID] = c
+		di := new(types.Dish)
+
+		if err := json.Unmarshal([]byte(buf), &di); err != nil {
+			return nil, err
+		}
+
+		dishes = append(dishes, di)
 	}
 
 	return dishes, nil

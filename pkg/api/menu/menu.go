@@ -19,23 +19,6 @@ func New(c context.Context) *menu {
 	}
 }
 
-func (p *menu) GetIDMenuByName(name_menu string) (string, error) {
-
-	var (
-		storage = ctx.Get().GetStorage()
-	)
-
-	menu_id, err := storage.Menu().GetIDmenuByName(p.context, name_menu)
-	if err != nil {
-		return "", err
-	}
-	if menu_id == "" {
-		return "", nil
-	}
-
-	return menu_id, nil
-}
-
 func (p *menu) Create(rq *request.MenuCreate) (*types.Menu, error) {
 
 	var (
@@ -124,7 +107,7 @@ func (u *menu) GetMenuByID(id string) (*types.Menu, error) {
 	return men, nil
 }
 
-func (r *menu) ListMenuDish(menuid, usrid string) (map[string]*types.Dish, error) {
+func (r *menu) ListMenuDish(menuid, usrid string) ([]*types.Dish, error) {
 
 	var (
 		storage = ctx.Get().GetStorage()
@@ -140,7 +123,7 @@ func (r *menu) ListMenuDish(menuid, usrid string) (map[string]*types.Dish, error
 	return list, nil
 }
 
-func (r *menu) ListDishNotMenu(menuid, usrid string) (map[string]*types.Dish, error) {
+func (r *menu) ListDishNotMenu(menuid, usrid string) ([]*types.Dish, error) {
 
 	var (
 		storage = ctx.Get().GetStorage()

@@ -2,12 +2,13 @@ package routes
 
 import (
 	"net/http"
-	"log"
 
 	"github.com/orderfood/api_of/pkg/api/dich/views/v1"
 	"github.com/orderfood/api_of/pkg/api/dich/routes/request"
+	"github.com/orderfood/api_of/pkg/log"
 	"github.com/orderfood/api_of/pkg/common/errors"
 	"github.com/orderfood/api_of/pkg/api/dich"
+	"github.com/orderfood/api_of/pkg/util/http/utils"
 )
 
 func DishCreate(w http.ResponseWriter, r *http.Request) {
@@ -21,39 +22,34 @@ func DishCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rq := new(request.RequestDichCreate)
+	log.Debug("Handler: Dish: create dish")
+
+	rq := new(request.DishCreate)
 	if err := rq.DecodeAndValidate(r.Body); err != nil {
-		err.Http(w)
+		log.Errorf("Handler: Dish: validation incoming data err: %s", err.Err())
+		errors.New("Invalid incoming data").Unknown().Http(w)
 		return
-	}
-
-	d := dich.New(r.Context())
-
-	typedish_id, err := d.GetIDTypeDishByName(rq.TypeDish)
-	if err != nil {
-		errors.HTTP.InternalServerError(w)
-		return
-	}
-	log.Print(typedish_id)
-	if typedish_id == "" {
-		errors.New("typedish").NotFound().Http(w)
 	}
 
 	usrid1 := r.Context().Value("uid").(string)
 
-	di, err := d.Create(rq, typedish_id, usrid1)
+	di, err := dich.New(r.Context()).Create(rq, usrid1)
 	if err != nil {
+		log.Errorf("Handler: Dish: create dish", err)
 		errors.HTTP.InternalServerError(w)
+		return
 	}
 
 	response, err := v1.NewDich(di).ToJson()
 	if err != nil {
+		log.Errorf("Handler: Dish: convert struct to json err: %s", err)
 		errors.HTTP.InternalServerError(w)
+		return
 	}
 
 	w.WriteHeader(http.StatusOK)
 	if _, err = w.Write(response); err != nil {
-		log.Println("Dich write response error")
+		log.Errorf("Handler: Dish: write response err: %s", err)
 		return
 	}
 }
@@ -69,36 +65,46 @@ func DishUpdate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rq := new(request.RequestDichUpdate)
+	log.Debug("Handler: Dish: update dish")
+
+	rq := new(request.DishUpdate)
 	if err := rq.DecodeAndValidate(r.Body); err != nil {
-		err.Http(w)
+		log.Errorf("Handler: Dish: validation incoming data err: %s", err.Err())
+		errors.New("Invalid incoming data").Unknown().Http(w)
 		return
 	}
 
 	usrid1 := r.Context().Value("uid").(string)
 
-	dish, err := dich.New(r.Context()).GetDishByUsrIdAndDishName(usrid1, *rq.Name)
+	dish, err := dich.New(r.Context()).GetDishById(rq.Id)
 	if err != nil {
+		log.Errorf("Handler: Dish: get dish by id %s err: %s", rq.Id, err)
 		errors.HTTP.InternalServerError(w)
 		return
 	}
 	if dish == nil {
-		errors.New("dish").NotFound().Http(w)
+		log.Warnf("Handler: Dish: dish by id `%s` not found", rq.Id)
+		errors.New("place").NotFound().Http(w)
+		return
 	}
 
 	err = dich.New(r.Context()).Update(usrid1, rq, dish)
 	if err != nil {
+		log.Errorf("Handler: Dish: update dish err: %s", err)
 		errors.HTTP.InternalServerError(w)
+		return
 	}
 
 	response, err := v1.NewDich(dish).ToJson()
 	if err != nil {
+		log.Errorf("Handler: Dish: convert struct to json err: %s", err)
 		errors.HTTP.InternalServerError(w)
+		return
 	}
 
 	w.WriteHeader(http.StatusOK)
 	if _, err = w.Write(response); err != nil {
-		log.Println("Dish update response error")
+		log.Errorf("Handler: Dish: write response err: %s", err)
 		return
 	}
 
@@ -111,35 +117,36 @@ func DishGet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	did := utils.Vars(r)["dish"]
+
 	var (
 		err error
 	)
 
-	rq := new(request.RequestDichRemoveFetch)
-	if err := rq.DecodeAndValidate(r.Body); err != nil {
-		err.Http(w)
-		return
-	}
+	log.Debug("Handler: Dish: get dish")
 
-	usrid := r.Context().Value("uid").(string)
-
-	dish, err := dich.New(r.Context()).GetDishByUsrIdAndDishName(usrid, rq.Name)
+	dish, err := dich.New(r.Context()).GetDishById(did)
 	if err != nil {
+		log.Errorf("Handler: Dish: get dish", err)
 		errors.HTTP.InternalServerError(w)
 		return
 	}
 	if dish == nil {
+		log.Warnf("Handler: Dish: dish by id `%s` not found", did)
 		errors.New("dish").NotFound().Http(w)
+		return
 	}
 
 	response, err := v1.NewDich(dish).ToJson()
 	if err != nil {
+		log.Errorf("Handler: Dish: convert struct to json err: %s", err)
 		errors.HTTP.InternalServerError(w)
+		return
 	}
 
 	w.WriteHeader(http.StatusOK)
 	if _, err = w.Write(response); err != nil {
-		log.Println("Dish fetch response error")
+		log.Errorf("Handler: Dish: write response err: %s", err)
 		return
 	}
 }
@@ -151,35 +158,20 @@ func DishRemove(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	usrid := r.Context().Value("uid").(string)
+	did := utils.Vars(r)["dish"]
 
-	rq := new(request.RequestDichRemoveFetch)
-	if err := rq.DecodeAndValidate(r.Body); err != nil {
-		err.Http(w)
-		return
-	}
+	log.Debug("Handler: Dish: delete dish")
 
-	d := dich.New(r.Context())
-
-	dich_id, err := d.GetIDdishByName(rq.Name, usrid)
+	err := dich.New(r.Context()).Remove(did)
 	if err != nil {
-		errors.HTTP.InternalServerError(w)
-		return
-	}
-	log.Print(dich_id)
-	if dich_id == "" {
-		errors.New("dich").NotFound().Http(w)
-	}
-
-	err = d.Remove(dich_id)
-	if err != nil {
+		log.Errorf("Handler: Dish: delete dish err %s", err)
 		errors.HTTP.InternalServerError(w)
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
 	if _, err = w.Write([]byte{}); err != nil {
-		log.Println("Dich remove response error")
+		log.Errorf("Handler: Dish: Dish: write response err: %s", err)
 		return
 	}
 }
@@ -191,22 +183,27 @@ func DishList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	log.Debug("Handler: Dish: List: list dishes")
+
 	usrid1 := r.Context().Value("uid").(string)
 
 	items, err := dich.New(r.Context()).List(usrid1)
 	if err != nil {
+		log.Errorf("Handler: Dish: List: list dishes err ", err)
 		errors.HTTP.InternalServerError(w)
 		return
 	}
 
 	response, err := v1.NewList(items).ToJson()
 	if err != nil {
+		log.Errorf("Handler: Dish: List: convert struct to json err: %s", err)
 		errors.HTTP.InternalServerError(w)
+		return
 	}
 
 	w.WriteHeader(http.StatusOK)
 	if _, err = w.Write(response); err != nil {
-		log.Println("Dich list response error")
+		log.Errorf("Handler: Dish: List: write response err: %s", err)
 		return
 	}
 }
@@ -226,7 +223,7 @@ func TypeDishList(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	if _, err = w.Write(response); err != nil {
-		log.Println("Dich list response error")
+
 		return
 	}
 }
