@@ -6,7 +6,7 @@ func NewDich(obj *types.Dish) *Dich {
 	return newDich(obj)
 }
 
-func NewList(obj map[string]*types.Dish) *DichList {
+func NewList(obj []*types.Dish) *DichList {
 	if obj == nil {
 		return nil
 	}
@@ -18,7 +18,7 @@ func NewList(obj map[string]*types.Dish) *DichList {
 	return &r
 }
 
-func NewListD(dish map[string]*types.Dish, typedish map[string]*types.TypeDishes) *TypeDishListinMenu {
+func NewListD(dish []*types.Dish, typedish map[string]*types.TypeDishes) *TypeDishListinMenu {
 	if dish == nil {
 		return nil
 	}

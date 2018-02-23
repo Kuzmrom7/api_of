@@ -4,100 +4,92 @@ import (
 	"io"
 
 	"github.com/orderfood/api_of/pkg/common/errors"
+	"github.com/orderfood/api_of/pkg/log"
 	"io/ioutil"
 	"encoding/json"
 )
 
-type RequestDichCreate struct {
-	Name     string `json:"name,omitempty"`
-	Desc     string `json:"description,omitempty"`
-	Timemin  int64  `json:"timemin,omitempty"`
-	TypeDish string `json:"typedish"`
-	Url      string `json:"url"`
+type DishCreate struct {
+	Name     string   `json:"name,omitempty"`
+	Desc     string   `json:"description,omitempty"`
+	Timemin  int64    `json:"timemin,omitempty"`
+	IdTypeDish string   `json:"idtypedish"`
+	Urls     []UrlOpt `json:"urls"`
 }
 
-type RequestDichUpdate struct {
-	Name     *string `json:"name,omitempty"`
-	Desc     *string `json:"description,omitempty"`
-	Timemin  *int64  `json:"timemin,omitempty"`
+type UrlOpt struct {
+	Url string `json:"url"`
 }
 
-type RequestDichRemoveFetch struct {
-	Name string `json:"name,omitempty"`
+type DishUpdate struct {
+	Id    	 string `json:"id,omitempty"`
+	Desc    *string `json:"description,omitempty"`
+	Timemin *int64  `json:"timemin,omitempty"`
 }
 
-func (s *RequestDichCreate) DecodeAndValidate(reader io.Reader) *errors.Err {
+func (s *DishCreate) DecodeAndValidate(reader io.Reader) *errors.Err {
 
 	var (
 		err error
 	)
 
+	log.Debug("Request: Dish: decode and validate data for creating")
+
 	body, err := ioutil.ReadAll(reader)
 	if err != nil {
-		return errors.New("dich").Unknown(err)
+		log.Errorf("Request: Dish: decode and validate data for creating err: %s", err)
+		return errors.New("dish").Unknown(err)
 	}
 	err = json.Unmarshal(body, s)
 	if err != nil {
-		return errors.New("dich").IncorrectJSON(err)
+		log.Errorf("Request: Dish: convert struct from json err: %s", err)
+		return errors.New("dish").IncorrectJSON(err)
 	}
 
 	if s.Name == "" {
+		log.Error("Request: Dish: parameter name dish can not be empty")
 		return errors.New("dish").BadParameter("name")
 	}
 
 	if s.Desc == "" {
-		return errors.New("dish").BadParameter("name")
+		log.Error("Request: Dish: parameter desc dish can not be empty")
+		return errors.New("dish").BadParameter("desc")
 	}
 
-	if s.TypeDish == "" {
-		return errors.New("dish").BadParameter("typedish")
+	if s.IdTypeDish == "" {
+		log.Error("Request: Dish: parameter id type dish can not be empty")
+		return errors.New("dish").BadParameter("idtypedish")
 	}
 
-	if s.Url == "" {
-		return errors.New("dish").BadParameter("url")
-	}
-
-	return nil
-}
-
-
-func (s *RequestDichUpdate) DecodeAndValidate(reader io.Reader) *errors.Err {
-
-	var (
-		err error
-	)
-
-	body, err := ioutil.ReadAll(reader)
-	if err != nil {
-		return errors.New("dich").Unknown(err)
-	}
-	err = json.Unmarshal(body, s)
-	if err != nil {
-		return errors.New("dich").IncorrectJSON(err)
-	}
-
-	if s.Name == nil {
-		return errors.New("dish").BadParameter("name")
+	if len(s.Urls) == 0 {
+		log.Error("Request: Dish: parameter urls dish can not be empty")
+		return errors.New("dish").BadParameter("urls")
 	}
 
 	return nil
 }
 
-func (s *RequestDichRemoveFetch) DecodeAndValidate(reader io.Reader) *errors.Err {
+func (s *DishUpdate) DecodeAndValidate(reader io.Reader) *errors.Err {
 
 	var (
 		err error
 	)
 
+	log.Debug("Request: Dish: decode and validate data for updating")
+
 	body, err := ioutil.ReadAll(reader)
 	if err != nil {
-		return errors.New("dich").Unknown(err)
+		log.Errorf("Request: Dish: decode and validate data for updating err: %s", err)
+		return errors.New("dish").Unknown(err)
 	}
 	err = json.Unmarshal(body, s)
 	if err != nil {
-		return errors.New("dich").IncorrectJSON(err)
+		log.Errorf("Request: Dish: convert struct from json err: %s", err)
+		return errors.New("dish").IncorrectJSON(err)
 	}
-	if s.Name == "" {
+
+	if s.Id == "" {
+		log.Error("Request: Dish: parameter id dish can not be empty")
 		return errors.New("dish").BadParameter("name")
 	}
 
