@@ -8,6 +8,7 @@ import (
 	"github.com/orderfood/api_of/pkg/api/place/routes/request"
 	"github.com/orderfood/api_of/pkg/common/errors"
 	"github.com/orderfood/api_of/pkg/api/place"
+	"github.com/orderfood/api_of/pkg/util/http/utils"
 )
 
 //------------------------------------CREATE PLACE----------------------------------------------//
@@ -24,7 +25,7 @@ func PlaceCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rq := new(request.RequestPlaceCreate)
+	rq := new(request.PlaceCreate)
 	if err := rq.DecodeAndValidate(r.Body); err != nil {
 		log.Errorf("Handler: Place: validation incoming data err: %s", err.Err())
 		errors.New("Invalid incoming data").Unknown().Http(w)
@@ -34,19 +35,7 @@ func PlaceCreate(w http.ResponseWriter, r *http.Request) {
 
 	p := place.New(r.Context())
 
-	typeplace_id, err := p.GetIDTypePlaceByName(rq.NameTypePlace)
-	if err != nil {
-		log.Errorf("Handler: Place: get id type place by type name err: %s", err)
-		errors.HTTP.InternalServerError(w)
-		return
-	}
-	if typeplace_id == "" {
-		log.Warnf("Handler: Place: id type place by name `%s` not found", rq.NameTypePlace)
-		errors.New("type_place").NotFound().Http(w)
-		return
-	}
-
-	plc, err := p.Create(usrid1, typeplace_id, rq)
+	plc, err := p.Create(usrid1, rq)
 	if err != nil {
 		log.Errorf("Handler: Place: create place", err)
 		errors.HTTP.InternalServerError(w)
@@ -94,7 +83,9 @@ func TypePlaceList(w http.ResponseWriter, r *http.Request) {
 }
 
 //------------------------------------INFORMATION ABOUT PLACE--------------------------------------------//
-func GetPlace(w http.ResponseWriter, r *http.Request) {
+func GetPlaceInfo(w http.ResponseWriter, r *http.Request) {
+
+	pid := utils.Vars(r)["place"]
 
 	if r.Context().Value("uid") == nil {
 		errors.HTTP.Unauthorized(w)
@@ -103,20 +94,19 @@ func GetPlace(w http.ResponseWriter, r *http.Request) {
 
 	var (
 		err error
-		id  = r.Context().Value("uid").(string)
 	)
 
 	log.Debug("Handler: Place: get place")
 
 	p := place.New(r.Context())
-	plc, err := p.GetPlaceByIDUsr(id)
+	plc, err := p.GetPlaceByID(pid)
 	if err != nil {
 		log.Errorf("Handler: Place: get place", err)
 		errors.HTTP.InternalServerError(w)
 		return
 	}
 	if plc == nil {
-		log.Warnf("Handler: Place: place by user id `%s` not found", id)
+		log.Warnf("Handler: Place: place by id `%s` not found", pid)
 		errors.New("place").NotFound().Http(w)
 		return
 	}
@@ -149,7 +139,7 @@ func PlaceUpdate(w http.ResponseWriter, r *http.Request) {
 
 	log.Debug("Handler: Place: update place")
 
-	rq := new(request.RequestPlaceUpdate)
+	rq := new(request.PlaceUpdate)
 	if err := rq.DecodeAndValidate(r.Body); err != nil {
 		err.Http(w)
 		return
@@ -159,7 +149,7 @@ func PlaceUpdate(w http.ResponseWriter, r *http.Request) {
 
 	p := place.New(r.Context())
 
-	plc, err := p.GetPlaceByIDUsr(id)
+	plc, err := p.GetPlaceByID(rq.Id)
 	if err != nil {
 		errors.HTTP.InternalServerError(w)
 		return

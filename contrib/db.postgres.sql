@@ -60,9 +60,9 @@ CREATE EXTENSION "uuid-ossp";
    phone_number          VARCHAR(256)                                 DEFAULT '',
    url                   VARCHAR(256)                                 DEFAULT '',
    city                  VARCHAR(256)                                 DEFAULT '',
-   adress                VARCHAR(256)                                 DEFAULT '',
+   adress                JSONB                                        DEFAULT '[]',
    user_id               UUID REFERENCES users (user_id)              NOT NULL,
-   id_typePlace          UUID REFERENCES type_place (id_typePlace)    NOT NULL,
+   type                  JSONB                                        DEFAULT '[]',
    created               TIMESTAMP                                    DEFAULT now(),
    updated               TIMESTAMP                                    DEFAULT now()
  );

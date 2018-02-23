@@ -106,11 +106,6 @@ const (
 		FROM place
 		WHERE place.user_id = $1;`
 
-	sqlCreatePlace = `
-		INSERT INTO place (name, phone_number, url, city, adress, user_id, id_typePlace)
-		VALUES ($1, $2, $3, $4, $5, $6, $7)
-		RETURNING id_place;
-	`
 	sqlTypePlaceIDGetByName = `SELECT type_place.id_typePlace
 		FROM type_place
 		WHERE type_place.name_type = $1;`
@@ -120,16 +115,6 @@ const (
 		FROM place
 		WHERE place.user_id = $1;`
 
-	sqlstrPlaceUpdate = `
-		UPDATE place
-		SET
-			phone_number = $1,
-			adress = $2,
-			city = $3,
-			url = $4,
-			updated = now()
-		WHERE name = $5
-		RETURNING updated;`
 
 	//-----------------USERS-------------------//
 
