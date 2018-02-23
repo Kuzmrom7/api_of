@@ -223,19 +223,26 @@ func (s *DishStorage) TypeList(ctx context.Context) (map[string]*types.TypeDishe
 
 	tydishes := make(map[string]*types.TypeDishes)
 
+	log.Debug("Storage: Dish: ListType: get type dish list")
+
+	const sqlstrListTypeDish = `
+		SELECT type_dish.id_typeDish, type_dish.name_typeDish
+		FROM type_dish;`
+
 	rows, err := s.client.Query(sqlstrListTypeDish)
 	switch err {
 	case nil:
 	case sql.ErrNoRows:
 		return nil, nil
 	default:
-
+		log.Errorf("Storage: Dish: ListType: get type dish list query err: %s", err)
 		return nil, err
 	}
 	for rows.Next() {
 		tp := new(typeModelDishes)
 
 		if err := rows.Scan(&tp.id, &tp.name); err != nil {
+			log.Errorf("Storage: Dish: ListType: get type dish list scan rows err: %s", err)
 			return nil, err
 		}
 

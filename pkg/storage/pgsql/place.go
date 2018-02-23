@@ -146,6 +146,10 @@ func (s *PlaceStorage) ListType(ctx context.Context) (map[string]*types.TypePlac
 
 	log.Debug("Storage: Place: ListType: get type place list")
 
+	const sqlstrListTypePlace = `
+		SELECT type_place.id_typePlace, type_place.name_type
+		FROM type_place;`
+
 	rows, err := s.client.Query(sqlstrListTypePlace)
 	switch err {
 	case nil:

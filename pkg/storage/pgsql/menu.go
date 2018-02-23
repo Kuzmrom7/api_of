@@ -129,6 +129,8 @@ func (s *MenuStorage) DeleteDishInMenu(ctx context.Context, menuid, dishid strin
 		return err
 	}
 
+	const sqlMenuDishRemove = `DELETE FROM menudish WHERE id_menu = $1 AND id_dish = $2;`
+
 	_, err := s.client.Exec(sqlMenuDishRemove, menuid, dishid)
 	if err != nil {
 		log.Errorf("Storage: Menu: Dish: Delete: delete dish from menu exec err: %s", err)

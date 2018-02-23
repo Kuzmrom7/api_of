@@ -23,6 +23,13 @@ func (um *userModel) convert() *types.User {
 
 func (s *UserStorage) CheckExistsByLogin(ctx context.Context, login string) (bool, error) {
 	log.Debugf("Storage: User: Exists: check account exists by: %s", login)
+
+	const sqlstrUserExistsByLogin = `
+		SELECT TRUE
+		FROM users
+		WHERE users.username = $1 OR users.email = $1
+	`
+
 	result, err := s.client.Exec(sqlstrUserExistsByLogin, login)
 	if err != nil {
 		log.Errorf("Storage: User: Exists: find user query err: %s", err)
@@ -47,6 +54,11 @@ func (s *UserStorage) GetByLoginOrId(ctx context.Context, log_id string) (*types
 		um  = new(userModel)
 	)
 
+	const sqlstrUserGetByLogin = `
+		SELECT users.user_id, users.username, users.email, users.gravatar, users.password, users.salt
+		FROM users
+		WHERE users.username = $1 OR users.user_id = $1;`
+
 	err = s.client.QueryRow(sqlstrUserGetByLogin, log_id).Scan(&um.id, &um.username, &um.email,
 		&um.gravatar, &um.password, &um.salt)
 	if err != nil {
@@ -65,29 +77,6 @@ func (s *UserStorage) GetByLoginOrId(ctx context.Context, log_id string) (*types
 
 	return usr, nil
 }
-//
-//func (s *UserStorage) GetUserByID(ctx context.Context, id string) (*types.User, error) {
-//	var (
-//		err error
-//		um  = new(userModel)
-//	)
-//
-//	log.Debugf("Storage: User: get user by id : %s", id)
-//
-//	err = s.client.QueryRow(sqlstrUserGetById, id).Scan(&um.id, &um.username, &um.email,
-//		&um.gravatar, &um.password, &um.salt)
-//	switch err {
-//	case nil:
-//	case sql.ErrNoRows:
-//		return nil, nil
-//	default:
-//		return nil, err
-//	}
-//
-//	usr := um.convert()
-//
-//	return usr, nil
-//}
 
 func (s *UserStorage) CreateUser(ctx context.Context, user *types.User) error {
 
@@ -103,6 +92,12 @@ func (s *UserStorage) CreateUser(ctx context.Context, user *types.User) error {
 		log.Errorf("Storage: User: insert user err: %s", err)
 		return err
 	}
+
+	const sqlCreateUser = `
+		INSERT INTO users (username, email, gravatar, password, salt)
+		VALUES ($1, $2, $3, $4, $5)
+		RETURNING user_id;
+	`
 
 	err = s.client.QueryRow(sqlCreateUser, user.Meta.Username, user.Meta.Email, user.Meta.Gravatar,
 		user.Security.Pass.Password, user.Security.Pass.Salt).Scan(&id)

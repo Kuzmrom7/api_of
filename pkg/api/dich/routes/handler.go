@@ -210,20 +210,25 @@ func DishList(w http.ResponseWriter, r *http.Request) {
 
 func TypeDishList(w http.ResponseWriter, r *http.Request) {
 
+	log.Debug("Handler: TypeDish: list type dish")
+
 	items, err := dich.New(r.Context()).TypeList()
 	if err != nil {
+		log.Errorf("Handler: TypeDish: list type dish err ", err)
 		errors.HTTP.InternalServerError(w)
 		return
 	}
 
 	response, err := v1.NewListType(items).ToJson()
 	if err != nil {
+		log.Errorf("Handler: TypeDish: convert struct to json err: %s", err)
 		errors.HTTP.InternalServerError(w)
+		return
 	}
 
 	w.WriteHeader(http.StatusOK)
 	if _, err = w.Write(response); err != nil {
-
+		log.Errorf("Handler: TypeDish: write response err: %s", err)
 		return
 	}
 }

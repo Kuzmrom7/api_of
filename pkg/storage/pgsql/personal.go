@@ -9,12 +9,15 @@ import (
 	"github.com/orderfood/api_of/pkg/storage/store"
 )
 
-
 func (s *PersonalStorage) GetTypePersonIDByName(ctx context.Context, name string) (string, error) {
 	var (
-		err error
+		err  error
 		pers = new(idModel)
 	)
+
+	const ssqlTypePersonalIDGetByName = `SELECT type_personal.id_typePersonal
+		FROM type_personal
+		WHERE type_personal.name_type = $1;`
 
 	err = s.client.QueryRow(ssqlTypePersonalIDGetByName, name).Scan(&pers.id)
 
@@ -45,6 +48,12 @@ func (s *PersonalStorage) CreatePerson(ctx context.Context, personal *types.Pers
 		id  store.NullString
 	)
 
+	const sqlCreatePerson = `
+		INSERT INTO personal (fio, phone, id_place, id_typePersonal)
+		VALUES ($1, $2, $3, $4)
+		RETURNING id_personal;
+	`
+
 	err = s.client.QueryRow(sqlCreatePerson, personal.Meta.Fio, personal.Meta.Phone, personal.Meta.PlaceID, personal.Meta.TypePersonalID).Scan(&id)
 
 	personal.Meta.ID = id.String
@@ -55,6 +64,10 @@ func (s *PersonalStorage) CreatePerson(ctx context.Context, personal *types.Pers
 func (s *PersonalStorage) ListType(ctx context.Context) (map[string]*types.TypePersonals, error) {
 
 	personals := make(map[string]*types.TypePersonals)
+
+	const sqlstrListTypePersonal = `
+		SELECT type_personal.id_typePersonal, type_personal.name_type
+		FROM type_personal;`
 
 	rows, err := s.client.Query(sqlstrListTypePersonal)
 	switch err {
@@ -84,6 +97,11 @@ func (s *PersonalStorage) List(ctx context.Context, placeid string) (map[string]
 
 	personals := make(map[string]*types.Personal)
 
+	const sqlstrListPersonal = `
+		SELECT personal.id_personal, personal.fio, personal.phone, personal.updated, personal.created
+		FROM personal
+		WHERE personal.id_place = $1;`
+
 	rows, err := s.client.Query(sqlstrListPersonal, placeid)
 	switch err {
 	case nil:
@@ -93,7 +111,6 @@ func (s *PersonalStorage) List(ctx context.Context, placeid string) (map[string]
 
 		return nil, err
 	}
-
 
 	for rows.Next() {
 
@@ -110,7 +127,6 @@ func (s *PersonalStorage) List(ctx context.Context, placeid string) (map[string]
 
 	return personals, nil
 }
-
 
 func (nm *typeModelPersonals) convert() *types.TypePersonals {
 	c := new(types.TypePersonals)

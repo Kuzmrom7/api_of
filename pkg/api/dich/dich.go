@@ -87,8 +87,11 @@ func (r *dish) TypeList() (map[string]*types.TypeDishes, error) {
 		storage = ctx.Get().GetStorage()
 	)
 
+	log.Debug("Dish: list type dish")
+
 	list, err := storage.Dish().TypeList(r.context)
 	if err != nil {
+		log.Errorf("Dish: list type dish err: %s", err)
 		return nil, err
 	}
 	return list, nil
