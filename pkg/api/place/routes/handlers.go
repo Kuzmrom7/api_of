@@ -151,6 +151,7 @@ func PlaceUpdate(w http.ResponseWriter, r *http.Request) {
 
 	plc, err := p.GetPlaceByID(rq.Id)
 	if err != nil {
+		log.Errorf("Handler: Place: get place by id %s err: %s", rq.Id, err)
 		errors.HTTP.InternalServerError(w)
 		return
 	}

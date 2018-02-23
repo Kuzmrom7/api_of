@@ -19,18 +19,6 @@ const (
 		FROM dish
 		WHERE dish.user_id = $1 AND dish.name_dish = $2;`
 
-	sqlstrListDishNotMenu = `
-					SELECT dish.id_dish, dish.name_dish, dish.description, dish.url, dish.updated, dish.created, dish.time_min
-					FROM dish
-					WHERE dish.user_id = $2 AND dish.id_dish NOT IN
-								(
-									SELECT dish.id_dish
-									FROM dish
-										INNER JOIN menudish on menudish.id_dish = dish.id_dish
-										INNER JOIN menu on menu.id_menu = menudish.id_menu
-									WHERE menu.id_menu = $1 AND dish.user_id = $2
-								);`
-
 	sqlCreateDich = `
 		INSERT INTO dish (name_dish, description, time_min, id_typeDish, url, user_id)
 		VALUES ($1, $2, $3, $4, $5, $6)
@@ -66,36 +54,8 @@ const (
 		FROM menu
 		WHERE menu.name_menu = $1;`
 
-	sqlCreateMenu = `
-		INSERT INTO menu (name_menu, id_place, url)
-		VALUES ($1, $2, $3)
-		RETURNING id_menu;
-	`
-
-	sqlCreateMenuDish = `
-		INSERT INTO menudish (id_menu, id_dish)
-		VALUES ($1, $2)
-		RETURNING id_menu;
-	`
-
 	sqlMenuDishRemove = `DELETE FROM menudish WHERE id_menu = $1 AND id_dish = $2;`
 
-	sqlFetchMenu = `
-		SELECT menu.id_menu, menu.url, menu.created, menu.updated
-		FROM menu
-		WHERE menu.id_place = $1 AND menu.name_menu = $2;`
-
-	sqlstrListMenu = `
-					SELECT menu.id_menu, menu.name_menu, menu.url, menu.created, menu.updated
-					FROM menu
-					WHERE menu.id_place = $1;`
-
-	sqlstrListMenuDishes = `
-					SELECT dish.id_dish, dish.name_dish, dish.description, dish.url, dish.updated, dish.id_typeDish, dish.created, dish.time_min
-					FROM dish
-							INNER JOIN menudish on menudish.id_dish = dish.id_dish
-							INNER JOIN menu on menu.id_menu = menudish.id_menu
-					WHERE menu.id_menu = $1 AND dish.user_id = $2;`
 	//-----------------PLACE-------------------//
 
 	sqlstrListTypePlace = `
@@ -114,7 +74,6 @@ const (
 		SELECT place.name, place.phone_number, place.adress, place.city, place.url, place.id_place
 		FROM place
 		WHERE place.user_id = $1;`
-
 
 	//-----------------USERS-------------------//
 

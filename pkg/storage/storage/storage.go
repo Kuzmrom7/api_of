@@ -24,7 +24,7 @@ type Menu interface {
 	InsertDishInMenu(ctx context.Context, menuid, dishid string) error
 	DeleteDishInMenu(ctx context.Context, menuid, dishid string) error
 	GetIDmenuByName(ctx context.Context, name string) (string, error)
-	Fetch(ctx context.Context, idplace, name string) (*types.Menu, error)
+	Fetch(ctx context.Context, id string) (*types.Menu, error)
 	List(ctx context.Context, placeid string) (map[string]*types.Menu, error)
 	ListDishesInMenu(ctx context.Context, menuid, usrid string) (map[string]*types.Dish, error)
 	ListDishesNotMenu(ctx context.Context, menuid, userid string) (map[string]*types.Dish, error)
