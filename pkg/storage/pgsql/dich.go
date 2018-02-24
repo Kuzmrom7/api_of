@@ -128,15 +128,13 @@ func (s *DishStorage) Fetch(ctx context.Context, id string) (*types.Dish, error)
 					'id', id_dish,
 					'name', name_dish,
 					'description', description,
-					'timemin', time_min,
-					'updated', updated
-					'created', created
+					'timemin', time_min
 				),
 				'urls', url
 				)
 			)
-			FROM place
-			WHERE place.id_place = $1;`
+			FROM dish
+			WHERE dish.id_dish = $1;`
 
 	var buf string
 
@@ -173,9 +171,7 @@ func (s *DishStorage) List(ctx context.Context, userid string) ([]*types.Dish, e
 					'id', id_dish,
 					'name', name_dish,
 					'description', description,
-					'timemin', time_min,
-					'updated', updated
-					'created', created
+					'timemin', time_min
 				),
 				'urls', url
 				)
