@@ -180,14 +180,12 @@ func (s *MenuStorage) ListDishesInMenu(ctx context.Context, menuid, usrid string
 					SELECT to_json(
 				json_build_object(
 					'meta', json_build_object(
-					'id', id_dish,
+					'id', dish.id_dish,
 					'name', name_dish,
 					'description', description,
-					'timemin', time_min,
-					'updated', updated
-					'created', created
+					'timemin', time_min
 				),
-				'urls', url
+				'urls', dish.url
 				)
 			)
 					FROM dish
@@ -236,14 +234,13 @@ func (s *MenuStorage) ListDishesNotMenu(ctx context.Context, menuid, userid stri
 					SELECT to_json(
 				json_build_object(
 					'meta', json_build_object(
-					'id', id_dish,
+					'id', dish.id_dish,
 					'name', name_dish,
 					'description', description,
-					'timemin', time_min,
-					'updated', updated
-					'created', created
+					'timemin', time_min
+
 				),
-				'urls', url
+				'urls', dish.url
 				)
 			)
 					FROM dish

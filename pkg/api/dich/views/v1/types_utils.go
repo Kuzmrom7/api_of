@@ -7,6 +7,7 @@ import (
 
 func newDich(obj *types.Dish) *Dich {
 	d := new(Dich)
+	d.Id = obj.Meta.ID
 	d.Name = obj.Meta.Name
 	d.Desc = obj.Meta.Desc
 
@@ -22,8 +23,6 @@ func newDich(obj *types.Dish) *Dich {
 	}
 
 	d.Timemin = obj.Meta.Timemin
-	d.Created = obj.Meta.Created
-	d.Updated = obj.Meta.Updated
 
 	return d
 }
@@ -34,6 +33,8 @@ func (obj *Dich) ToJson() ([]byte, error) {
 
 func New(obj *types.Dish) *Dich {
 	i := new(Dich)
+
+	i.Id = obj.Meta.ID
 	i.Name = obj.Meta.Name
 	i.Desc = obj.Meta.Desc
 	i.Urls = make([]*UrlOpt, 0)
@@ -47,13 +48,14 @@ func New(obj *types.Dish) *Dich {
 		}
 	}
 	i.Timemin = obj.Meta.Timemin
-	i.Updated = obj.Meta.Updated
-	i.Created = obj.Meta.Created
+
 	return i
 }
 
 func NewDm(obj *types.Dish) *Dich {
 	i := new(Dich)
+
+	i.Id = obj.Meta.ID
 	i.Name = obj.Meta.Name
 	i.Desc = obj.Meta.Desc
 	i.Urls = make([]*UrlOpt, 0)
@@ -67,8 +69,7 @@ func NewDm(obj *types.Dish) *Dich {
 		}
 	}
 	i.Timemin = obj.Meta.Timemin
-	i.Updated = obj.Meta.Updated
-	i.Created = obj.Meta.Created
+
 	return i
 }
 

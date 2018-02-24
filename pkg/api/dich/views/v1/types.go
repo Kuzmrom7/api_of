@@ -1,14 +1,11 @@
 package v1
 
-import "time"
-
 type Dich struct {
+	Id      string    `json:"id"`
 	Name    string    `json:"name,omitempty"`
 	Desc    string    `json:"description,omitempty"`
 	Urls    []*UrlOpt `json:"urls,omitempty"`
 	Timemin int64     `json:"timemin"`
-	Created time.Time `json:"created"`
-	Updated time.Time `json:"updated"`
 }
 
 type UrlOpt struct {
