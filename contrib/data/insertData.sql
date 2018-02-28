@@ -3,9 +3,9 @@ DELETE FROM users;
 
 -------USERS-------
 
-INSERT INTO users (user_id, username, email, gravatar, password, salt)
+INSERT INTO users (user_id, username, email, gravatar, password, salt,type)
 VALUES ('ba7f171c-8bd2-4470-99de-6d82ca9402e9', 'orderfood', 'orderfood@of.com', 'd68ec67243ffcc5184afb4619d0ee447',
-        '$2a$10$2zfn8HqZnE0oNnvnB9SmNeCNExnumDSNnnDGvr/KASKWktaSWWXeS', '8fcc5cfa90d2304e3b8c9f3486c5f32447227eedf15d0ebc172ef8966c36');
+        '$2a$10$2zfn8HqZnE0oNnvnB9SmNeCNExnumDSNnnDGvr/KASKWktaSWWXeS', '8fcc5cfa90d2304e3b8c9f3486c5f32447227eedf15d0ebc172ef8966c36', 'owner');
 
 -------TYPES PLACES-------
 
