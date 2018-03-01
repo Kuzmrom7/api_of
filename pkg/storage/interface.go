@@ -8,4 +8,5 @@ type Storage interface {
 	Menu() storage.Menu
 	Dish() storage.Dish
 	Personal() storage.Personal
+	Adress() storage.Adress
 }

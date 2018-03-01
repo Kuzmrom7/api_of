@@ -118,17 +118,6 @@ func (p *place) Update(place *types.Place, rq *request.PlaceUpdate) error {
 		place.Meta.City = *rq.City
 	}
 
-	if rq.Adresses != nil {
-		place.Adresses = make([]types.AdressOpt, 0)
-		for _, typepl := range *rq.Adresses {
-			p := new(types.AdressOpt)
-
-			p.Adress = typepl.Adress
-
-			place.Adresses = append(place.Adresses, *p)
-		}
-	}
-
 	if rq.Phone != nil {
 		place.Meta.Phone = *rq.Phone
 	}

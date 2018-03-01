@@ -29,8 +29,7 @@ func (s *PlaceStorage) GetPlaceByIDUser(ctx context.Context, id string) (*types.
 					'url', url,
 					'city', city
 				),
-				'typesplace', type,
-				'adresses', adress
+				'typesplace', type
 				)
 			)
 			FROM place
@@ -75,8 +74,7 @@ func (s *PlaceStorage) GetPlaceByID(ctx context.Context, id string) (*types.Plac
 					'url', url,
 					'city', city
 				),
-				'typesplace', type,
-				'adresses', adress
+				'typesplace', type
 				)
 			)
 			FROM place
@@ -185,26 +183,19 @@ func (s *PlaceStorage) Update(ctx context.Context, place *types.Place) error {
 		return err
 	}
 
-	adress, err := json.Marshal(place.Adresses)
-	if err != nil {
-		log.Errorf("Storage: Place: prepare types struct to database write: %s", err)
-		adress = []byte("{}")
-	}
-
 	place.Meta.Updated = time.Now()
 
 	const sqlstrPlaceUpdate = `
 		UPDATE place
 		SET
 			phone_number = $1,
-			adress = $2,
-			city = $3,
-			url = $4,
+			city = $2,
+			url = $3,
 			updated = now()
-		WHERE id_place = $5
+		WHERE id_place = $4
 		RETURNING updated;`
 
-	err = s.client.QueryRow(sqlstrPlaceUpdate, place.Meta.Phone, string(adress),
+	err := s.client.QueryRow(sqlstrPlaceUpdate, place.Meta.Phone,
 		place.Meta.City, place.Meta.Url, place.Meta.ID).Scan(&place.Meta.Updated)
 	if err != nil {
 		log.Errorf("Storage: Place: Update: update place query err: %s", err)

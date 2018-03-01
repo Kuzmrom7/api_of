@@ -6,7 +6,6 @@ import (
 	"time"
 )
 
-
 //-----------------------STORAGEs------------------------//
 type DishStorage struct {
 	storage.Dish
@@ -15,6 +14,11 @@ type DishStorage struct {
 
 type MenuStorage struct {
 	storage.Menu
+	client store.IDB
+}
+
+type AdressStorage struct {
+	storage.Adress
 	client store.IDB
 }
 
@@ -52,6 +56,11 @@ type menuModel struct {
 	url     store.NullString
 	created time.Time
 	updated time.Time
+}
+
+type adressModel struct {
+	id   store.NullString
+	name store.NullString
 }
 
 type personalModel struct {
@@ -139,6 +148,12 @@ func newPlaceStorage(client store.IDB) *PlaceStorage {
 
 func newUserStorage(client store.IDB) *UserStorage {
 	s := new(UserStorage)
+	s.client = client
+	return s
+}
+
+func newAdressStorage(client store.IDB) *AdressStorage {
+	s := new(AdressStorage)
 	s.client = client
 	return s
 }

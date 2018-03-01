@@ -59,7 +59,6 @@ CREATE TABLE place
   phone_number VARCHAR(256)                                                   DEFAULT '',
   url          VARCHAR(256)                                                   DEFAULT '',
   city         VARCHAR(256)                                                   DEFAULT '',
-  adress       JSONB                                                          DEFAULT '[]',
   user_id      UUID REFERENCES users (user_id)                       NOT NULL,
   type         JSONB                                                          DEFAULT '[]',
   created      TIMESTAMP                                                      DEFAULT now(),
@@ -69,6 +68,7 @@ CREATE TABLE place
 CREATE TABLE adressing
 (
   id_adressing UUID PRIMARY KEY                                   NOT NULL DEFAULT uuid_generate_v4(),
+  name_adress  VARCHAR(256)                                       DEFAULT '',
   id_place     UUID REFERENCES place (id_place)                   NOT NULL DEFAULT uuid_generate_v4(),
   id_user      UUID REFERENCES users (user_id)                    NOT NULL DEFAULT uuid_generate_v4()
 );

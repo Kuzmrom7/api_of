@@ -24,11 +24,6 @@ type PlaceUpdate struct {
 	Phone    *string      `json:"phone,omitempty"`
 	Url      *string      `json:"url,omitempty"`
 	City     *string      `json:"city,omitempty"`
-	Adresses *[]AdressOpt `json:"adresses,omitempty"`
-}
-
-type AdressOpt struct {
-	Adress string `json:"adress"`
 }
 
 func (s *PlaceCreate) DecodeAndValidate(reader io.Reader) *errors.Err {
@@ -85,11 +80,6 @@ func (s *PlaceUpdate) DecodeAndValidate(reader io.Reader) *errors.Err {
 	if s.Id == "" {
 		log.Error("Request: Place: parameter id place can not be empty")
 		return errors.New("place").BadParameter("name")
-	}
-
-	if len(*s.Adresses) == 0 {
-		log.Error("Request: Place: parameter adresess can not be empty")
-		return errors.New("place").BadParameter("adresess")
 	}
 
 	return nil
