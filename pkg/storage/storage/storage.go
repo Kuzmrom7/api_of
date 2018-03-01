@@ -44,3 +44,8 @@ type Personal interface {
 	ListType(ctx context.Context) (map[string]*types.TypePersonals, error)
 	List(ctx context.Context, placeid string) (map[string]*types.Personal, error)
 }
+
+type Adress interface {
+	CreateAdress(ctx context.Context, adress *types.Adress) error
+	List(ctx context.Context, placeid string) (map[string]*types.Adress, error)
+}

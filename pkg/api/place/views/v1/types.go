@@ -6,12 +6,7 @@ type Place struct {
 	Phone      string       `json:"phone,omitempty"`
 	Url        string       `json:"url,omitempty"`
 	City       string       `json:"city,omitempty"`
-	Adresses   []*AdressOpt  `json:"adresses,omitempty"`
 	TypesPlace []*TypePlaces `json:"typesplace"`
-}
-
-type AdressOpt struct {
-	Adress string `json:"adress"`
 }
 
 type TypePlaces struct {
