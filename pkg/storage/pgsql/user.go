@@ -45,9 +45,9 @@ func (s *UserStorage) CheckExistsByLogin(ctx context.Context, login string) (boo
 	return rows != 0, nil
 }
 
-func (s *UserStorage) GetByLoginOrId(ctx context.Context, log_id string) (*types.User, error) {
+func (s *UserStorage) GetByLogin(ctx context.Context, login string) (*types.User, error) {
 
-	log.Debugf("Storage: User: get user by login or id: %s", log_id)
+	log.Debugf("Storage: User: get user by login: %s", login)
 
 	var (
 		err error
@@ -59,10 +59,45 @@ func (s *UserStorage) GetByLoginOrId(ctx context.Context, log_id string) (*types
 		FROM users
 		WHERE users.username = $1;`
 
-	err = s.client.QueryRow(sqlstrUserGetByLogin, log_id).Scan(&um.id, &um.username, &um.email,
+	err = s.client.QueryRow(sqlstrUserGetByLogin, login).Scan(&um.id, &um.username, &um.email,
 		&um.gravatar, &um.password, &um.salt)
 	if err != nil {
 		log.Errorf("Storage: User: get user by login err: %s", err)
+		return nil, err
+	}
+
+	switch err {
+	case nil:
+	case sql.ErrNoRows:
+		return nil, nil
+	default:
+		return nil, err
+	}
+
+	usr := um.convert()
+
+	return usr, nil
+}
+
+func (s *UserStorage) GetById(ctx context.Context, id string) (*types.User, error) {
+
+	log.Debugf("Storage: User: get user by id: %s", id)
+
+	var (
+		err error
+		um  = new(userModel)
+	)
+
+	const sqlstrUserGetId = `
+		SELECT users.user_id, users.username, users.email, users.gravatar, users.password, users.salt
+		FROM users
+		WHERE users.user_id = $1;`
+
+	err = s.client.QueryRow(sqlstrUserGetId, id).Scan(&um.id, &um.username, &um.email,
+		&um.gravatar, &um.password, &um.salt)
+	if err != nil {
+		log.Errorf("Storage: User: get user by id err: %s", err)
+		return nil, err
 	}
 
 	switch err {

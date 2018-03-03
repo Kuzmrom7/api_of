@@ -24,7 +24,7 @@ func SessionCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	usr, err = storage.User().GetByLoginOrId(r.Context(), *rq.Login)
+	usr, err = storage.User().GetByLogin(r.Context(), *rq.Login)
 	if err == nil && usr == nil {
 		log.Errorf("Handler: Session: account not found")
 		errors.HTTP.Unauthorized(w)

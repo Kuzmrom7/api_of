@@ -6,7 +6,8 @@ import (
 )
 
 type User interface {
-	GetByLoginOrId(ctx context.Context, login string) (*types.User, error)
+	GetByLogin(ctx context.Context, login string) (*types.User, error)
+	GetById(ctx context.Context, id string) (*types.User, error)
 	CreateUser(ctx context.Context, user *types.User) error
 	CheckExistsByLogin(ctx context.Context, login string) (bool, error)
 }

@@ -74,3 +74,22 @@ func (u *user) Create(rq *request.RequestUserCreate) (*types.User, error) {
 
 	return usr, nil
 }
+
+func (u *user) GetByID(id string) (*types.User, error) {
+	var (
+		storage = ctx.Get().GetStorage()
+	)
+
+	log.Debugf("User: get user by id %s", id)
+
+	usr, err := storage.User().GetById(u.context, id)
+	if err != nil {
+		log.Errorf("User: get user by id err %s", err)
+		return nil, err
+	}
+	if usr == nil {
+		return nil, nil
+	}
+
+	return usr, nil
+}
