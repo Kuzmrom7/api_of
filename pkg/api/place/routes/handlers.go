@@ -8,7 +8,6 @@ import (
 	"github.com/orderfood/api_of/pkg/api/place/routes/request"
 	"github.com/orderfood/api_of/pkg/common/errors"
 	"github.com/orderfood/api_of/pkg/api/place"
-	"github.com/orderfood/api_of/pkg/util/http/utils"
 )
 
 //------------------------------------CREATE PLACE----------------------------------------------//
@@ -85,8 +84,6 @@ func TypePlaceList(w http.ResponseWriter, r *http.Request) {
 //------------------------------------INFORMATION ABOUT PLACE--------------------------------------------//
 func GetPlaceInfo(w http.ResponseWriter, r *http.Request) {
 
-	pid := utils.Vars(r)["place"]
-
 	if r.Context().Value("uid") == nil {
 		errors.HTTP.Unauthorized(w)
 		return
@@ -94,19 +91,20 @@ func GetPlaceInfo(w http.ResponseWriter, r *http.Request) {
 
 	var (
 		err error
+		id  = r.Context().Value("uid").(string)
 	)
 
 	log.Debug("Handler: Place: get place")
 
 	p := place.New(r.Context())
-	plc, err := p.GetPlaceByID(pid)
+	plc, err := p.GetPlaceByIDUsr(id)
 	if err != nil {
 		log.Errorf("Handler: Place: get place", err)
 		errors.HTTP.InternalServerError(w)
 		return
 	}
 	if plc == nil {
-		log.Warnf("Handler: Place: place by id `%s` not found", pid)
+		log.Warnf("Handler: Place: place by id iser `%s` not found", id)
 		errors.New("place").NotFound().Http(w)
 		return
 	}
@@ -145,8 +143,6 @@ func PlaceUpdate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	id := r.Context().Value("uid").(string)
-
 	p := place.New(r.Context())
 
 	plc, err := p.GetPlaceByID(rq.Id)
@@ -156,7 +152,7 @@ func PlaceUpdate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if plc == nil {
-		log.Warnf("Handler: Place: place by user id `%s` not found", id)
+		log.Warnf("Handler: Place: place by id `%s` not found", rq.Id)
 		errors.New("place").NotFound().Http(w)
 		return
 	}
