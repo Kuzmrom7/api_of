@@ -46,13 +46,19 @@ func (s *DishStorage) CreateDish(ctx context.Context, dish *types.Dish) error {
 		urls = []byte("{}")
 	}
 
+	specs, err := json.Marshal(dish.Specs)
+	if err != nil {
+		log.Errorf("Storage: Dish: prepare types struct to database write: %s", err)
+		specs = []byte("{}")
+	}
+
 	const sqlCreateDich = `
-		INSERT INTO dish (name_dish, description, time_min, id_typeDish, url, user_id)
-		VALUES ($1, $2, $3, $4, $5, $6)
+		INSERT INTO dish (name_dish, description, time_min, id_typeDish, url, spec, user_id)
+		VALUES ($1, $2, $3, $4, $5, $6, $7)
 		RETURNING id_dish;
 	`
 
-	err = s.client.QueryRow(sqlCreateDich, dish.Meta.Name, dish.Meta.Desc, dish.Meta.Timemin, dish.Meta.TypeDishID, string(urls), dish.Meta.UserID).Scan(&id)
+	err = s.client.QueryRow(sqlCreateDich, dish.Meta.Name, dish.Meta.Desc, dish.Meta.Timemin, dish.Meta.TypeDishID, string(urls), string(specs), dish.Meta.UserID).Scan(&id)
 	if err != nil {
 		log.Errorf("Storage: Dish: Insert: insert dish query err: %s", err)
 		return err
@@ -130,7 +136,8 @@ func (s *DishStorage) Fetch(ctx context.Context, id string) (*types.Dish, error)
 					'description', description,
 					'timemin', time_min
 				),
-				'urls', url
+				'urls', url,
+				'specs', spec
 				)
 			)
 			FROM dish
@@ -173,7 +180,8 @@ func (s *DishStorage) List(ctx context.Context, userid string) ([]*types.Dish, e
 					'description', description,
 					'timemin', time_min
 				),
-				'urls', url
+				'urls', url,
+				'specs', spec
 				)
 			)
 			FROM dish

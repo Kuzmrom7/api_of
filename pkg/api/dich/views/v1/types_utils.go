@@ -22,6 +22,18 @@ func newDich(obj *types.Dish) *Dich {
 		}
 	}
 
+	d.Specs = make([]*SpecOpt, 0)
+	if obj.Specs != nil {
+		for _, sp := range obj.Specs {
+			s := new(SpecOpt)
+
+			s.Size = sp.Size
+			s.Price = sp.Price
+
+			d.Specs = append(d.Specs, s)
+		}
+	}
+
 	d.Timemin = obj.Meta.Timemin
 
 	return d
@@ -32,45 +44,66 @@ func (obj *Dich) ToJson() ([]byte, error) {
 }
 
 func New(obj *types.Dish) *Dich {
-	i := new(Dich)
+	d := new(Dich)
 
-	i.Id = obj.Meta.ID
-	i.Name = obj.Meta.Name
-	i.Desc = obj.Meta.Desc
-	i.Urls = make([]*UrlOpt, 0)
+	d.Id = obj.Meta.ID
+	d.Name = obj.Meta.Name
+	d.Desc = obj.Meta.Desc
+	d.Urls = make([]*UrlOpt, 0)
 	if obj.Urls != nil {
 		for _, url := range obj.Urls {
 			u := new(UrlOpt)
 
 			u.Url = url.Url
 
-			i.Urls = append(i.Urls, u)
+			d.Urls = append(d.Urls, u)
 		}
 	}
-	i.Timemin = obj.Meta.Timemin
 
-	return i
+	if obj.Specs != nil {
+		for _, sp := range obj.Specs {
+			s := new(SpecOpt)
+
+			s.Size = sp.Size
+			s.Price = sp.Price
+
+			d.Specs = append(d.Specs, s)
+		}
+	}
+	d.Timemin = obj.Meta.Timemin
+
+	return d
 }
 
 func NewDm(obj *types.Dish) *Dich {
-	i := new(Dich)
+	d := new(Dich)
 
-	i.Id = obj.Meta.ID
-	i.Name = obj.Meta.Name
-	i.Desc = obj.Meta.Desc
-	i.Urls = make([]*UrlOpt, 0)
+	d.Id = obj.Meta.ID
+	d.Name = obj.Meta.Name
+	d.Desc = obj.Meta.Desc
+	d.Urls = make([]*UrlOpt, 0)
 	if obj.Urls != nil {
 		for _, url := range obj.Urls {
 			u := new(UrlOpt)
 
 			u.Url = url.Url
 
-			i.Urls = append(i.Urls, u)
+			d.Urls = append(d.Urls, u)
 		}
 	}
-	i.Timemin = obj.Meta.Timemin
+	if obj.Specs != nil {
+		for _, sp := range obj.Specs {
+			s := new(SpecOpt)
 
-	return i
+			s.Size = sp.Size
+			s.Price = sp.Price
+
+			d.Specs = append(d.Specs, s)
+		}
+	}
+	d.Timemin = obj.Meta.Timemin
+
+	return d
 }
 
 func Newt(obj *types.TypeDishes) *TypeDish {

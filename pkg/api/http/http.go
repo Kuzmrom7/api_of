@@ -10,6 +10,7 @@ import (
 	menu "github.com/orderfood/api_of/pkg/api/menu/routes"
 	dich "github.com/orderfood/api_of/pkg/api/dich/routes"
 	personal "github.com/orderfood/api_of/pkg/api/personal/routes"
+	adress "github.com/orderfood/api_of/pkg/api/adress/routes"
 )
 
 var Routes = make([]http.Route, 0)
@@ -27,6 +28,7 @@ func init() {
 	AddRoutes(menu.Routes)
 	AddRoutes(dich.Routes)
 	AddRoutes(personal.Routes)
+	AddRoutes(adress.Routes)
 
 }
 

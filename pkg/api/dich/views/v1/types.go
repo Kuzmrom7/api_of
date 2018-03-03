@@ -1,15 +1,21 @@
 package v1
 
 type Dich struct {
-	Id      string    `json:"id"`
-	Name    string    `json:"name,omitempty"`
-	Desc    string    `json:"description,omitempty"`
-	Urls    []*UrlOpt `json:"urls,omitempty"`
-	Timemin int64     `json:"timemin"`
+	Id      string     `json:"id"`
+	Name    string     `json:"name,omitempty"`
+	Desc    string     `json:"description,omitempty"`
+	Urls    []*UrlOpt  `json:"urls,omitempty"`
+	Specs   []*SpecOpt `json:"specs,omitempty"`
+	Timemin int64      `json:"timemin"`
 }
 
 type UrlOpt struct {
 	Url string `json:"url"`
+}
+
+type SpecOpt struct {
+	Size  string `json:"size"`
+	Price string `json:"price"`
 }
 
 type DichList []*Dich

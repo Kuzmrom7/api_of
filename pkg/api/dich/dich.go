@@ -39,6 +39,13 @@ func (p *dish) Create(rq *request.DishCreate, userid string) (*types.Dish, error
 		})
 	}
 
+	for _, s := range rq.Specs {
+		di.Specs = append(di.Specs, types.SpecOpt{
+			Size:  s.Size,
+			Price: s.Price,
+		})
+	}
+
 	di.Meta.UserID = userid
 
 	if err := storage.Dish().CreateDish(p.context, &di); err != nil {
@@ -96,7 +103,6 @@ func (r *dish) TypeList() (map[string]*types.TypeDishes, error) {
 	}
 	return list, nil
 }
-
 
 func (u *dish) GetDishById(id string) (*types.Dish, error) {
 	var (

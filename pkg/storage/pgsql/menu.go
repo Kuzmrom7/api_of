@@ -185,7 +185,8 @@ func (s *MenuStorage) ListDishesInMenu(ctx context.Context, menuid, usrid string
 					'description', description,
 					'timemin', time_min
 				),
-				'urls', dish.url
+				'urls', dish.url,
+				'specs', dish.spec
 				)
 			)
 					FROM dish
@@ -240,7 +241,8 @@ func (s *MenuStorage) ListDishesNotMenu(ctx context.Context, menuid, userid stri
 					'timemin', time_min
 
 				),
-				'urls', dish.url
+				'urls', dish.url,
+				'specs', dish.spec
 				)
 			)
 					FROM dish
