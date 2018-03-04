@@ -10,19 +10,25 @@ import (
 )
 
 type DishCreate struct {
-	Name     string   `json:"name,omitempty"`
-	Desc     string   `json:"description,omitempty"`
-	Timemin  int64    `json:"timemin,omitempty"`
-	IdTypeDish string   `json:"idtypedish"`
-	Urls     []UrlOpt `json:"urls"`
+	Name       string    `json:"name,omitempty"`
+	Desc       string    `json:"description,omitempty"`
+	Timemin    int64     `json:"timemin,omitempty"`
+	IdTypeDish string    `json:"idtypedish"`
+	Urls       []UrlOpt  `json:"urls"`
+	Specs      []SpecOpt `json:"specs"`
 }
 
 type UrlOpt struct {
 	Url string `json:"url"`
 }
 
+type SpecOpt struct {
+	Size  string `json:"size"`
+	Price string `json:"price"`
+}
+
 type DishUpdate struct {
-	Id    	 string `json:"id,omitempty"`
+	Id      string  `json:"id,omitempty"`
 	Desc    *string `json:"description,omitempty"`
 	Timemin *int64  `json:"timemin,omitempty"`
 }
@@ -64,6 +70,11 @@ func (s *DishCreate) DecodeAndValidate(reader io.Reader) *errors.Err {
 	if len(s.Urls) == 0 {
 		log.Error("Request: Dish: parameter urls dish can not be empty")
 		return errors.New("dish").BadParameter("urls")
+	}
+
+	if len(s.Specs) == 0 {
+		log.Error("Request: Dish: parameter specs dish can not be empty")
+		return errors.New("dish").BadParameter("specs")
 	}
 
 	return nil

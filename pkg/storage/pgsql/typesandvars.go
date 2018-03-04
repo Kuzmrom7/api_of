@@ -59,8 +59,9 @@ type menuModel struct {
 }
 
 type adressModel struct {
-	id   store.NullString
-	name store.NullString
+	id      store.NullString
+	name    store.NullString
+	idplace store.NullString
 }
 
 type personalModel struct {

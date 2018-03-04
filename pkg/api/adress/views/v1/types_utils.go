@@ -11,7 +11,6 @@ func newAdress(obj *types.Adress) *Adress {
 	m.Id = obj.Meta.ID
 	m.Name = obj.Meta.Name
 	m.PlaceID = obj.Meta.PlaceID
-	m.MemberID = obj.Meta.MemberID
 
 	return m
 }
@@ -26,7 +25,6 @@ func New(obj *types.Adress) *Adress {
 	i.Id = obj.Meta.ID
 	i.Name = obj.Meta.Name
 	i.PlaceID = obj.Meta.PlaceID
-	i.MemberID = obj.Meta.MemberID
 
 	return i
 }

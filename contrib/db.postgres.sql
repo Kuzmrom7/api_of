@@ -69,8 +69,7 @@ CREATE TABLE adressing
 (
   id_adressing UUID PRIMARY KEY                                   NOT NULL DEFAULT uuid_generate_v4(),
   name_adress  VARCHAR(256)                                       DEFAULT '',
-  id_place     UUID REFERENCES place (id_place)                   NOT NULL DEFAULT uuid_generate_v4(),
-  id_user      UUID REFERENCES users (user_id)                    NOT NULL DEFAULT uuid_generate_v4()
+  id_place     UUID REFERENCES place (id_place)                   NOT NULL DEFAULT uuid_generate_v4()
 );
 
 
@@ -101,6 +100,7 @@ CREATE TABLE dish
   id_typeDish UUID REFERENCES type_dish (id_typeDish),
   description VARCHAR(256)                                     DEFAULT '',
   url         JSONB                                            DEFAULT '[]',
+  spec        JSONB                                            DEFAULT '[]',
   time_min    INTEGER                                          DEFAULT 0,
   created     TIMESTAMP                                        DEFAULT now(),
   updated     TIMESTAMP                                        DEFAULT now()

@@ -3,12 +3,18 @@ package types
 import "time"
 
 type Dish struct {
-	Meta DishMeta  `json:"meta"`
-	Urls []UrlsOpt `json:"urls,omitempty"`
+	Meta  DishMeta  `json:"meta"`
+	Urls  []UrlsOpt `json:"urls,omitempty"`
+	Specs []SpecOpt `json:"specs,omitempty"`
 }
 
 type UrlsOpt struct {
 	Url string `json:"url"`
+}
+
+type SpecOpt struct {
+	Size  string `json:"size"`
+	Price string `json:"price"`
 }
 
 type DishMeta struct {

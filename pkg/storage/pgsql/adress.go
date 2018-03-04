@@ -25,7 +25,7 @@ func (s *AdressStorage) CreateAdress(ctx context.Context, adress *types.Adress) 
 	)
 
 	const sqlCreateAdress = `
-		INSERT INTO adress (name_adress, id_place)
+		INSERT INTO adressing (name_adress, id_place)
 		VALUES ($1, $2)
 		RETURNING id_adressing;
 	`
@@ -48,9 +48,9 @@ func (s *AdressStorage) List(ctx context.Context, placeid string) (map[string]*t
 	log.Debug("Storage: Adress: List: get list adress")
 
 	const sqlstrListAdress = `
-					SELECT adress.id_adressing, adress.name_adress
-					FROM adress
-					WHERE adress.id_place = $1;`
+					SELECT adressing.id_adressing, adressing.name_adress, adressing.id_place
+					FROM adressing
+					WHERE adressing.id_place = $1;`
 
 	rows, err := s.client.Query(sqlstrListAdress, placeid)
 	switch err {
@@ -66,7 +66,7 @@ func (s *AdressStorage) List(ctx context.Context, placeid string) (map[string]*t
 
 		di := new(adressModel)
 
-		if err := rows.Scan(&di.id, &di.name); err != nil {
+		if err := rows.Scan(&di.id, &di.name, &di.idplace); err != nil {
 			log.Errorf("Storage: Adress: List: get list adress scan rows err: %s", err)
 			return nil, err
 		}
@@ -83,6 +83,7 @@ func (nm *adressModel) convert() *types.Adress {
 
 	c.Meta.ID = nm.id.String
 	c.Meta.Name = nm.name.String
+	c.Meta.PlaceID = nm.idplace.String
 
 	return c
 }
