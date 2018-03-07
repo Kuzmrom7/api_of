@@ -183,7 +183,8 @@ func (s *MenuStorage) ListDishesInMenu(ctx context.Context, menuid, usrid string
 					'id', dish.id_dish,
 					'name', name_dish,
 					'description', description,
-					'timemin', time_min
+					'timemin', time_min,
+					'typedish', id_typeDish
 				),
 				'urls', dish.url,
 				'specs', dish.spec
