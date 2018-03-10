@@ -23,6 +23,7 @@ type Place interface {
 type Menu interface {
 	CreateMenu(ctx context.Context, menu *types.Menu) error
 	InsertDishInMenu(ctx context.Context, menuid, dishid string) error
+	CheckUnique(ctx context.Context, menuid, dishid string) (bool, error)
 	DeleteDishInMenu(ctx context.Context, menuid, dishid string) error
 	Fetch(ctx context.Context, id string) (*types.Menu, error)
 	List(ctx context.Context, placeid string) (map[string]*types.Menu, error)

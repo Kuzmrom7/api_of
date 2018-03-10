@@ -120,7 +120,21 @@ func MenuDishCreate(w http.ResponseWriter, r *http.Request) {
 
 	log.Debug("Handler: Menu: Dish: add dish in menu")
 
-	err = menu.New(r.Context()).CreateMenuDish(mid, did)
+	m := menu.New(r.Context())
+
+	exists, err := m.CheckUniqueDishInMenu(mid, did)
+	if err == nil && exists {
+		log.Errorf("Handler: Menu: Dich: check unique, dish already adding")
+		errors.New("menudish").NotUnique("dish").Http(w)
+		return
+	}
+	if err != nil {
+		log.Errorf("Handler: Menu: Dich: check exists by dish and menu err: %s", err)
+		errors.HTTP.InternalServerError(w)
+		return
+	}
+	
+	err = m.CreateMenuDish(mid, did)
 	if err != nil {
 		log.Errorf("Handler: Menu: Dish: add dish in menu err %s", err)
 		errors.HTTP.InternalServerError(w)
