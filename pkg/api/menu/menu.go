@@ -72,6 +72,23 @@ func (p *menu) CreateMenuDish(menuid, dishid string) error {
 	return nil
 }
 
+func (p *menu) CheckUniqueDishInMenu(menuid, dishid string) (bool, error) {
+
+	var (
+		storage = ctx.Get().GetStorage()
+	)
+
+	log.Debugf("Menu: Dish: check unique add dish by id %s in menu by id %s", menuid, dishid)
+
+	exists, err := storage.Menu().CheckUnique(p.context, menuid, dishid)
+	if err != nil {
+		log.Errorf("Menu: Dish: check unique add dish in menu err: %s", err)
+		return false, err
+	}
+
+	return exists, nil
+}
+
 func (p *menu) RemoveMenuDish(menuid, dishid string) error {
 
 	var (

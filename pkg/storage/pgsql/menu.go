@@ -114,6 +114,31 @@ func (s *MenuStorage) InsertDishInMenu(ctx context.Context, menuid, dishid strin
 	return err
 }
 
+func (s *MenuStorage) CheckUnique(ctx context.Context, menuid, dishid string) (bool, error) {
+
+	log.Debugf("Storage: Menu: Dish: Insert: check unique add dish by id %s in menu by id %s", dishid, menuid)
+
+	const sqlstrCheckExistsDishInMenu = `
+		SELECT TRUE
+		FROM menudish
+		WHERE menudish.id_menu = $1 AND menudish.id_dish = $2
+	`
+
+	result, err := s.client.Exec(sqlstrCheckExistsDishInMenu, menuid, dishid)
+	if err != nil {
+		log.Errorf("Storage: Menu: Dish: Exists: find dich in menu query err: %s", err)
+		return false, err
+	}
+
+	rows, err := result.RowsAffected()
+	if err != nil {
+		log.Errorf("Storage: Menu: Dish: Exists: check query affected err: %s", err)
+		return false, err
+	}
+
+	return rows != 0, nil
+}
+
 func (s *MenuStorage) DeleteDishInMenu(ctx context.Context, menuid, dishid string) error {
 
 	log.Debugf("Storage: Menu: Dish: Delete: delete dish by id %s from menu by id %s", dishid, menuid)
