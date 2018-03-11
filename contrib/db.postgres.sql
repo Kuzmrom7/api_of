@@ -68,7 +68,7 @@ CREATE TABLE place
 CREATE TABLE adressing
 (
   id_adressing UUID PRIMARY KEY                                   NOT NULL DEFAULT uuid_generate_v4(),
-  name_adress  VARCHAR(256)                                       DEFAULT '',
+  name_adress  VARCHAR(256)                                                DEFAULT '',
   id_place     UUID REFERENCES place (id_place)                   NOT NULL DEFAULT uuid_generate_v4()
 );
 

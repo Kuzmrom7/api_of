@@ -1,11 +1,11 @@
 package main
 
 import (
+	"github.com/jawher/mow.cli"
 	"github.com/orderfood/api_of/pkg/api"
 	"github.com/orderfood/api_of/pkg/api/config"
-	"github.com/jawher/mow.cli"
-	"os"
 	"github.com/orderfood/api_of/pkg/log"
+	"os"
 )
 
 const (
@@ -26,17 +26,17 @@ func main() {
 	app.Spec = "[OPTIONS]"
 
 	cfg.APIServer.Host = app.String(cli.StringOpt{
-		Name:   "http-server-host", Desc: "Http server host",
+		Name: "http-server-host", Desc: "Http server host",
 		EnvVar: "HTTP_SERVER_HOST", Value: host, HideValue: true,
 	})
 
 	cfg.APIServer.Port = app.Int(cli.IntOpt{
-		Name:   "http-server-port", Desc: "Http server port",
+		Name: "http-server-port", Desc: "Http server port",
 		EnvVar: "HTTP_SERVER_PORT", Value: port, HideValue: true,
 	})
 
 	cfg.Database.Connection = app.String(cli.StringOpt{
-		Name:   "pgsql-connection", Desc: "Set postgres connection string",
+		Name: "pgsql-connection", Desc: "Set postgres connection string",
 		EnvVar: "PGSQL_CONNECTION", Value: "host= 0.0.0.0 port=5432 user=orderfood  password=orderfood dbname=orderfood sslmode=disable", HideValue: true,
 	})
 

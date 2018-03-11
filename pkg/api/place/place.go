@@ -47,7 +47,7 @@ func (p *place) Create(user string, rq *request.PlaceCreate) (*types.Place, erro
 	return &plc, nil
 }
 
-func (r *place) List() (map[string]*types.TypePlaces, error) {
+func (r *place) ListType() (map[string]*types.TypePlaces, error) {
 
 	var (
 		storage = ctx.Get().GetStorage()
@@ -58,6 +58,22 @@ func (r *place) List() (map[string]*types.TypePlaces, error) {
 	list, err := storage.Place().ListType(r.context)
 	if err != nil {
 		log.Errorf("Place: list type place err: %s", err)
+		return nil, err
+	}
+	return list, nil
+}
+
+func (r *place) List() ([]*types.Place, error) {
+
+	var (
+		storage = ctx.Get().GetStorage()
+	)
+
+	log.Debug("Place: list places")
+
+	list, err := storage.Place().List(r.context)
+	if err != nil {
+		log.Errorf("Place: list places err: %s", err)
 		return nil, err
 	}
 	return list, nil

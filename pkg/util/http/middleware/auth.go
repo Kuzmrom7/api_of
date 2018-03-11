@@ -1,11 +1,11 @@
 package middleware
 
 import (
-	"net/http"
-	"strings"
 	"github.com/orderfood/api_of/pkg/common/errors"
 	"github.com/orderfood/api_of/pkg/common/types"
 	"github.com/orderfood/api_of/pkg/util/http/utils"
+	"net/http"
+	"strings"
 )
 
 func Authenticate(h http.HandlerFunc) http.HandlerFunc {

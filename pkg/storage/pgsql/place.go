@@ -2,13 +2,13 @@ package pgsql
 
 import (
 	"context"
-	"github.com/orderfood/api_of/pkg/common/types"
-	"github.com/orderfood/api_of/pkg/storage/store"
-	"github.com/orderfood/api_of/pkg/log"
-	"errors"
 	"database/sql"
-	"time"
 	"encoding/json"
+	"errors"
+	"github.com/orderfood/api_of/pkg/common/types"
+	"github.com/orderfood/api_of/pkg/log"
+	"github.com/orderfood/api_of/pkg/storage/store"
+	"time"
 )
 
 func (s *PlaceStorage) GetPlaceByIDUser(ctx context.Context, id string) (*types.Place, error) {
@@ -168,6 +168,58 @@ func (s *PlaceStorage) ListType(ctx context.Context) (map[string]*types.TypePlac
 
 		c := tp.convert()
 		places[c.ID] = c
+	}
+
+	return places, nil
+}
+
+func (s *PlaceStorage) List(ctx context.Context) ([]*types.Place, error) {
+
+	var places []*types.Place
+
+	log.Debug("Storage: Place: List: get list places")
+
+	const sqlstrListPlace = `
+			SELECT to_json(
+				json_build_object(
+					'meta', json_build_object(
+					'id', id_place,
+					'name', name,
+					'phone', phone_number,
+					'url', url,
+					'city', city
+				),
+				'typesplace', type
+				)
+			)
+			FROM place;`
+
+	rows, err := s.client.Query(sqlstrListPlace)
+	switch err {
+	case nil:
+	case sql.ErrNoRows:
+		return nil, nil
+	default:
+		log.Errorf("Storage: Place: List: get list places query err: %s", err)
+		return nil, err
+	}
+
+	for rows.Next() {
+
+		var buf string
+
+		if err := rows.Scan(&buf); err != nil {
+			log.Errorf("Storage: Place: List: get list places scan rows err: %s", err)
+			return nil, err
+		}
+
+		pl := new(types.Place)
+
+		if err := json.Unmarshal([]byte(buf), &pl); err != nil {
+			return nil, err
+		}
+
+		places = append(places, pl)
 	}
 
 	return places, nil

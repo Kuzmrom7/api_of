@@ -1,13 +1,14 @@
 package routes
 
 import (
-	"net/http"
 	"github.com/orderfood/api_of/pkg/log"
+	"net/http"
 
-	"github.com/orderfood/api_of/pkg/api/place/views/v1"
-	"github.com/orderfood/api_of/pkg/api/place/routes/request"
-	"github.com/orderfood/api_of/pkg/common/errors"
 	"github.com/orderfood/api_of/pkg/api/place"
+	"github.com/orderfood/api_of/pkg/api/place/routes/request"
+	"github.com/orderfood/api_of/pkg/api/place/views/v1"
+	"github.com/orderfood/api_of/pkg/common/errors"
+	"github.com/orderfood/api_of/pkg/util/http/utils"
 )
 
 //------------------------------------CREATE PLACE----------------------------------------------//
@@ -55,19 +56,44 @@ func PlaceCreate(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func GetPlaceList(w http.ResponseWriter, r *http.Request) {
+
+	log.Debug("Handler: Place: list places")
+
+	items, err := place.New(r.Context()).List()
+	if err != nil {
+		log.Errorf("Handler: Place: list type place err ", err)
+		errors.HTTP.InternalServerError(w)
+		return
+	}
+
+	response, err := v1.NewList(items).ToJson()
+	if err != nil {
+		log.Errorf("Handler: Place: convert struct to json err: %s", err)
+		errors.HTTP.InternalServerError(w)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	if _, err = w.Write(response); err != nil {
+		log.Errorf("Handler: Place: write response err: %s", err)
+		return
+	}
+}
+
 //------------------------------------LIST TYPE PLACE-------------------------------------------//
 func TypePlaceList(w http.ResponseWriter, r *http.Request) {
 
 	log.Debug("Handler: TypePlace: list type place")
 
-	items, err := place.New(r.Context()).List()
+	items, err := place.New(r.Context()).ListType()
 	if err != nil {
 		log.Errorf("Handler: TypePlace: list type place err ", err)
 		errors.HTTP.InternalServerError(w)
 		return
 	}
 
-	response, err := v1.NewList(items).ToJson()
+	response, err := v1.NewListType(items).ToJson()
 	if err != nil {
 		log.Errorf("Handler: TypePlace: convert struct to json err: %s", err)
 		errors.HTTP.InternalServerError(w)
@@ -104,7 +130,44 @@ func GetPlaceInfo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if plc == nil {
-		log.Warnf("Handler: Place: place by id iser `%s` not found", id)
+		log.Warnf("Handler: Place: place by id user `%s` not found", id)
+		errors.New("place").NotFound().Http(w)
+		return
+	}
+
+	response, err := v1.NewPlace(plc).ToJson()
+	if err != nil {
+		log.Errorf("Handler: Place: convert struct to json err: %s", err)
+		errors.HTTP.InternalServerError(w)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	if _, err = w.Write(response); err != nil {
+		log.Errorf("Handler: Place: write response err: %s", err)
+		return
+	}
+}
+
+//------------------------------------INFORMATION ABOUT PLACE--------------------------------------------//
+func GetPlaceInfoById(w http.ResponseWriter, r *http.Request) {
+
+	var (
+		err error
+		pid = utils.Vars(r)["place"]
+	)
+
+	log.Debug("Handler: Place: get place by id")
+
+	p := place.New(r.Context())
+	plc, err := p.GetPlaceByID(pid)
+	if err != nil {
+		log.Errorf("Handler: Place: get place by id", err)
+		errors.HTTP.InternalServerError(w)
+		return
+	}
+	if plc == nil {
+		log.Warnf("Handler: Place: place by id `%s` not found", pid)
 		errors.New("place").NotFound().Http(w)
 		return
 	}

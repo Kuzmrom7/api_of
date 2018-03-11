@@ -3,14 +3,14 @@ package routes
 import (
 	"net/http"
 
-	"github.com/orderfood/api_of/pkg/api/menu/views/v1"
-	"github.com/orderfood/api_of/pkg/log"
-	"github.com/orderfood/api_of/pkg/api/menu/routes/request"
-	"github.com/orderfood/api_of/pkg/common/errors"
-	"github.com/orderfood/api_of/pkg/api/menu"
-	"github.com/orderfood/api_of/pkg/api/place"
 	"github.com/orderfood/api_of/pkg/api/dich"
 	dv1 "github.com/orderfood/api_of/pkg/api/dich/views/v1"
+	"github.com/orderfood/api_of/pkg/api/menu"
+	"github.com/orderfood/api_of/pkg/api/menu/routes/request"
+	"github.com/orderfood/api_of/pkg/api/menu/views/v1"
+	"github.com/orderfood/api_of/pkg/api/place"
+	"github.com/orderfood/api_of/pkg/common/errors"
+	"github.com/orderfood/api_of/pkg/log"
 	"github.com/orderfood/api_of/pkg/util/http/utils"
 )
 
@@ -133,7 +133,7 @@ func MenuDishCreate(w http.ResponseWriter, r *http.Request) {
 		errors.HTTP.InternalServerError(w)
 		return
 	}
-	
+
 	err = m.CreateMenuDish(mid, did)
 	if err != nil {
 		log.Errorf("Handler: Menu: Dish: add dish in menu err %s", err)

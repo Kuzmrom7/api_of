@@ -9,4 +9,3 @@ type NullString struct {
 type NullInt64 struct {
 	sql.NullInt64
 }
-

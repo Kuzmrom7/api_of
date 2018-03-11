@@ -43,7 +43,7 @@ func (p *personal) Create(typeperson, place string, rq *request.RequestPersonCre
 
 	var (
 		storage = ctx.Get().GetStorage()
-		pers     = types.Personal{}
+		pers    = types.Personal{}
 	)
 
 	pers.Meta.Fio = rq.Fio

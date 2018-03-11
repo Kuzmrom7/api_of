@@ -15,6 +15,7 @@ type User interface {
 type Place interface {
 	CreatePlace(ctx context.Context, place *types.Place) error
 	ListType(ctx context.Context) (map[string]*types.TypePlaces, error)
+	List(ctx context.Context) ([]*types.Place, error)
 	GetPlaceByIDUser(ctx context.Context, id string) (*types.Place, error)
 	GetPlaceByID(ctx context.Context, id string) (*types.Place, error)
 	Update(ctx context.Context, place *types.Place) error

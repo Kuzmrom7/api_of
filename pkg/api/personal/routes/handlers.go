@@ -1,13 +1,14 @@
 package routes
-import (
-	"net/http"
-	"log"
 
-	"github.com/orderfood/api_of/pkg/api/personal/views/v1"
-	"github.com/orderfood/api_of/pkg/api/personal/routes/request"
-	"github.com/orderfood/api_of/pkg/common/errors"
+import (
+	"log"
+	"net/http"
+
 	"github.com/orderfood/api_of/pkg/api/personal"
+	"github.com/orderfood/api_of/pkg/api/personal/routes/request"
+	"github.com/orderfood/api_of/pkg/api/personal/views/v1"
 	"github.com/orderfood/api_of/pkg/api/place"
+	"github.com/orderfood/api_of/pkg/common/errors"
 )
 
 func PersonCreate(w http.ResponseWriter, r *http.Request) {

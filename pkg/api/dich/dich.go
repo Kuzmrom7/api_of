@@ -5,8 +5,8 @@ import (
 
 	ctx "github.com/orderfood/api_of/pkg/api/context"
 	"github.com/orderfood/api_of/pkg/api/dich/routes/request"
-	"github.com/orderfood/api_of/pkg/log"
 	"github.com/orderfood/api_of/pkg/common/types"
+	"github.com/orderfood/api_of/pkg/log"
 )
 
 type dish struct {

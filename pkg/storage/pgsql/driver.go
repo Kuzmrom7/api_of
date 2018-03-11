@@ -1,10 +1,10 @@
 package pgsql
 
 import (
-	"github.com/orderfood/api_of/pkg/storage/store"
-	"github.com/orderfood/api_of/pkg/storage/storage"
 	"database/sql"
 	_ "github.com/lib/pq"
+	"github.com/orderfood/api_of/pkg/storage/storage"
+	"github.com/orderfood/api_of/pkg/storage/store"
 
 	"github.com/orderfood/api_of/pkg/log"
 )

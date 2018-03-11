@@ -73,6 +73,6 @@ func Errorf(format string, args ...interface{}) {
 
 func Error(args ...interface{}) {
 	if l.verbose {
-		l.log.Error( args...)
+		l.log.Error(args...)
 	}
 }

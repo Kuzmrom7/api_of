@@ -2,12 +2,12 @@ package routes
 
 import (
 	c "github.com/orderfood/api_of/pkg/api/context"
-	"net/http"
-	"github.com/orderfood/api_of/pkg/common/types"
 	"github.com/orderfood/api_of/pkg/auth/session/routes/request"
 	"github.com/orderfood/api_of/pkg/auth/session/views/v1"
 	"github.com/orderfood/api_of/pkg/common/errors"
+	"github.com/orderfood/api_of/pkg/common/types"
 	"github.com/orderfood/api_of/pkg/log"
+	"net/http"
 )
 
 func SessionCreate(w http.ResponseWriter, r *http.Request) {

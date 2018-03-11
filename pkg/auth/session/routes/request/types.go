@@ -1,11 +1,11 @@
 package request
 
 import (
+	"encoding/json"
 	"github.com/orderfood/api_of/pkg/common/errors"
 	"github.com/orderfood/api_of/pkg/log"
 	"io"
 	"io/ioutil"
-	"encoding/json"
 	"strings"
 )
 

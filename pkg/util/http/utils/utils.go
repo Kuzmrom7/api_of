@@ -2,8 +2,8 @@ package utils
 
 import (
 	"context"
-	"net/http"
 	"github.com/gorilla/mux"
+	"net/http"
 )
 
 func SetContext(r *http.Request, name string, val interface{}) *http.Request {

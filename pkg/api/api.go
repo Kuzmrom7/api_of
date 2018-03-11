@@ -1,14 +1,14 @@
 package api
 
 import (
-	"github.com/orderfood/api_of/pkg/api/http"
 	"github.com/orderfood/api_of/pkg/api/config"
 	"github.com/orderfood/api_of/pkg/api/context"
+	"github.com/orderfood/api_of/pkg/api/http"
+	"github.com/orderfood/api_of/pkg/log"
 	"github.com/orderfood/api_of/pkg/storage"
+	"os"
 	"os/signal"
 	"syscall"
-	"os"
-	"github.com/orderfood/api_of/pkg/log"
 )
 
 func Daemon(_cfg *config.Config) {

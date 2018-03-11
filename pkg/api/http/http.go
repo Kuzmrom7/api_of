@@ -3,14 +3,14 @@ package http
 import (
 	"github.com/gorilla/mux"
 
+	adress "github.com/orderfood/api_of/pkg/api/adress/routes"
+	dich "github.com/orderfood/api_of/pkg/api/dich/routes"
+	menu "github.com/orderfood/api_of/pkg/api/menu/routes"
+	personal "github.com/orderfood/api_of/pkg/api/personal/routes"
+	place "github.com/orderfood/api_of/pkg/api/place/routes"
+	session "github.com/orderfood/api_of/pkg/auth/session/routes"
 	users "github.com/orderfood/api_of/pkg/auth/user/routes"
 	"github.com/orderfood/api_of/pkg/util/http"
-	session "github.com/orderfood/api_of/pkg/auth/session/routes"
-	place "github.com/orderfood/api_of/pkg/api/place/routes"
-	menu "github.com/orderfood/api_of/pkg/api/menu/routes"
-	dich "github.com/orderfood/api_of/pkg/api/dich/routes"
-	personal "github.com/orderfood/api_of/pkg/api/personal/routes"
-	adress "github.com/orderfood/api_of/pkg/api/adress/routes"
 )
 
 var Routes = make([]http.Route, 0)

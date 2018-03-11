@@ -3,11 +3,11 @@ package routes
 import (
 	"net/http"
 
-	"github.com/orderfood/api_of/pkg/api/dich/views/v1"
-	"github.com/orderfood/api_of/pkg/api/dich/routes/request"
-	"github.com/orderfood/api_of/pkg/log"
-	"github.com/orderfood/api_of/pkg/common/errors"
 	"github.com/orderfood/api_of/pkg/api/dich"
+	"github.com/orderfood/api_of/pkg/api/dich/routes/request"
+	"github.com/orderfood/api_of/pkg/api/dich/views/v1"
+	"github.com/orderfood/api_of/pkg/common/errors"
+	"github.com/orderfood/api_of/pkg/log"
 	"github.com/orderfood/api_of/pkg/util/http/utils"
 )
 

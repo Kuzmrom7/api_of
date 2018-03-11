@@ -4,7 +4,7 @@ import "github.com/orderfood/api_of/pkg/common/config"
 
 type Config struct {
 	APIServer config.APIServer
-	Database struct {
+	Database  struct {
 		Connection *string
 	}
 }
