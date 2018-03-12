@@ -28,15 +28,15 @@ type Menu interface {
 	DeleteDishInMenu(ctx context.Context, menuid, dishid string) error
 	Fetch(ctx context.Context, id string) (*types.Menu, error)
 	List(ctx context.Context, placeid string) (map[string]*types.Menu, error)
-	ListDishesInMenu(ctx context.Context, menuid, usrid string) ([]*types.Dish, error)
-	ListDishesNotMenu(ctx context.Context, menuid, userid string) ([]*types.Dish, error)
+	ListDishesInMenu(ctx context.Context, menuid, placeid string) ([]*types.Dish, error)
+	ListDishesNotMenu(ctx context.Context, menuid, placeid string) ([]*types.Dish, error)
 }
 
 type Dish interface {
 	CreateDish(ctx context.Context, dich *types.Dish) error
 	RemoveDish(ctx context.Context, id string) error
 	Fetch(ctx context.Context, id string) (*types.Dish, error)
-	List(ctx context.Context, userid string) ([]*types.Dish, error)
+	List(ctx context.Context, placeid string) ([]*types.Dish, error)
 	TypeList(ctx context.Context) (map[string]*types.TypeDishes, error)
 	Update(ctx context.Context, dish *types.Dish) error
 }

@@ -124,7 +124,7 @@ func (u *menu) GetMenuByID(id string) (*types.Menu, error) {
 	return men, nil
 }
 
-func (r *menu) ListMenuDish(menuid, usrid string) ([]*types.Dish, error) {
+func (r *menu) ListMenuDish(menuid, placeid string) ([]*types.Dish, error) {
 
 	var (
 		storage = ctx.Get().GetStorage()
@@ -132,7 +132,7 @@ func (r *menu) ListMenuDish(menuid, usrid string) ([]*types.Dish, error) {
 
 	log.Debug("Menu: Dish: List: list dish in menu")
 
-	list, err := storage.Menu().ListDishesInMenu(r.context, menuid, usrid)
+	list, err := storage.Menu().ListDishesInMenu(r.context, menuid, placeid)
 	if err != nil {
 		log.Errorf("Menu: Dish: List: list dish in menu err: %s", err)
 		return nil, err
@@ -140,7 +140,7 @@ func (r *menu) ListMenuDish(menuid, usrid string) ([]*types.Dish, error) {
 	return list, nil
 }
 
-func (r *menu) ListDishNotMenu(menuid, usrid string) ([]*types.Dish, error) {
+func (r *menu) ListDishNotMenu(menuid, placeid string) ([]*types.Dish, error) {
 
 	var (
 		storage = ctx.Get().GetStorage()
@@ -148,7 +148,7 @@ func (r *menu) ListDishNotMenu(menuid, usrid string) ([]*types.Dish, error) {
 
 	log.Debug("Menu: Dish: List: list dish not in menu")
 
-	list, err := storage.Menu().ListDishesNotMenu(r.context, menuid, usrid)
+	list, err := storage.Menu().ListDishesNotMenu(r.context, menuid, placeid)
 	if err != nil {
 		log.Errorf("Menu: Dish: List: list dish not in menu err: %s", err)
 		return nil, err

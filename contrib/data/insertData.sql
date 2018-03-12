@@ -91,8 +91,8 @@ INSERT INTO type_dish (id_typeDish, name_typeDish)
 VALUES ('bac58724-8025-4507-8d01-37e42b790214', 'коктели');
 -------DISH-------
 
-INSERT INTO dish (id_dish, user_id, name_dish, id_typedish, description, url, time_min, spec)
-VALUES ('31ba1f68-6eb3-4362-8d4d-24616fa9593d', 'ba7f171c-8bd2-4470-99de-6d82ca9402e9', 'Капучино',
+INSERT INTO dish (id_dish, id_place, name_dish, id_typedish, description, url, time_min, spec)
+VALUES ('31ba1f68-6eb3-4362-8d4d-24616fa9593d', '9ba48d7c-b573-4dcb-b8bb-fbb196753231', 'Капучино',
         'dcea187e-3e05-4eec-9bf0-05cabb6d4360',
         'Кофейный напиток итальянской кухни на основе эспрессо с добавлением в него подогретого вспененного молока', '[
     {
@@ -112,8 +112,8 @@ VALUES ('31ba1f68-6eb3-4362-8d4d-24616fa9593d', 'ba7f171c-8bd2-4470-99de-6d82ca9
       "price": "140"
     }
   ]');
-INSERT INTO dish (id_dish, user_id, name_dish, id_typedish, description, url, time_min, spec)
-VALUES ('8072b173-baaa-4d0f-a1c7-8af3995ffefa', 'ba7f171c-8bd2-4470-99de-6d82ca9402e9', 'Латте макиато',
+INSERT INTO dish (id_dish, id_place, name_dish, id_typedish, description, url, time_min, spec)
+VALUES ('8072b173-baaa-4d0f-a1c7-8af3995ffefa', '9ba48d7c-b573-4dcb-b8bb-fbb196753231', 'Латте макиато',
         'dcea187e-3e05-4eec-9bf0-05cabb6d4360',
         'Горячий кофейный напиток, приготавливаемый путём вливания в молоко кофе-эспрессо в пропорции 3:1. Итальянское macchia обозначает маленькое пятнышко кофе, остающееся на поверхности молочной пены.',
         '[
@@ -134,8 +134,8 @@ VALUES ('8072b173-baaa-4d0f-a1c7-8af3995ffefa', 'ba7f171c-8bd2-4470-99de-6d82ca9
       "price": "140"
     }
   ]');
-INSERT INTO dish (id_dish, user_id, name_dish, id_typedish, description, url, time_min, spec)
-VALUES ('5cb7e111-3860-424b-a14e-83a93db1e889', 'ba7f171c-8bd2-4470-99de-6d82ca9402e9', 'Гамбургер',
+INSERT INTO dish (id_dish, id_place, name_dish, id_typedish, description, url, time_min, spec)
+VALUES ('5cb7e111-3860-424b-a14e-83a93db1e889', '9ba48d7c-b573-4dcb-b8bb-fbb196753231', 'Гамбургер',
         '1a5cf225-2673-46dc-9fd5-33a2fafd6bf2',
         'Вид сэндвича, состоящий из рубленой жареной котлеты, подаваемой внутри разрезанной булки.', '[
     {

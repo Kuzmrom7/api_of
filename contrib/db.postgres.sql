@@ -95,7 +95,7 @@ CREATE TABLE type_dish
 CREATE TABLE dish
 (
   id_dish     UUID PRIMARY KEY                        NOT NULL DEFAULT uuid_generate_v4(),
-  user_id     UUID,
+  id_place    UUID,
   name_dish   VARCHAR(256),
   id_typeDish UUID REFERENCES type_dish (id_typeDish),
   description VARCHAR(256)                                     DEFAULT '',

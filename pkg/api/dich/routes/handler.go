@@ -6,6 +6,7 @@ import (
 	"github.com/orderfood/api_of/pkg/api/dich"
 	"github.com/orderfood/api_of/pkg/api/dich/routes/request"
 	"github.com/orderfood/api_of/pkg/api/dich/views/v1"
+	"github.com/orderfood/api_of/pkg/api/place"
 	"github.com/orderfood/api_of/pkg/common/errors"
 	"github.com/orderfood/api_of/pkg/log"
 	"github.com/orderfood/api_of/pkg/util/http/utils"
@@ -14,7 +15,8 @@ import (
 func DishCreate(w http.ResponseWriter, r *http.Request) {
 
 	var (
-		err error
+		err    error
+		usrid1 = r.Context().Value("uid").(string)
 	)
 
 	if r.Context().Value("uid") == nil {
@@ -31,9 +33,20 @@ func DishCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	usrid1 := r.Context().Value("uid").(string)
+	p := place.New(r.Context())
+	plc, err := p.GetPlaceByIDUsr(usrid1)
+	if err != nil {
+		log.Errorf("Handler: Place: get place", err)
+		errors.HTTP.InternalServerError(w)
+		return
+	}
+	if plc == nil {
+		log.Warnf("Handler: Place: place by id user `%s` not found", usrid1)
+		errors.New("place").NotFound().Http(w)
+		return
+	}
 
-	di, err := dich.New(r.Context()).Create(rq, usrid1)
+	di, err := dich.New(r.Context()).Create(rq, plc.Meta.ID)
 	if err != nil {
 		log.Errorf("Handler: Dish: create dish", err)
 		errors.HTTP.InternalServerError(w)
@@ -112,15 +125,9 @@ func DishUpdate(w http.ResponseWriter, r *http.Request) {
 
 func DishGet(w http.ResponseWriter, r *http.Request) {
 
-	if r.Context().Value("uid") == nil {
-		errors.HTTP.Unauthorized(w)
-		return
-	}
-
-	did := utils.Vars(r)["dish"]
-
 	var (
 		err error
+		did = utils.Vars(r)["dish"]
 	)
 
 	log.Debug("Handler: Dish: get dish")
@@ -178,16 +185,13 @@ func DishRemove(w http.ResponseWriter, r *http.Request) {
 
 func DishList(w http.ResponseWriter, r *http.Request) {
 
-	if r.Context().Value("uid") == nil {
-		errors.HTTP.Unauthorized(w)
-		return
-	}
-
 	log.Debug("Handler: Dish: List: list dishes")
+	var (
+		err error
+		pid = utils.Vars(r)["place"]
+	)
 
-	usrid1 := r.Context().Value("uid").(string)
-
-	items, err := dich.New(r.Context()).List(usrid1)
+	items, err := dich.New(r.Context()).List(pid)
 	if err != nil {
 		log.Errorf("Handler: Dish: List: list dishes err ", err)
 		errors.HTTP.InternalServerError(w)

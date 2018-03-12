@@ -53,12 +53,12 @@ func (s *DishStorage) CreateDish(ctx context.Context, dish *types.Dish) error {
 	}
 
 	const sqlCreateDich = `
-		INSERT INTO dish (name_dish, description, time_min, id_typeDish, url, spec, user_id)
+		INSERT INTO dish (name_dish, description, time_min, id_typeDish, url, spec, id_place)
 		VALUES ($1, $2, $3, $4, $5, $6, $7)
 		RETURNING id_dish;
 	`
 
-	err = s.client.QueryRow(sqlCreateDich, dish.Meta.Name, dish.Meta.Desc, dish.Meta.Timemin, dish.Meta.TypeDishID, string(urls), string(specs), dish.Meta.UserID).Scan(&id)
+	err = s.client.QueryRow(sqlCreateDich, dish.Meta.Name, dish.Meta.Desc, dish.Meta.Timemin, dish.Meta.TypeDishID, string(urls), string(specs), dish.Meta.PlaceID).Scan(&id)
 	if err != nil {
 		log.Errorf("Storage: Dish: Insert: insert dish query err: %s", err)
 		return err
@@ -165,11 +165,11 @@ func (s *DishStorage) Fetch(ctx context.Context, id string) (*types.Dish, error)
 
 }
 
-func (s *DishStorage) List(ctx context.Context, userid string) ([]*types.Dish, error) {
+func (s *DishStorage) List(ctx context.Context, placeid string) ([]*types.Dish, error) {
 
 	var dishes []*types.Dish
 
-	log.Debug("Storage: Dish: List: get list dishes by user id %s", userid)
+	log.Debug("Storage: Dish: List: get list dishes by place id %s", placeid)
 
 	const sqlstrListDish = `
 			SELECT to_json(
@@ -185,14 +185,9 @@ func (s *DishStorage) List(ctx context.Context, userid string) ([]*types.Dish, e
 				)
 			)
 			FROM dish
-			WHERE dish.user_id = $1;`
+			WHERE dish.id_place = $1;`
 
-	//const sqlstrListDish = `
-	//				SELECT dish.id_dish, dish.name_dish, dish.description, dish.url, dish.updated, dish.created, dish.time_min
-	//				FROM dish
-	//				WHERE dish.user_id = $1;`
-
-	rows, err := s.client.Query(sqlstrListDish, userid)
+	rows, err := s.client.Query(sqlstrListDish, placeid)
 	switch err {
 	case nil:
 	case sql.ErrNoRows:
