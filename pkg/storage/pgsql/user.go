@@ -1,12 +1,12 @@
 package pgsql
 
 import (
+	"context"
+	"database/sql"
+	"errors"
+	"github.com/orderfood/api_of/pkg/common/types"
 	"github.com/orderfood/api_of/pkg/log"
 	"github.com/orderfood/api_of/pkg/storage/store"
-	"context"
-	"github.com/orderfood/api_of/pkg/common/types"
-	"errors"
-	"database/sql"
 )
 
 func (um *userModel) convert() *types.User {

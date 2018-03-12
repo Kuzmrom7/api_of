@@ -3,10 +3,10 @@ package request
 import (
 	"io"
 
-	"github.com/orderfood/api_of/pkg/common/errors"
-	"io/ioutil"
 	"encoding/json"
+	"github.com/orderfood/api_of/pkg/common/errors"
 	"github.com/orderfood/api_of/pkg/log"
+	"io/ioutil"
 )
 
 type PlaceCreate struct {
@@ -20,10 +20,10 @@ type TypePlaceOpt struct {
 }
 
 type PlaceUpdate struct {
-	Id       string       `json:"id,omitempty"`
-	Phone    *string      `json:"phone,omitempty"`
-	Url      *string      `json:"url,omitempty"`
-	City     *string      `json:"city,omitempty"`
+	Id    string  `json:"id,omitempty"`
+	Phone *string `json:"phone,omitempty"`
+	Url   *string `json:"url,omitempty"`
+	City  *string `json:"city,omitempty"`
 }
 
 func (s *PlaceCreate) DecodeAndValidate(reader io.Reader) *errors.Err {

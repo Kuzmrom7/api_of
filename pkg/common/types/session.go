@@ -1,9 +1,9 @@
 package types
 
 import (
+	"errors"
 	"github.com/dgrijalva/jwt-go"
 	"time"
-	"errors"
 )
 
 var (

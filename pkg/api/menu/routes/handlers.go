@@ -3,14 +3,13 @@ package routes
 import (
 	"net/http"
 
-	"github.com/orderfood/api_of/pkg/api/menu/views/v1"
-	"github.com/orderfood/api_of/pkg/log"
-	"github.com/orderfood/api_of/pkg/api/menu/routes/request"
-	"github.com/orderfood/api_of/pkg/common/errors"
-	"github.com/orderfood/api_of/pkg/api/menu"
-	"github.com/orderfood/api_of/pkg/api/place"
 	"github.com/orderfood/api_of/pkg/api/dich"
 	dv1 "github.com/orderfood/api_of/pkg/api/dich/views/v1"
+	"github.com/orderfood/api_of/pkg/api/menu"
+	"github.com/orderfood/api_of/pkg/api/menu/routes/request"
+	"github.com/orderfood/api_of/pkg/api/menu/views/v1"
+	"github.com/orderfood/api_of/pkg/common/errors"
+	"github.com/orderfood/api_of/pkg/log"
 	"github.com/orderfood/api_of/pkg/util/http/utils"
 )
 
@@ -57,32 +56,14 @@ func MenuCreate(w http.ResponseWriter, r *http.Request) {
 
 func GetListMenu(w http.ResponseWriter, r *http.Request) {
 
-	if r.Context().Value("uid") == nil {
-		errors.HTTP.Unauthorized(w)
-		return
-	}
-
 	var (
 		err error
-		id  = r.Context().Value("uid").(string)
+		pid = utils.Vars(r)["place"]
 	)
 
 	log.Debug("Handler: Menu: List: get list menu")
 
-	p := place.New(r.Context())
-	pl, err := p.GetPlaceByIDUsr(id)
-	if err != nil {
-		log.Errorf("Handler: Menu: List: get place by user id %s err: %s", id, err)
-		errors.HTTP.InternalServerError(w)
-		return
-	}
-	if pl == nil {
-		log.Warnf("Handler: Menu: List: place by user id `%s` not found", id)
-		errors.New("place").NotFound().Http(w)
-		return
-	}
-
-	items, err := menu.New(r.Context()).List(pl.Meta.ID)
+	items, err := menu.New(r.Context()).List(pid)
 	if err != nil {
 		log.Errorf("Handler: Menu: List: get list menu err: %s", err)
 		errors.HTTP.InternalServerError(w)
@@ -133,7 +114,7 @@ func MenuDishCreate(w http.ResponseWriter, r *http.Request) {
 		errors.HTTP.InternalServerError(w)
 		return
 	}
-	
+
 	err = m.CreateMenuDish(mid, did)
 	if err != nil {
 		log.Errorf("Handler: Menu: Dish: add dish in menu err %s", err)
@@ -150,15 +131,9 @@ func MenuDishCreate(w http.ResponseWriter, r *http.Request) {
 
 func GetInfoMenu(w http.ResponseWriter, r *http.Request) {
 
-	if r.Context().Value("uid") == nil {
-		errors.HTTP.Unauthorized(w)
-		return
-	}
-
-	mid := utils.Vars(r)["menu"]
-
 	var (
 		err error
+		mid = utils.Vars(r)["menu"]
 	)
 
 	log.Debug("Handler: Menu: Info: get info menu")
@@ -191,21 +166,16 @@ func GetInfoMenu(w http.ResponseWriter, r *http.Request) {
 
 func GetListDishInMenu(w http.ResponseWriter, r *http.Request) {
 
-	if r.Context().Value("uid") == nil {
-		errors.HTTP.Unauthorized(w)
-		return
-	}
-
 	var (
 		err error
 	)
 
 	mid := utils.Vars(r)["menu"]
-	uid := r.Context().Value("uid").(string)
+	pid := utils.Vars(r)["place"]
 
 	log.Debug("Handler: Menu: Dish: List: get list dish in menu")
 
-	dishList, err := menu.New(r.Context()).ListMenuDish(mid, uid)
+	dishList, err := menu.New(r.Context()).ListMenuDish(mid, pid)
 	if err != nil {
 		log.Errorf("Handler: Menu: Dish: List: get list dish in menu err %s", err)
 		errors.HTTP.InternalServerError(w)
@@ -262,17 +232,12 @@ func MenuDishRemove(w http.ResponseWriter, r *http.Request) {
 
 func DishListNotMenu(w http.ResponseWriter, r *http.Request) {
 
-	if r.Context().Value("uid") == nil {
-		errors.HTTP.Unauthorized(w)
-		return
-	}
-
-	usrid := r.Context().Value("uid").(string)
+	pid := utils.Vars(r)["place"]
 	mid := utils.Vars(r)["menu"]
 
 	log.Debug("Handler: Menu: Dish: List: get list dish not menu")
 
-	dishList, err := menu.New(r.Context()).ListDishNotMenu(mid, usrid)
+	dishList, err := menu.New(r.Context()).ListDishNotMenu(mid, pid)
 	if err != nil {
 		log.Errorf("Handler: Menu: Dish: List: get list dish not menu err %s", err)
 		errors.HTTP.InternalServerError(w)

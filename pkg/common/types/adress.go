@@ -5,7 +5,7 @@ type Adress struct {
 }
 
 type AdressMeta struct {
-	ID       string `json:"id"`
-	Name     string `json:"name,omitempty"`
-	PlaceID  string `json:"place,omitempty"`
+	ID      string `json:"id"`
+	Name    string `json:"name,omitempty"`
+	PlaceID string `json:"place,omitempty"`
 }

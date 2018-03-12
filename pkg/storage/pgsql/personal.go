@@ -1,12 +1,12 @@
 package pgsql
 
 import (
-	"database/sql"
 	"context"
-	"github.com/orderfood/api_of/pkg/common/types"
+	"database/sql"
 	"errors"
-	"log"
+	"github.com/orderfood/api_of/pkg/common/types"
 	"github.com/orderfood/api_of/pkg/storage/store"
+	"log"
 )
 
 func (s *PersonalStorage) GetTypePersonIDByName(ctx context.Context, name string) (string, error) {

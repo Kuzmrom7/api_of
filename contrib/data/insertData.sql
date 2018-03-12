@@ -1,11 +1,11 @@
-
 DELETE FROM users;
 
 -------USERS-------
 
-INSERT INTO users (user_id, username, email, gravatar, password, salt,type)
+INSERT INTO users (user_id, username, email, gravatar, password, salt, type)
 VALUES ('ba7f171c-8bd2-4470-99de-6d82ca9402e9', 'orderfood', 'orderfood@of.com', 'd68ec67243ffcc5184afb4619d0ee447',
-        '$2a$10$2zfn8HqZnE0oNnvnB9SmNeCNExnumDSNnnDGvr/KASKWktaSWWXeS', '8fcc5cfa90d2304e3b8c9f3486c5f32447227eedf15d0ebc172ef8966c36', 'owner');
+        '$2a$10$2zfn8HqZnE0oNnvnB9SmNeCNExnumDSNnnDGvr/KASKWktaSWWXeS',
+        '8fcc5cfa90d2304e3b8c9f3486c5f32447227eedf15d0ebc172ef8966c36', 'owner');
 
 -------TYPES PLACES-------
 
@@ -24,19 +24,30 @@ VALUES ('28f8e2f1-4183-45c2-bb94-b58116af0e42', 'кафе');
 INSERT INTO type_place (id_typeplace, name_type)
 VALUES ('3b896b95-928a-4107-934b-d7dace83b83a', 'кофейнная');
 
-
 -------PLACES-------
 
 INSERT INTO place (id_place, name, phone_number, url, city, user_id, type)
-VALUES ('9ba48d7c-b573-4dcb-b8bb-fbb196753231', 'ORDplace', '+79995207691', 'rklplace.com', 'Saint Petersburg','ba7f171c-8bd2-4470-99de-6d82ca9402e9',
-'[{"id": "7d826de7-97de-4002-8555-6a8056fa3faa", "nametype": "кафе"}, {"id": "7d826de7-97de-4002-8555-6a8056fa3faa", "nametype": "бар"}]');
+VALUES ('9ba48d7c-b573-4dcb-b8bb-fbb196753231', 'ORDplace', '+79995207691', 'rklplace.com', 'Saint Petersburg',
+        'ba7f171c-8bd2-4470-99de-6d82ca9402e9',
+        '[
+          {
+            "id": "7d826de7-97de-4002-8555-6a8056fa3faa",
+            "nametype": "кафе"
+          },
+          {
+            "id": "7d826de7-97de-4002-8555-6a8056fa3faa",
+            "nametype": "бар"
+          }
+        ]');
 
 -------MENUS-------
 
 INSERT INTO menu (id_menu, name_menu, id_place, url)
-VALUES ('a93ba633-7547-491f-a4ae-339b1420b1c7', 'Основное','9ba48d7c-b573-4dcb-b8bb-fbb196753231', 'http://www.redprint.ru/wp-content/uploads/2017/10/3-4.jpg' );
+VALUES ('a93ba633-7547-491f-a4ae-339b1420b1c7', 'Основное', '9ba48d7c-b573-4dcb-b8bb-fbb196753231',
+        'http://www.redprint.ru/wp-content/uploads/2017/10/3-4.jpg');
 INSERT INTO menu (id_menu, name_menu, id_place, url)
-VALUES ('f0f6738b-5437-4a89-b715-9cd1d00173de', 'Напитки','9ba48d7c-b573-4dcb-b8bb-fbb196753231', 'http://vesdoloi.ru/tim/46e099425dde9d90f39da6c5659a4b47.jpg' );
+VALUES ('f0f6738b-5437-4a89-b715-9cd1d00173de', 'Напитки', '9ba48d7c-b573-4dcb-b8bb-fbb196753231',
+        'http://vesdoloi.ru/tim/46e099425dde9d90f39da6c5659a4b47.jpg');
 
 -------TYPES DISHES-------
 
@@ -80,12 +91,66 @@ INSERT INTO type_dish (id_typeDish, name_typeDish)
 VALUES ('bac58724-8025-4507-8d01-37e42b790214', 'коктели');
 -------DISH-------
 
-INSERT INTO dish (id_dish, user_id,  name_dish, id_typedish, description, url, time_min, spec)
-VALUES ('31ba1f68-6eb3-4362-8d4d-24616fa9593d','ba7f171c-8bd2-4470-99de-6d82ca9402e9','Капучино', 'dcea187e-3e05-4eec-9bf0-05cabb6d4360', 'Кофейный напиток итальянской кухни на основе эспрессо с добавлением в него подогретого вспененного молока', '[{"url": "http://kofeka.ru/assets/images/LATTE%20I%20KAPUCHINO/%D0%BA%D0%B0%D1%80%D1%82%D0%B8%D0%BD%D0%BA%D0%B0-1_opt.jpg"}]', 10, '[{"size": "s", "price": "100"}, {"size": "m", "price": "120"}, {"size": "l", "price": "140"}]');
-INSERT INTO dish (id_dish, user_id,  name_dish, id_typedish, description, url, time_min, spec)
-VALUES ('8072b173-baaa-4d0f-a1c7-8af3995ffefa','ba7f171c-8bd2-4470-99de-6d82ca9402e9','Латте макиато', 'dcea187e-3e05-4eec-9bf0-05cabb6d4360', 'Горячий кофейный напиток, приготавливаемый путём вливания в молоко кофе-эспрессо в пропорции 3:1. Итальянское macchia обозначает маленькое пятнышко кофе, остающееся на поверхности молочной пены.', '[{"url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Latte_macchiato_with_coffee_beans_new.jpg/800px-Latte_macchiato_with_coffee_beans_new.jpg"}]', 10, '[{"size": "s", "price": "100"}, {"size": "m", "price": "120"}, {"size": "l", "price": "140"}]');
-INSERT INTO dish (id_dish, user_id,  name_dish, id_typedish, description, url, time_min, spec)
-VALUES ('5cb7e111-3860-424b-a14e-83a93db1e889','ba7f171c-8bd2-4470-99de-6d82ca9402e9','Гамбургер', '1a5cf225-2673-46dc-9fd5-33a2fafd6bf2', 'Вид сэндвича, состоящий из рубленой жареной котлеты, подаваемой внутри разрезанной булки.', '[{"url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgL_t_6ibelQW6nRKUDyLYMAHhUdQn2aiRWvlD057hbEr5BiF4"}]', 10, '[{"size": "200гр", "price": "190"}, {"size": "300гр", "price": "295"}]');
+INSERT INTO dish (id_dish, id_place, name_dish, id_typedish, description, url, time_min, spec)
+VALUES ('31ba1f68-6eb3-4362-8d4d-24616fa9593d', '9ba48d7c-b573-4dcb-b8bb-fbb196753231', 'Капучино',
+        'dcea187e-3e05-4eec-9bf0-05cabb6d4360',
+        'Кофейный напиток итальянской кухни на основе эспрессо с добавлением в него подогретого вспененного молока', '[
+    {
+      "url": "http://kofeka.ru/assets/images/LATTE%20I%20KAPUCHINO/%D0%BA%D0%B0%D1%80%D1%82%D0%B8%D0%BD%D0%BA%D0%B0-1_opt.jpg"
+    }
+  ]', 10, '[
+    {
+      "size": "s",
+      "price": "100"
+    },
+    {
+      "size": "m",
+      "price": "120"
+    },
+    {
+      "size": "l",
+      "price": "140"
+    }
+  ]');
+INSERT INTO dish (id_dish, id_place, name_dish, id_typedish, description, url, time_min, spec)
+VALUES ('8072b173-baaa-4d0f-a1c7-8af3995ffefa', '9ba48d7c-b573-4dcb-b8bb-fbb196753231', 'Латте макиато',
+        'dcea187e-3e05-4eec-9bf0-05cabb6d4360',
+        'Горячий кофейный напиток, приготавливаемый путём вливания в молоко кофе-эспрессо в пропорции 3:1. Итальянское macchia обозначает маленькое пятнышко кофе, остающееся на поверхности молочной пены.',
+        '[
+          {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Latte_macchiato_with_coffee_beans_new.jpg/800px-Latte_macchiato_with_coffee_beans_new.jpg"
+          }
+        ]', 10, '[
+    {
+      "size": "s",
+      "price": "100"
+    },
+    {
+      "size": "m",
+      "price": "120"
+    },
+    {
+      "size": "l",
+      "price": "140"
+    }
+  ]');
+INSERT INTO dish (id_dish, id_place, name_dish, id_typedish, description, url, time_min, spec)
+VALUES ('5cb7e111-3860-424b-a14e-83a93db1e889', '9ba48d7c-b573-4dcb-b8bb-fbb196753231', 'Гамбургер',
+        '1a5cf225-2673-46dc-9fd5-33a2fafd6bf2',
+        'Вид сэндвича, состоящий из рубленой жареной котлеты, подаваемой внутри разрезанной булки.', '[
+    {
+      "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgL_t_6ibelQW6nRKUDyLYMAHhUdQn2aiRWvlD057hbEr5BiF4"
+    }
+  ]', 10, '[
+    {
+      "size": "200гр",
+      "price": "190"
+    },
+    {
+      "size": "300гр",
+      "price": "295"
+    }
+  ]');
 
 
 INSERT INTO menudish (id_menu, id_dish)
@@ -93,8 +158,6 @@ VALUES ('a93ba633-7547-491f-a4ae-339b1420b1c7', '5cb7e111-3860-424b-a14e-83a93db
 
 INSERT INTO menudish (id_menu, id_dish)
 VALUES ('f0f6738b-5437-4a89-b715-9cd1d00173de', '31ba1f68-6eb3-4362-8d4d-24616fa9593d');
-
-
 
 
 INSERT INTO type_personal (id_typePersonal, name_type)
@@ -114,7 +177,6 @@ VALUES ('6f8ee4df-ce23-4e1e-9c21-87d163075785', 'бармен');
 
 INSERT INTO type_personal (id_typePersonal, name_type)
 VALUES ('7d826de7-97de-4002-8555-6a8056fa3faa', 'техперсонал');
-
 
 ------EXAMPLE SELECT------
 

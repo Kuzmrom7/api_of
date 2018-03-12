@@ -1,11 +1,11 @@
 package v1
 
 type Place struct {
-	Id         string       `json:"id,omitempty"`
-	Name       string       `json:"name,omitempty"`
-	Phone      string       `json:"phone,omitempty"`
-	Url        string       `json:"url,omitempty"`
-	City       string       `json:"city,omitempty"`
+	Id         string        `json:"id,omitempty"`
+	Name       string        `json:"name,omitempty"`
+	Phone      string        `json:"phone,omitempty"`
+	Url        string        `json:"url,omitempty"`
+	City       string        `json:"city,omitempty"`
 	TypesPlace []*TypePlaces `json:"typesplace"`
 }
 
@@ -15,6 +15,8 @@ type TypePlaces struct {
 }
 
 type TypePlaceList []*TypePlace
+
+type PlaceList []*Place
 
 type TypePlace struct {
 	Meta TypePlaceMeta `json:"meta"`

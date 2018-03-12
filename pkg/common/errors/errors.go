@@ -2,8 +2,8 @@ package errors
 
 import (
 	"errors"
-	"strings"
 	"net/http"
+	"strings"
 )
 
 const (

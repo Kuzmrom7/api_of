@@ -1,16 +1,21 @@
 package pgsql
 
 import (
-	"github.com/orderfood/api_of/pkg/storage/store"
+	"context"
 	"database/sql"
+	"encoding/json"
+	"errors"
 	"github.com/orderfood/api_of/pkg/common/types"
 	"github.com/orderfood/api_of/pkg/log"
-	"context"
-	"errors"
-	"encoding/json"
+	"github.com/orderfood/api_of/pkg/storage/store"
 )
 
 func (s *MenuStorage) CreateMenu(ctx context.Context, menu *types.Menu) error {
+
+	var (
+		err error
+		id  store.NullString
+	)
 
 	log.Debug("Storage: Menu: Insert: insert menu: %#v", menu)
 
@@ -19,11 +24,6 @@ func (s *MenuStorage) CreateMenu(ctx context.Context, menu *types.Menu) error {
 		log.Errorf("Storage: Menu: Insert: insert menu err: %s", err)
 		return err
 	}
-
-	var (
-		err error
-		id  store.NullString
-	)
 
 	const sqlCreateMenu = `
 		INSERT INTO menu (name_menu, id_place, url)
@@ -195,7 +195,7 @@ func (s *MenuStorage) Fetch(ctx context.Context, id string) (*types.Menu, error)
 
 }
 
-func (s *MenuStorage) ListDishesInMenu(ctx context.Context, menuid, usrid string) ([]*types.Dish, error) {
+func (s *MenuStorage) ListDishesInMenu(ctx context.Context, menuid, placeid string) ([]*types.Dish, error) {
 
 	var dishes []*types.Dish
 
@@ -218,9 +218,9 @@ func (s *MenuStorage) ListDishesInMenu(ctx context.Context, menuid, usrid string
 					FROM dish
 							INNER JOIN menudish on menudish.id_dish = dish.id_dish
 							INNER JOIN menu on menu.id_menu = menudish.id_menu
-					WHERE menu.id_menu = $1 AND dish.user_id = $2;`
+					WHERE menu.id_menu = $1 AND dish.id_place = $2;`
 
-	rows, err := s.client.Query(sqlstrListMenuDishes, menuid, usrid)
+	rows, err := s.client.Query(sqlstrListMenuDishes, menuid, placeid)
 	switch err {
 	case nil:
 	case sql.ErrNoRows:
@@ -251,7 +251,7 @@ func (s *MenuStorage) ListDishesInMenu(ctx context.Context, menuid, usrid string
 	return dishes, nil
 }
 
-func (s *MenuStorage) ListDishesNotMenu(ctx context.Context, menuid, userid string) ([]*types.Dish, error) {
+func (s *MenuStorage) ListDishesNotMenu(ctx context.Context, menuid, placeid string) ([]*types.Dish, error) {
 
 	var dishes []*types.Dish
 
@@ -278,10 +278,10 @@ func (s *MenuStorage) ListDishesNotMenu(ctx context.Context, menuid, userid stri
 									FROM dish
 										INNER JOIN menudish on menudish.id_dish = dish.id_dish
 										INNER JOIN menu on menu.id_menu = menudish.id_menu
-									WHERE menu.id_menu = $1 AND dish.user_id = $2
+									WHERE menu.id_menu = $1 AND dish.id_place = $2
 								);`
 
-	rows, err := s.client.Query(sqlstrListDishNotMenu, menuid, userid)
+	rows, err := s.client.Query(sqlstrListDishNotMenu, menuid, placeid)
 	switch err {
 	case nil:
 	case sql.ErrNoRows:

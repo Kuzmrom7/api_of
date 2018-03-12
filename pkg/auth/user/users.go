@@ -6,8 +6,8 @@ import (
 	ctx "github.com/orderfood/api_of/pkg/api/context"
 	"github.com/orderfood/api_of/pkg/auth/user/routes/request"
 	"github.com/orderfood/api_of/pkg/common/types"
-	"github.com/orderfood/api_of/pkg/util/generator"
 	"github.com/orderfood/api_of/pkg/log"
+	"github.com/orderfood/api_of/pkg/util/generator"
 )
 
 type user struct {

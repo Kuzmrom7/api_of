@@ -4,11 +4,11 @@ import (
 	"net/http"
 
 	sv1 "github.com/orderfood/api_of/pkg/auth/session/views/v1"
-	"github.com/orderfood/api_of/pkg/auth/user/views/v1"
-	"github.com/orderfood/api_of/pkg/auth/user/routes/request"
 	"github.com/orderfood/api_of/pkg/auth/user"
-	"github.com/orderfood/api_of/pkg/common/types"
+	"github.com/orderfood/api_of/pkg/auth/user/routes/request"
+	"github.com/orderfood/api_of/pkg/auth/user/views/v1"
 	"github.com/orderfood/api_of/pkg/common/errors"
+	"github.com/orderfood/api_of/pkg/common/types"
 	"github.com/orderfood/api_of/pkg/log"
 )
 

@@ -2,7 +2,7 @@ package v1
 
 import "github.com/orderfood/api_of/pkg/common/types"
 
-func NewPersonal(obj *types.Personal) *Personal{
+func NewPersonal(obj *types.Personal) *Personal {
 	return newPersonal(obj)
 }
 

@@ -1,11 +1,11 @@
 package v1
 
 import (
-	"github.com/orderfood/api_of/pkg/common/types"
 	"encoding/json"
+	"github.com/orderfood/api_of/pkg/common/types"
 )
 
-func newPersonal(obj *types.Personal) *Personal{
+func newPersonal(obj *types.Personal) *Personal {
 	p := new(Personal)
 	p.Fio = obj.Meta.Fio
 	p.Phone = obj.Meta.Phone

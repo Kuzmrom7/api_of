@@ -5,8 +5,8 @@ import (
 
 	ctx "github.com/orderfood/api_of/pkg/api/context"
 	"github.com/orderfood/api_of/pkg/api/dich/routes/request"
-	"github.com/orderfood/api_of/pkg/log"
 	"github.com/orderfood/api_of/pkg/common/types"
+	"github.com/orderfood/api_of/pkg/log"
 )
 
 type dish struct {
@@ -19,7 +19,7 @@ func New(c context.Context) *dish {
 	}
 }
 
-func (p *dish) Create(rq *request.DishCreate, userid string) (*types.Dish, error) {
+func (p *dish) Create(rq *request.DishCreate, placeid string) (*types.Dish, error) {
 
 	var (
 		storage = ctx.Get().GetStorage()
@@ -46,7 +46,7 @@ func (p *dish) Create(rq *request.DishCreate, userid string) (*types.Dish, error
 		})
 	}
 
-	di.Meta.UserID = userid
+	di.Meta.PlaceID = placeid
 
 	if err := storage.Dish().CreateDish(p.context, &di); err != nil {
 		log.Errorf("Dish: insert dish err: %s", err)
@@ -72,7 +72,7 @@ func (d *dish) Remove(id string) error {
 	return nil
 }
 
-func (r *dish) List(userid string) ([]*types.Dish, error) {
+func (r *dish) List(placeid string) ([]*types.Dish, error) {
 
 	var (
 		storage = ctx.Get().GetStorage()
@@ -80,7 +80,7 @@ func (r *dish) List(userid string) ([]*types.Dish, error) {
 
 	log.Debug("Dish: list dishes")
 
-	list, err := storage.Dish().List(r.context, userid)
+	list, err := storage.Dish().List(r.context, placeid)
 	if err != nil {
 		log.Errorf("Dish: list dishes err: %s", err)
 		return nil, err

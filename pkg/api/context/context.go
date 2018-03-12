@@ -2,9 +2,9 @@ package context
 
 import (
 	"context"
-	"github.com/orderfood/api_of/pkg/storage"
 	"github.com/orderfood/api_of/pkg/api/config"
 	_c "github.com/orderfood/api_of/pkg/common/context"
+	"github.com/orderfood/api_of/pkg/storage"
 )
 
 var _ctx Context

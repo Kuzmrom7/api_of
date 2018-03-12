@@ -33,8 +33,7 @@ type UserSSH struct {
 }
 
 func (p *UserPassword) ValidatePassword(password string) error {
-	if err := bcrypt.CompareHashAndPassword([]byte(p.Password), []byte(password+string(p.Salt)));
-		err != nil {
+	if err := bcrypt.CompareHashAndPassword([]byte(p.Password), []byte(password+string(p.Salt))); err != nil {
 		return err
 	}
 	return nil

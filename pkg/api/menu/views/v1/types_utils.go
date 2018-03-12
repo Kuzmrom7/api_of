@@ -1,8 +1,8 @@
 package v1
 
 import (
-	"github.com/orderfood/api_of/pkg/common/types"
 	"encoding/json"
+	"github.com/orderfood/api_of/pkg/common/types"
 )
 
 func newMenu(obj *types.Menu) *Menu {

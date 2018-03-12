@@ -3,12 +3,12 @@ package request
 import (
 	"io"
 
-	"github.com/orderfood/api_of/pkg/common/errors"
-	"io/ioutil"
 	"encoding/json"
-	"github.com/orderfood/api_of/pkg/util/validator"
-	"strings"
+	"github.com/orderfood/api_of/pkg/common/errors"
 	"github.com/orderfood/api_of/pkg/log"
+	"github.com/orderfood/api_of/pkg/util/validator"
+	"io/ioutil"
+	"strings"
 )
 
 type RequestUserCreate struct {

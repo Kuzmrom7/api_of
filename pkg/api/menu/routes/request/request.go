@@ -3,10 +3,10 @@ package request
 import (
 	"io"
 
+	"encoding/json"
 	"github.com/orderfood/api_of/pkg/common/errors"
 	"github.com/orderfood/api_of/pkg/log"
 	"io/ioutil"
-	"encoding/json"
 )
 
 type MenuCreate struct {
