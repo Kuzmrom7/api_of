@@ -44,10 +44,10 @@ VALUES ('9ba48d7c-b573-4dcb-b8bb-fbb196753231', 'ORDplace', '+79995207691', 'rkl
 
 INSERT INTO menu (id_menu, name_menu, id_place, url)
 VALUES ('a93ba633-7547-491f-a4ae-339b1420b1c7', 'Основное', '9ba48d7c-b573-4dcb-b8bb-fbb196753231',
-        'http://www.redprint.ru/wp-content/uploads/2017/10/3-4.jpg');
+        'http://res.cloudinary.com/dwkkf6qmg/image/upload/v1520968541/zmj5z5qepk2qjp1trqft.jpg');
 INSERT INTO menu (id_menu, name_menu, id_place, url)
 VALUES ('f0f6738b-5437-4a89-b715-9cd1d00173de', 'Напитки', '9ba48d7c-b573-4dcb-b8bb-fbb196753231',
-        'http://vesdoloi.ru/tim/46e099425dde9d90f39da6c5659a4b47.jpg');
+        'http://res.cloudinary.com/dwkkf6qmg/image/upload/v1520968532/nzqophlzi64dcj3uwsrn.jpg');
 
 -------TYPES DISHES-------
 
@@ -96,7 +96,7 @@ VALUES ('31ba1f68-6eb3-4362-8d4d-24616fa9593d', '9ba48d7c-b573-4dcb-b8bb-fbb1967
         'dcea187e-3e05-4eec-9bf0-05cabb6d4360',
         'Кофейный напиток итальянской кухни на основе эспрессо с добавлением в него подогретого вспененного молока', '[
     {
-      "url": "http://kofeka.ru/assets/images/LATTE%20I%20KAPUCHINO/%D0%BA%D0%B0%D1%80%D1%82%D0%B8%D0%BD%D0%BA%D0%B0-1_opt.jpg"
+      "url": "http://res.cloudinary.com/dwkkf6qmg/image/upload/v1520968517/zacyvt2ofxybcdj6khno.jpg"
     }
   ]', 10, '[
     {
@@ -118,7 +118,7 @@ VALUES ('8072b173-baaa-4d0f-a1c7-8af3995ffefa', '9ba48d7c-b573-4dcb-b8bb-fbb1967
         'Горячий кофейный напиток, приготавливаемый путём вливания в молоко кофе-эспрессо в пропорции 3:1. Итальянское macchia обозначает маленькое пятнышко кофе, остающееся на поверхности молочной пены.',
         '[
           {
-            "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Latte_macchiato_with_coffee_beans_new.jpg/800px-Latte_macchiato_with_coffee_beans_new.jpg"
+            "url": "http://res.cloudinary.com/dwkkf6qmg/image/upload/v1520968526/rpiiwgrwdkwb7ha9vnap.jpg"
           }
         ]', 10, '[
     {
@@ -139,7 +139,7 @@ VALUES ('5cb7e111-3860-424b-a14e-83a93db1e889', '9ba48d7c-b573-4dcb-b8bb-fbb1967
         '1a5cf225-2673-46dc-9fd5-33a2fafd6bf2',
         'Вид сэндвича, состоящий из рубленой жареной котлеты, подаваемой внутри разрезанной булки.', '[
     {
-      "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgL_t_6ibelQW6nRKUDyLYMAHhUdQn2aiRWvlD057hbEr5BiF4"
+      "url": "http://res.cloudinary.com/dwkkf6qmg/image/upload/v1520968521/hsnjck41261mlb4cmjkv.jpg"
     }
   ]', 10, '[
     {
