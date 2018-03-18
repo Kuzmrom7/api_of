@@ -78,13 +78,13 @@ VALUES ('90ab92a8-ab18-44ac-8108-21e4511a70bb', 'соусы');
 INSERT INTO type_dish (id_typeDish, name_typeDish)
 VALUES ('c5d87847-26a1-47dc-9762-070b15b2eff6', 'шаверма');
 INSERT INTO type_dish (id_typeDish, name_typeDish)
-VALUES ('1a5cf225-2673-46dc-9fd5-33a2fafd6bf2', ',бургеры');
+VALUES ('1a5cf225-2673-46dc-9fd5-33a2fafd6bf2', 'бургеры');
 INSERT INTO type_dish (id_typeDish, name_typeDish)
 VALUES ('662e63cf-af3e-41a6-8e48-f764a7562ff3', ',вегетарианские');
 INSERT INTO type_dish (id_typeDish, name_typeDish)
 VALUES ('43a55d96-8b0c-45f3-9ea2-c8032a1866f2', 'чай');
 INSERT INTO type_dish (id_typeDish, name_typeDish)
-VALUES ('dcea187e-3e05-4eec-9bf0-05cabb6d4360', 'коффе');
+VALUES ('dcea187e-3e05-4eec-9bf0-05cabb6d4360', 'кофе');
 INSERT INTO type_dish (id_typeDish, name_typeDish)
 VALUES ('7cc6302c-5c3c-4429-a7a4-12c645886221', 'вино');
 INSERT INTO type_dish (id_typeDish, name_typeDish)
