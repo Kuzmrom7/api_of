@@ -12,8 +12,9 @@ RUN govendor sync
 
 WORKDIR /go/src/github.com/orderfood/api_of/cmd/api
 
-RUN chmod +x /go/src/github.com/orderfood/api_of/cmd/api/api.go
 
 RUN go build
 
-ENTRYPOINT ["/go/src/github.com/orderfood/api_of"]
+RUN chmod +x /go/src/github.com/orderfood/api_of/cmd/api/api
+
+ENTRYPOINT ["/go/src/github.com/orderfood/api_of/cmd/api/api"]
