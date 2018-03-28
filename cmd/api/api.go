@@ -37,7 +37,7 @@ func main() {
 
 	cfg.Database.Connection = app.String(cli.StringOpt{
 		Name: "pgsql-connection", Desc: "Set postgres connection string",
-		EnvVar: "PGSQL_CONNECTION", Value: "host= 0.0.0.0 port=5432 user=orderfood  password=orderfood dbname=orderfood sslmode=disable", HideValue: true,
+		EnvVar: "PGSQL_CONNECTION", Value: "host=167.99.200.139  port=5432 user=orderfood  password=orderfood dbname=orderfood sslmode=disable", HideValue: true,
 	})
 
 	var help = app.Bool(cli.BoolOpt{
