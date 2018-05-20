@@ -9,6 +9,7 @@ import (
 	"github.com/orderfood/api_of/pkg/api/place"
 	"github.com/orderfood/api_of/pkg/common/errors"
 	"github.com/orderfood/api_of/pkg/log"
+	"github.com/orderfood/api_of/pkg/util/http/utils"
 )
 
 func AdressCreate(w http.ResponseWriter, r *http.Request) {
@@ -54,27 +55,22 @@ func AdressCreate(w http.ResponseWriter, r *http.Request) {
 
 func GetListAdress(w http.ResponseWriter, r *http.Request) {
 
-	if r.Context().Value("uid") == nil {
-		errors.HTTP.Unauthorized(w)
-		return
-	}
-
 	var (
 		err error
-		id  = r.Context().Value("uid").(string)
+		pid = utils.Vars(r)["place"]
 	)
 
 	log.Debug("Handler: Adress: List: get list adress")
 
 	p := place.New(r.Context())
-	pl, err := p.GetPlaceByIDUsr(id)
+	pl, err := p.GetPlaceByID(pid)
 	if err != nil {
-		log.Errorf("Handler: Adress: List: get place by user id %s err: %s", id, err)
+		log.Errorf("Handler: Adress: List: get place by user id %s err: %s", pid, err)
 		errors.HTTP.InternalServerError(w)
 		return
 	}
 	if pl == nil {
-		log.Warnf("Handler: Adress: List: place by user id `%s` not found", id)
+		log.Warnf("Handler: Adress: List: place by user id `%s` not found", pid)
 		errors.New("place").NotFound().Http(w)
 		return
 	}

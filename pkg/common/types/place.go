@@ -12,6 +12,7 @@ type PlaceMeta struct {
 	Name        string    `json:"name,omitempty"`
 	Phone       string    `json:"phone,omitempty"`
 	Url         string    `json:"url,omitempty"`
+	Logo        string    `json:"logo,omitempty"`
 	City        string    `json:"city,omitempty"`
 	TypePlaceID string    `json:"typeplace,omitempty"`
 	UserID      string    `json:"user,omitempty"`

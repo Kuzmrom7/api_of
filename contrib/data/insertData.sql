@@ -26,7 +26,7 @@ VALUES ('3b896b95-928a-4107-934b-d7dace83b83a', 'кофейнная');
 
 -------PLACES-------
 
-INSERT INTO place (id_place, name, phone_number, url, city, user_id, type)
+INSERT INTO place (id_place, name, phone_number, url, city, user_id, type, logo)
 VALUES ('9ba48d7c-b573-4dcb-b8bb-fbb196753231', 'ORDplace', '+79995207691', 'rklplace.com', 'Saint Petersburg',
         'ba7f171c-8bd2-4470-99de-6d82ca9402e9',
         '[
@@ -38,7 +38,16 @@ VALUES ('9ba48d7c-b573-4dcb-b8bb-fbb196753231', 'ORDplace', '+79995207691', 'rkl
             "id": "7d826de7-97de-4002-8555-6a8056fa3faa",
             "nametype": "бар"
           }
-        ]');
+        ]', 'https://logopond.com/logos/5294687071d82fba0627827c54dfc42a.png');
+
+-------ADRESSES-------
+
+INSERT INTO adressing (name_adress, id_place)
+VALUES ('Проспект Невского, 11', '9ba48d7c-b573-4dcb-b8bb-fbb196753231');
+INSERT INTO adressing (name_adress, id_place)
+VALUES ('Улица Передовиков, 13', '9ba48d7c-b573-4dcb-b8bb-fbb196753231');
+INSERT INTO adressing (name_adress, id_place)
+VALUES ('Улица Большая Морская, 67', '9ba48d7c-b573-4dcb-b8bb-fbb196753231');
 
 -------MENUS-------
 

@@ -58,6 +58,7 @@ CREATE TABLE place
   name         VARCHAR(256) UNIQUE,
   phone_number VARCHAR(256)                                                   DEFAULT '',
   url          VARCHAR(256)                                                   DEFAULT '',
+  logo         VARCHAR(256)                                                   DEFAULT '',
   city         VARCHAR(256)                                                   DEFAULT '',
   user_id      UUID REFERENCES users (user_id)                       NOT NULL,
   type         JSONB                                                          DEFAULT '[]',
