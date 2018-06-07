@@ -12,6 +12,7 @@ func newPlace(obj *types.Place) *Place {
 	p.Url = obj.Meta.Url
 	p.Phone = obj.Meta.Phone
 	p.Id = obj.Meta.ID
+	p.Logo = obj.Meta.Logo
 
 	p.TypesPlace = make([]*TypePlaces, 0)
 	if obj.TypesPlace != nil {
@@ -46,6 +47,7 @@ func New(obj *types.Place) *Place {
 	i.Name = obj.Meta.Name
 	i.City = obj.Meta.City
 	i.Phone = obj.Meta.Phone
+	i.Logo = obj.Meta.Logo
 
 	i.TypesPlace = make([]*TypePlaces, 0)
 	if obj.TypesPlace != nil {

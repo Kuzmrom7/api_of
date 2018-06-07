@@ -120,6 +120,7 @@ type placeModel struct {
 	url    store.NullString
 	city   store.NullString
 	adress store.NullString
+	logo	 store.NullString
 }
 
 //-------------------------------------------------------------------------------------------------------//

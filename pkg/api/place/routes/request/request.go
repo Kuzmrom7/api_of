@@ -24,6 +24,7 @@ type PlaceUpdate struct {
 	Phone *string `json:"phone,omitempty"`
 	Url   *string `json:"url,omitempty"`
 	City  *string `json:"city,omitempty"`
+	Logo  *string `json:"logo,omitempty"`
 }
 
 func (s *PlaceCreate) DecodeAndValidate(reader io.Reader) *errors.Err {

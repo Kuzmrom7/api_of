@@ -138,6 +138,10 @@ func (p *place) Update(place *types.Place, rq *request.PlaceUpdate) error {
 		place.Meta.Phone = *rq.Phone
 	}
 
+	if rq.Logo != nil {
+		place.Meta.Logo = *rq.Logo
+	}
+
 	place.Meta.ID = rq.Id
 
 	if err = storage.Place().Update(p.context, place); err != nil {

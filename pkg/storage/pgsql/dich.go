@@ -178,7 +178,8 @@ func (s *DishStorage) List(ctx context.Context, placeid string) ([]*types.Dish, 
 					'id', id_dish,
 					'name', name_dish,
 					'description', description,
-					'timemin', time_min
+					'timemin', time_min,
+					'typedish', id_typeDish
 				),
 				'urls', url,
 				'specs', spec
