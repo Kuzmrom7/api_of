@@ -49,6 +49,7 @@ func New(obj *types.Dish) *Dich {
 	d.Id = obj.Meta.ID
 	d.Name = obj.Meta.Name
 	d.Desc = obj.Meta.Desc
+	d.TypeDishID = obj.Meta.TypeDishID
 	d.Urls = make([]*UrlOpt, 0)
 	if obj.Urls != nil {
 		for _, url := range obj.Urls {

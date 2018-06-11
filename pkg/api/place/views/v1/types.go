@@ -6,6 +6,7 @@ type Place struct {
 	Phone      string        `json:"phone,omitempty"`
 	Url        string        `json:"url,omitempty"`
 	City       string        `json:"city,omitempty"`
+	Logo       string        `json:"logo,omitempty"`
 	TypesPlace []*TypePlaces `json:"typesplace"`
 }
 

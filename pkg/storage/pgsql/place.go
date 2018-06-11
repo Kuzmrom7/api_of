@@ -27,7 +27,8 @@ func (s *PlaceStorage) GetPlaceByIDUser(ctx context.Context, id string) (*types.
 					'name', name,
 					'phone', phone_number,
 					'url', url,
-					'city', city
+					'city', city,
+					'logo', logo
 				),
 				'typesplace', type
 				)
@@ -72,7 +73,8 @@ func (s *PlaceStorage) GetPlaceByID(ctx context.Context, id string) (*types.Plac
 					'name', name,
 					'phone', phone_number,
 					'url', url,
-					'city', city
+					'city', city,
+					'logo', logo
 				),
 				'typesplace', type
 				)
@@ -187,7 +189,8 @@ func (s *PlaceStorage) List(ctx context.Context) ([]*types.Place, error) {
 					'name', name,
 					'phone', phone_number,
 					'url', url,
-					'city', city
+					'city', city,
+					'logo', logo
 				),
 				'typesplace', type
 				)
@@ -243,12 +246,13 @@ func (s *PlaceStorage) Update(ctx context.Context, place *types.Place) error {
 			phone_number = $1,
 			city = $2,
 			url = $3,
+			logo = $5,
 			updated = now()
 		WHERE id_place = $4
 		RETURNING updated;`
 
 	err := s.client.QueryRow(sqlstrPlaceUpdate, place.Meta.Phone,
-		place.Meta.City, place.Meta.Url, place.Meta.ID).Scan(&place.Meta.Updated)
+		place.Meta.City, place.Meta.Url, place.Meta.ID, place.Meta.Logo).Scan(&place.Meta.Updated)
 	if err != nil {
 		log.Errorf("Storage: Place: Update: update place query err: %s", err)
 		return err
@@ -272,6 +276,7 @@ func (pl *placeModel) convert() *types.Place {
 	c.Meta.City = pl.city.String
 	c.Meta.Url = pl.url.String
 	c.Meta.ID = pl.id.String
+	c.Meta.Logo = pl.logo.String
 
 	return c
 }
