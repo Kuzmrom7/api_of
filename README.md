@@ -23,6 +23,8 @@ api_of/contrib/data/insertData.sql
 ### Run api using `go run`
 
 ```
+go get -u github.com/kardianos/govendor
+govendor sync
 go run /cmd/api/api.go
 ```
 
